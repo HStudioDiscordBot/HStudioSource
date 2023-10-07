@@ -8,9 +8,6 @@ const config = configFile.app[configFile.appName] || configFile.app.debug;
 const downloadPath = 'downloads';
 if (!fs.existsSync(downloadPath)) {
     fs.mkdirSync(downloadPath);
-    console.log('Folder created successfully.');
-} else {
-    console.log('Folder already exists.');
 }
 
 const app = express();

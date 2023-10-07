@@ -77,7 +77,9 @@
             "error": {
                 "please_join_before_use_bot": "You must be in the Voice Channel before inviting the bot.",
                 "cant_procress_query": "Unable to process query",
-                "execute": "There was an error while executing this command!"
+                "execute": "There was an error while executing this command!",
+                "is_not_number": "is not Number!",
+                "it_should_between_1_100": "It should be greater than 1 and less than 100."
             },
             "version": "Version",
             "ms": "ms"
@@ -161,7 +163,9 @@
             "error": {
                 "please_join_before_use_bot": "คุณต้องอยู่ใน Voice Channel ก่อนเชิญบอท",
                 "cant_procress_query": "ไม่สามารถประมวณผล query ได้",
-                "execute": "เกิดข้อผิดพลาดขณะดำเนินการคำสั่งนี้!"
+                "execute": "เกิดข้อผิดพลาดขณะดำเนินการคำสั่งนี้!",
+                "is_not_number": "ไม่ใช่ตัวเลข",
+                "it_should_between_1_100": "ควรอยู่ระหว่าง 1 ถึง 100"
             },
             "version": "เวอร์ชั่น",
             "ms": "มิลลิวิ"
