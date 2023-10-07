@@ -1,5 +1,8 @@
 const { generateDependencyReport }= require('@discordjs/voice')
+const config = require('../config.json')
 
 module.exports = (client) => {
-    console.log(generateDependencyReport());
+    if (config.setting.generateDependencyReport) {
+        console.log(generateDependencyReport());
+    }
 }

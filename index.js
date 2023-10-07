@@ -1,11 +1,13 @@
-const { ShardingManager, Shard, ShardClientUtil } = require('discord.js');
-const { token, port } = require('./config.json');
+const { ShardingManager } = require('discord.js');
 const express = require('express');
+const configFile = require('./config.json');
+
+const config = configFile.app[configFile.appName] || configFile.app.debug;
 
 const app = express();
 
 const manager = new ShardingManager('./bot.js', {
-    token: token,
+    token: config.token,
     totalShards: 1,
 });
 
@@ -27,8 +29,8 @@ app.get('/status', (req, res) => {
     res.json(status);
 });
 
-app.listen(port, () => {
-    console.log(`Status page server is running at http://localhost:${port}/status`);
+app.listen(config.port, () => {
+    console.log(`Status page server is running at http://localhost:${config.port}/status`);
 });
 
 manager.spawn();

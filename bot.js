@@ -11,8 +11,6 @@ const client = new Client({
 
 client.commands = new Collection();
 
-const { token } = require('./config.json');
-
 const functions = fs.readdirSync("./functions").filter(file => file.endsWith(".js"));
 const eventFiles = fs.readdirSync("./events").filter(file => file.endsWith(".js"));
 const commandFolders = fs.readdirSync("./commands");
@@ -25,4 +23,3 @@ const commandFolders = fs.readdirSync("./commands");
     client.handleCommands(commandFolders, "./commands");
     client.login();
 })();
-

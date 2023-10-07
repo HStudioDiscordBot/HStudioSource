@@ -1,15 +1,14 @@
 const { REST } = require("@discordjs/rest");
 const { Routes } = require('discord-api-types/v9');
 const fs = require('fs');
-const { token, client_id } = require('../config.json');
+const configFile = require('../config.json');
 
-const clientId = '1105873690022924450';
-const guildId = '1038752900639358988'; 
+const config = configFile.app[configFile.appName] || configFile.app.debug;
 
 module.exports = (client) => {
     client.handleCommands = async (commandFolders, path) => {
         client.commandArray = [];
-        const commandNames = new Set(); // Use a Set to store unique command names
+        const commandNames = new Set();
         for (const folder of commandFolders) {
             const commandFiles = fs.readdirSync(`${path}/${folder}`).filter(file => file.endsWith('.js'));
             for (const file of commandFiles) {
@@ -18,10 +17,10 @@ module.exports = (client) => {
 
                 if (commandNames.has(commandName)) {
                     console.error(`Duplicate command name found: ${commandName}`);
-                    continue; // Skip this command
+                    continue;
                 }
 
-                commandNames.add(commandName); // Add the command name to the Set
+                commandNames.add(commandName);
                 client.commands.set(commandName, command);
                 client.commandArray.push(command.data.toJSON());
             }
@@ -29,14 +28,14 @@ module.exports = (client) => {
 
         const rest = new REST({
             version: '10'
-        }).setToken(token);
+        }).setToken(config.token);
 
         (async () => {
             try {
                 console.log(`[${client.shard.ids}] Started refreshing application (/) commands.`);
 
                 const data = await rest.put(
-                    Routes.applicationCommands(client_id), {
+                    Routes.applicationCommands(config.client_id), {
                         body: client.commandArray
                     },
                 );

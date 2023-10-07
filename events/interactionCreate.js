@@ -1,4 +1,4 @@
-const { Interaction, EmbedBuilder } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const lang = require("../lang.json")
 
 module.exports = {
@@ -17,8 +17,8 @@ module.exports = {
 
             const errorEmbed = new EmbedBuilder()
                 .setColor("Red")
-                .setTitle(`${requestedLocalization.commands_error}`)
-                .setDescription(`\`\`\`${error}\`\`\``)
+                .setTitle(`${requestedLocalization.commands.error.execute}`)
+                .setDescription(`\`\`\`${error}\`\`\``);
 
             console.log(error);
             await interaction.reply({
@@ -26,9 +26,5 @@ module.exports = {
                 ephemeral: true
             });
         }
-
     },
-
-
-
 };

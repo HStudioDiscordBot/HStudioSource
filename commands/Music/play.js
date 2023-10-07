@@ -7,6 +7,8 @@ const fs = require('fs');
 const { createReadStream } = require('node:fs');
 const Spotify = require('spotifydl-core').default
 const lang = require('../../lang.json');
+const configFile = require('../../config.json');
+const config = configFile.app[configFile.appName] || configFile.app.debug;
 
 function isSpotifyTrackURL(str) {
     const urlPattern = /^(?:https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
@@ -169,7 +171,7 @@ function autoPlatfrom(query) {
     }
 }
 
-async function dlSpotify(interaction, dlPath, getResults, emoji_name, emoji_id) {
+async function dlSpotify(interaction, dlPath, getResults, emoji_name, emoji_id, requestedLocalization) {
     if (fs.existsSync(dlPath)) {
         return;
     }
@@ -185,13 +187,13 @@ async function dlSpotify(interaction, dlPath, getResults, emoji_name, emoji_id) 
 
     const updateProgressBar = async () => {
         await dlMessage.edit({
-            embeds: [new EmbedBuilder().setColor('Green').setTitle(`<:${emoji_name}:${emoji_id}> Downloading for the first time.`).setDescription(progressBar[currentProgress])]
+            embeds: [new EmbedBuilder().setColor(config.color).setTitle(`<:${emoji_name}:${emoji_id}> ${requestedLocalization.commands.play.execute.download}`).setDescription(progressBar[currentProgress])]
         });
         currentProgress++;
     };
 
     const dlMessage = await interaction.channel.send({
-        embeds: [new EmbedBuilder().setColor('Green').setTitle(`<:${emoji_name}:${emoji_id}> Downloading for the first time.`).setDescription(progressBar[0])]
+        embeds: [new EmbedBuilder().setColor(config.color).setTitle(`<:${emoji_name}:${emoji_id}> ${requestedLocalization.commands.play.execute.download}`).setDescription(progressBar[0])]
     });
 
     await Promise.all([
@@ -207,12 +209,12 @@ async function dlSpotify(interaction, dlPath, getResults, emoji_name, emoji_id) 
     await dlMessage.delete();
 }
 
-async function playMusic(interaction, dlPath, connection, player, platform, platform_emoji_id, song_name) {
+async function playMusic(interaction, dlPath, connection, player, platform, platform_emoji_id, song_name, requestedLocalization) {
     let resource = createAudioResource(createReadStream(dlPath));
 
     player.play(resource);
 
-    interaction.channel.send({ contant: '@silent', embeds: [new EmbedBuilder().setColor('Green').setDescription(`<:${platform}:${platform_emoji_id}> Start playing **${song_name}**`)] });
+    interaction.channel.send({ contant: '@silent', embeds: [new EmbedBuilder().setColor(config.color).setDescription(`<:${platform}:${platform_emoji_id}> ${requestedLocalization.commands.play.execute.start_playing} **${song_name}**`)] });
 
     connection.subscribe(player);
 
@@ -231,15 +233,15 @@ async function playSpotify(interaction, searchResults, ac_token, requestedLocali
     const getResults = await getTracks(searchResults, ac_token);
 
     const cardEmbed = new EmbedBuilder()
-        .setColor("Blue")
+        .setColor(config.color)
         .setAuthor({ name: getResults.artists, url: getResults.artists_url, iconURL: getResults.platfrom_icon })
         .setTitle(`:arrow_double_down: ┃ **${getResults.name}** \`${getResults.length}\``)
         .setURL(getResults.url)
         .setThumbnail(getResults.images)
         .addFields(
-            { name: requestedLocalization.commands_play_execute_album, value: `\`${getResults.album}\``, inline: true },
-            { name: requestedLocalization.commands_play_execute_voice_chat, value: `<#${interaction.member.voice.channel.id}>`, inline: true },
-            { name: requestedLocalization.commands_play_execute_owner, value: `<@${interaction.user.id}>`, inline: true }
+            { name: requestedLocalization.commands.play.execute.album, value: `\`${getResults.album}\``, inline: true },
+            { name: requestedLocalization.commands.play.execute.voice_chat, value: `<#${interaction.member.voice.channel.id}>`, inline: true },
+            { name: requestedLocalization.commands.play.execute.owner, value: `<@${interaction.user.id}>`, inline: true }
         );
 
     await interaction.reply({ embeds: [cardEmbed] });
@@ -250,9 +252,9 @@ async function playSpotify(interaction, searchResults, ac_token, requestedLocali
 
     const dlPath = `downloads/${getResults.id}.mp3`;
 
-    await dlSpotify(interaction, dlPath, getResults, 'spotify', '1156557829486948413');
+    await dlSpotify(interaction, dlPath, getResults, 'spotify', '1156557829486948413', requestedLocalization);
 
-    await playMusic(interaction, dlPath, connection, player, 'spotify', '1156557829486948413', getResults.name);
+    await playMusic(interaction, dlPath, connection, player, 'spotify', '1156557829486948413', getResults.name, requestedLocalization, requestedLocalization);
 }
 
 const postData = {
@@ -276,23 +278,22 @@ var spotifyApi = new SpotifyWebApi({
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('play')
-        .setDescription(lang.default.commands_play_description)
+        .setDescription(lang.default.commands.play.description)
         .setDescriptionLocalizations({
-            th: lang.th.commands_play_description,
+            th: lang.th.commands.play.description,
         })
         .addStringOption(option =>
             option.setName('query')
-                .setDescription(lang.default.commands_play_query_description)
+                .setDescription(lang.default.commands.play.StringOption.query.description)
                 .setRequired(true)
                 .setDescriptionLocalizations({
-                    th: lang.th.commands_play_query_description,
+                    th: lang.th.commands.play.StringOption.query.description,
                 }))
-
         .addStringOption(option =>
             option.setName('platform')
-                .setDescription(lang.default.commands_play_platform_description)
+                .setDescription(lang.default.commands.play.StringOption.platform.description)
                 .setDescriptionLocalizations({
-                    th: lang.th.commands_play_platform_description,
+                    th: lang.th.commands.play.StringOption.platform.description,
                 })
                 .setRequired(false)
                 .addChoices(
@@ -307,7 +308,7 @@ module.exports = {
         const requestedLocalization = lang[interaction.locale] || lang.default;
 
         if (!interaction.member.voice.channel) {
-            return await interaction.reply({ embeds: [new EmbedBuilder().setTitle(`:warning:: ${requestedLocalization.commands_play_error_please_join_before_use_bot}`).setColor("Yellow")] });
+            return await interaction.reply({ embeds: [new EmbedBuilder().setTitle(`:warning: ${requestedLocalization.commands.error.please_join_before_use_bot}`).setColor("Yellow")] });
         }
 
         const pl = autoPlatfrom(query);
@@ -323,7 +324,7 @@ module.exports = {
             const spotify_id = await searchTracks(query, ac_token);
             await playSpotify(interaction, spotify_id, ac_token, requestedLocalization);
         } else {
-            return await interaction.reply({ embeds: [new EmbedBuilder().setTitle(`:no_entry:: ไม่สามารถประมวณผล query ได้`).setColor('Red').setDescription(`\`\`\`${query}\`\`\``)] });
+            return await interaction.reply({ embeds: [new EmbedBuilder().setTitle(`:no_entry:: ${requestedLocalization.error.cant_procress_query}`).setColor('Red').setDescription(`\`\`\`${query}\`\`\``)] });
         }     
     },
 };

@@ -5,15 +5,15 @@ const lang = require('../../lang.json');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('speed')
-        .setDescription(lang.default.commands_speed_description)
+        .setDescription(lang.default.commands.speed.description)
         .setDescriptionLocalizations({
-            th: lang.th.commands_speed_description,
+            th: lang.th.commands.speed.description,
         })
         .addStringOption(option =>
             option.setName('level')
-                .setDescription(lang.default.commands_speed_level_description)
+                .setDescription(lang.default.commands.speed.StringOption.level.description)
                 .setDescriptionLocalizations({
-                    th: lang.th.commands_speed_level_description,
+                    th: lang.th.commands.speed.StringOption.level.description,
                 })
                 .setRequired(true)
                 .addChoices(
@@ -27,8 +27,6 @@ module.exports = {
 
         const level = interaction.options.getString('level');
 
-        console.log(`${level}`);
-
-        await interaction.reply({ contants: `${level}`});
+        await interaction.reply({ embeds: [ new EmbedBuilder().setTitle(`${interaction.commandName}`).setColor('Green').setDescription(`${level}`)]});
     },
 };

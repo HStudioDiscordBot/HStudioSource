@@ -1,56 +1,170 @@
 {
     "default": {
-        "commands_play_execute_album": "Album",
-        "commands_play_execute_voice_chat": "Voice Chat",
-        "commands_play_execute_owner": "Owner",
-        "commands_play_description": "Play or add to queue",
-        "commands_play_query_description": "Search term or URL",
-        "commands_play_platform_description": "Default (Spotify)",
-        "commands_play_error_please_join_before_use_bot": "You must be in the Voice Channel before inviting the bot.",
-        "commands_pause_description": "Pause",
-        "commands_leave_description": "Leave from Voice Channel",
-        "commands_leave_not_in_voice_channel": "Bot is not in Voice Channel",
-        "commands_leave_success": "Leave Voice Channel",
-        "commands_join_description": "Join Voice Channel",
-        "commands_ping_description": "Ping",
-        "commands_ping_pong": "Pong",
-        "commands_ping_bot_latency": "Bot Latency",
-        "commands_ping_api_latency": "API Latency",
-        "commands_invite_description": "Invite Bot",
-        "commands_loop_description": "Toggle Loop",
-        "commands_speed_description": "Change Speed",
-        "commands_speed_level_description": "Speed Level",
-        "commands_volume_description": "Change Volume",
-        "commands_config_description": "Config",
-        "commands_error": "There was an error while executing this command!",
-        "version": "Version",
-        "ms": "ms"
+        "commands": {
+            "play": {
+                "description": "Play or add to queue",
+                "StringOption": {
+                    "query": {
+                        "description": "Search term or URL"
+                    },
+                    "platform": {
+                        "description": "Default (Spotify)"
+                    }
+                },
+                "execute": {
+                    "album": "Album",
+                    "voice_chat": "Voice Chat",
+                    "owner": "Owner",
+                    "start_playing": "Start playing",
+                    "download": "Downloading for the first time."
+                }
+            },
+            "pause": {
+                "description": "Pause"
+            },
+            "leave": {
+                "description": "Leave from Voice Channel",
+                "execute": {
+                    "not_in_voice_channel": "Bot is not in Voice Channel",
+                    "success": "Leave Voice Channel"
+                }
+            },
+            "join": {
+                "description": "Join Voice Channel",
+                "execute": {
+                    "success": "Joined the voice channel.",
+                    "already_join": "The bot is already in the voice channel."
+                }
+            },
+            "ping": {
+                "description": "Ping",
+                "execute": {
+                    "ping": "Ping...",
+                    "pong": "Pong",
+                    "bot_latency": "Bot Latency",
+                    "api_latency": "API Latency"
+                }
+            },
+            "invite": {
+                "description": "Invite Bot",
+                "execute": {
+                    "main": "Would like to invite the bot to play a song for you.",
+                    "click": "Click here to invite."
+                }
+            },
+            "loop": {
+                "description": "Toggle Loop"
+            },
+            "speed": {
+                "description": "Change Speed",
+                "StringOption": {
+                    "level": {
+                        "description": "Speed Level"
+                    }
+                }
+            },
+            "volume": {
+                "description": "Change Volume",
+                "StringOption": {
+                    "level": {
+                        "description": "Volume Level"
+                    }
+                }
+            },
+            "config": {
+                "description": "Config"
+            },
+            "error": {
+                "please_join_before_use_bot": "You must be in the Voice Channel before inviting the bot.",
+                "cant_procress_query": "Unable to process query",
+                "execute": "There was an error while executing this command!"
+            },
+            "version": "Version",
+            "ms": "ms"
+        }
     },
     "th": {
-        "commands_play_execute_album": "อัลบั้ม",
-        "commands_play_execute_voice_chat": "ช่องเสียง",
-        "commands_play_execute_owner": "เพิ่มโดย",
-        "commands_play_description": "เล่นเพลง / เพิ่มคิว",
-        "commands_play_query_description": "ชื่อ หรือ ลิ้งก์",
-        "commands_play_platform_description": "ค่าเริ่มต้น (Spotify)",
-        "commands_play_error_please_join_before_use_bot": "คุณต้องอยู่ใน Voice Channel ก่อนเชิญบอท",
-        "commands_pause_description": "หยุดชั่วคราว",
-        "commands_leave_description": "ออกจากห้องเสียง",
-        "commands_leave_not_in_voice_channel": "บอทไม่ได้อยู่ในห้องเสียง",
-        "commands_leave_success": "ออกจากห้องเสียงแล้ว",
-        "commands_join_description": "เข้าห้องเสียง",
-        "commands_ping_description": "เช็คปิง",
-        "commands_ping_pong": "ปอง",
-        "commands_ping_bot_latency": "ตีกลับมาแล้ว",
-        "commands_ping_api_latency": "ใช้เวลาในการติดต่อ Discord",
-        "commands_invite_description": "เชิญบอท",
-        "commands_loop_description": "เปิด/ปิดลูป",
-        "commands_speed_description": "ปรับความเร็ว",
-        "commands_speed_level_description": "ระดับความเร็ว",
-        "commands_volume_description": "ปรับระดับเสียง",
-        "commands_config_description": "ดูการตั้งค่า",
-        "commands_error": "เกิดข้อผิดพลาดขณะดำเนินการคำสั่งนี้!",
-        "version": "เวอร์ชั่น",
-        "ms": "มิลลิวิ"
+        "commands": {
+            "play": {
+                "description": "เล่นเพลง / เพิ่มคิว",
+                "StringOption": {
+                    "query": {
+                        "description": "ชื่อ หรือ ลิ้งก์"
+                    },
+                    "platform": {
+                        "description": "ค่าเริ่มต้น (Spotify)"
+                    }
+                },
+                "execute": {
+                    "album": "อัลบั้ม",
+                    "voice_chat": "ช่องเสียง",
+                    "owner": "เพิ่มโดย",
+                    "start_playing": "เริ่มเล่น",
+                    "download": "กำลังโหลดเพลงนี้สำหรับครั้งแรก"
+                }
+            },
+            "pause": {
+                "description": "หยุดชั่วคราว"
+            },
+            "leave": {
+                "description": "ออกจากห้องเสียง",
+                "execute": {
+                    "not_in_voice_channel": "บอทไม่ได้อยู่ในห้องเสียง",
+                    "success": "ออกจากห้องเสียงแล้ว"
+                }
+            },
+            "join": {
+                "description": "เข้าห้องเสียง",
+                "execute": {
+                    "success": "เข้าห้องเสียงแล้ว",
+                    "already_join": "บอทอยู่ในห้องเสียงอยู่แล้ว"
+                }
+            },
+            "ping": {
+                "description": "เช็คปิง",
+                "execute": {
+                    "ping": "กำลังตี",
+                    "pong": "ปอง",
+                    "bot_latency": "ตีกลับมาแล้ว",
+                    "api_latency": "ใช้เวลาในการติดต่อ Discord"
+                }
+            },
+            "invite": {
+                "description": "เชิญบอท",
+                "execute": {
+                    "main": "อยากเชิญบอทไปเปิดเพลงให้ฟังละซิ",
+                    "click": "กดที่นี่เพื่อเชิญ"
+                }
+            },
+            "loop": {
+                "description": "เปิด/ปิดลูป"
+            },
+            "speed": {
+                "description": "ปรับความเร็ว",
+                "StringOption": {
+                    "level": {
+                        "description": "ระดับความเร็ว"
+                    }
+                }
+            },
+            "volume": {
+                "description": "ปรับระดับเสียง",
+                "StringOption": {
+                    "level": {
+                        "description": "ระดับเสียง"
+                    }
+                }
+            },
+            "config": {
+                "description": "ดูการตั้งค่า"
+            },
+            "error": {
+                "please_join_before_use_bot": "คุณต้องอยู่ใน Voice Channel ก่อนเชิญบอท",
+                "cant_procress_query": "ไม่สามารถประมวณผล query ได้",
+                "execute": "เกิดข้อผิดพลาดขณะดำเนินการคำสั่งนี้!"
+            },
+            "version": "เวอร์ชั่น",
+            "ms": "มิลลิวิ"
+        }
     }
 }

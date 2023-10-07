@@ -1,10 +1,10 @@
 {
   "name": "hstudio",
-  "version": "2.0.56build-5",
+  "version": "2.0.61build-7",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "bot": "node ./index.js"
   },
   "author": "HStudio Teams",
   "license": "ISC",

@@ -1,13 +1,31 @@
 {
-    "token0": "MTEwNTg3MzY5MDAyMjkyNDQ1MA.GYxV9A.mwDA-t3GJtwq6etAh7wvMVCSuTUz7-a4ID45O4",
-    "token1": "MTE0MDEzMDY4MjA5NDQ5NzgyMw.G9I3ZV.os8ijxiP84oCgxobCW1uJ96EY3X7Gvf9m4cUy8",
-    "token": "MTE1OTc3MzU2MTY4MzE5Mzg2Ng.GeaStn.snz03ZYCh8VZRDrYAorU9wQZKRwt2f_WiyH5_o",
+    "appName": "debug",
     "spotify_client_id": "08e3e233af5b4c3dabae5869658f1d0f",
     "spotify_client_secret": "627ee9e3dac54262b20667936c48bb78",
-    "client_id0": "1105873690022924450",
-    "client_id1": "1140130682094497823",
-    "client_id": "1159773561683193866",
-	"inviteURL0": "https://discord.com/oauth2/authorize?client_id=1105873690022924450&scope=bot%20applications.commands&permissions=36825160",
-    "inviteURL": "https://discord.com/oauth2/authorize?client_id=1140130682094497823&scope=bot%20applications.commands&permissions=36825160",
-    "port": 1555
+    "setting": {
+        "generateDependencyReport": false
+    },
+    "app": {
+        "i": {
+            "token": "MTEwNTg3MzY5MDAyMjkyNDQ1MA.GYxV9A.mwDA-t3GJtwq6etAh7wvMVCSuTUz7-a4ID45O4",
+            "client_id": "1105873690022924450",
+            "color": "Blue",
+            "inviteURL": "https://discord.com/oauth2/authorize?client_id=1105873690022924450&scope=bot%20applications.commands&permissions=36825160",
+            "port": 1550
+        },
+        "ii": {
+            "token": "MTE0MDEzMDY4MjA5NDQ5NzgyMw.G9I3ZV.os8ijxiP84oCgxobCW1uJ96EY3X7Gvf9m4cUy8",
+            "client_id": "1140130682094497823",
+            "color": "Green",
+            "inviteURL": "https://discord.com/oauth2/authorize?client_id=1140130682094497823&scope=bot%20applications.commands&permissions=36825160",
+            "port": 1551
+        },
+        "debug": {
+            "token": "MTE1OTc3MzU2MTY4MzE5Mzg2Ng.GeaStn.snz03ZYCh8VZRDrYAorU9wQZKRwt2f_WiyH5_o",
+            "client_id": "1159773561683193866",
+            "color": "NotQuiteBlack",
+            "inviteURL": "https://discord.com/oauth2/authorize?client_id=1159773561683193866&scope=bot%20applications.commands&permissions=36825160",
+            "port": 1549
+        }
+    }
 }
