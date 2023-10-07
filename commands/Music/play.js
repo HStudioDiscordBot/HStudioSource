@@ -49,7 +49,7 @@ module.exports = {
             const spotify_id = utils.extractSpotifyTrackId(query);
             await utils.playSpotify(interaction, spotify_id, ac_token, requestedLocalization, config, spotify_client_id, spotify_client_secret);
         } else if (pl === 'youtube') {
-            await playYoutube();
+            await utils.playYoutube(interaction, query, requestedLocalization, config);
         } else if (pl === 'search') {
             const spotify_id = await utils.searchTracks(query, ac_token);
             await utils.playSpotify(interaction, spotify_id, ac_token, requestedLocalization, config, spotify_client_id, spotify_client_secret);

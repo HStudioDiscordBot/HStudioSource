@@ -16,7 +16,8 @@
                     "voice_chat": "Voice Chat",
                     "owner": "Owner",
                     "start_playing": "Start playing",
-                    "download": "Downloading for the first time."
+                    "download": "Downloading for the first time.",
+                    "view": "View"
                 }
             },
             "pause": {
@@ -102,7 +103,8 @@
                     "voice_chat": "ช่องเสียง",
                     "owner": "เพิ่มโดย",
                     "start_playing": "เริ่มเล่น",
-                    "download": "กำลังโหลดเพลงนี้สำหรับครั้งแรก"
+                    "download": "กำลังโหลดเพลงนี้สำหรับครั้งแรก",
+                    "view": "การดู"
                 }
             },
             "pause": {

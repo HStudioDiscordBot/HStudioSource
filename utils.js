@@ -4,7 +4,8 @@ const axios = require('axios');
 var SpotifyWebApi = require('spotify-web-api-node');
 const fs = require('fs');
 const { createReadStream } = require('node:fs');
-const Spotify = require('spotifydl-core').default
+const Spotify = require('spotifydl-core').default;
+const ytdl = require('ytdl-core');
 
 // Time Converter
 function msToSec(milliseconds) {
@@ -26,10 +27,25 @@ function convertToHHMMSS(seconds) {
     }
 }
 
+// Converter
+function formatNumber(num) {
+    if (num >= 1000000) {
+        return (num / 1000000).toFixed(1) + 'm';
+    } else if (num >= 100000) {
+        return (num / 1000).toFixed(0) + 'k';
+    } else if (num >= 10000) {
+        return (num / 1000).toFixed(1) + 'k';
+    } else if (num >= 1000) {
+        return (num / 1000).toFixed(0) + 'k';
+    } else {
+        return num.toString();
+    }
+}
+
 // Spotify
 async function makeAccessToken(interaction, spotify_client_id, spotify_client_secret) {
     try {
-        const response = await axios.post('https://accounts.spotify.com/api/token', { grant_type: 'client_credentials', client_id: spotify_client_id, client_secret: spotify_client_secret }, { headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
+        const response = await axios.post('https://accounts.spotify.com/api/token', { grant_type: 'client_credentials', client_id: spotify_client_id, client_secret: spotify_client_secret }, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
         return response.data.access_token;
     } catch (error) {
         interaction.reply("Can't Call Spotify API");
@@ -93,7 +109,33 @@ async function searchTracks(q, access_token) {
 }
 
 // Youtube
+async function getVideo(url) {
+    const response = await ytdl.getBasicInfo(url);
 
+    const videoDetails = response.videoDetails;
+
+    let maxResolutionThumbnail = videoDetails.thumbnails[0];
+
+    for (const thumbnail of videoDetails.thumbnails) {
+        if (thumbnail.width > maxResolutionThumbnail.width || thumbnail.height > maxResolutionThumbnail.height) {
+            maxResolutionThumbnail = thumbnail;
+        }
+    }
+
+    const redata = {
+        id: videoDetails.videoId,
+        images: maxResolutionThumbnail.url,
+        name: videoDetails.title,
+        url: videoDetails.video_url,
+        length: convertToHHMMSS(videoDetails.lengthSeconds),
+        auther: videoDetails.author.name,
+        artists_url: videoDetails.author.channel_url,
+        view: formatNumber(videoDetails.viewCount),
+        platfrom_icon: "https://www.youtube.com/s/desktop/7c155e84/img/favicon_144x144.png"
+    };
+    return redata;
+
+}
 
 // Downloader
 async function dlSpotify(interaction, dlPath, getResults, emoji_name, emoji_id, requestedLocalization, spotify_client_id, spotify_client_secret, config) {
@@ -123,6 +165,43 @@ async function dlSpotify(interaction, dlPath, getResults, emoji_name, emoji_id, 
 
     await Promise.all([
         spotify.downloadTrack(getResults.url, dlPath),
+        (async () => {
+            for (let i = 1; i < progressBar.length; i++) {
+                await updateProgressBar();
+                await new Promise(resolve => setTimeout(resolve, 200));
+            }
+        })(),
+    ]);
+
+    await dlMessage.delete();
+}
+
+async function dlYoutube(interaction, dlPath, getResults, emoji_name, emoji_id, requestedLocalization, config) {
+    if (fs.existsSync(dlPath)) {
+        return;
+    }
+
+    const progressBar = ['⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜', '🟩⬜⬜⬜⬜⬜⬜⬜⬜⬜', '🟩🟩⬜⬜⬜⬜⬜⬜⬜⬜', '🟩🟩🟩⬜⬜⬜⬜⬜⬜⬜', '🟩🟩🟩🟩⬜⬜⬜⬜⬜⬜', '🟩🟩🟩🟩🟩⬜⬜⬜⬜⬜', '🟩🟩🟩🟩🟩🟩⬜⬜⬜⬜', '🟩🟩🟩🟩🟩🟩🟩⬜⬜⬜', '🟩🟩🟩🟩🟩🟩🟩🟩⬜⬜', '🟩🟩🟩🟩🟩🟩🟩🟩🟩⬜'];
+
+    let currentProgress = 0;
+
+    const updateProgressBar = async () => {
+        await dlMessage.edit({
+            embeds: [new EmbedBuilder().setColor(config.color).setTitle(`<:${emoji_name}:${emoji_id}> ${requestedLocalization.commands.play.execute.download}`).setDescription(progressBar[currentProgress])]
+        });
+        currentProgress++;
+    };
+
+    const dlMessage = await interaction.channel.send({
+        embeds: [new EmbedBuilder().setColor(config.color).setTitle(`<:${emoji_name}:${emoji_id}> ${requestedLocalization.commands.play.execute.download}`).setDescription(progressBar[0])]
+    });
+
+    await Promise.all([
+        ytdl(getResults.url, {
+            quality: 'highestaudio',
+            filter: 'audioonly',
+            format: 'mp3',
+        }).pipe(fs.createWriteStream(dlPath)),
         (async () => {
             for (let i = 1; i < progressBar.length; i++) {
                 await updateProgressBar();
@@ -184,7 +263,7 @@ async function playSpotify(interaction, searchResults, ac_token, requestedLocali
 
     const player = createAudioPlayer();
 
-    const dlPath = `downloads/${getResults.id}.mp3`;
+    const dlPath = `downloads/sp-${getResults.id}.mp3`;
 
     await dlSpotify(interaction, dlPath, getResults, 'spotify', '1156557829486948413', requestedLocalization, spotify_client_id, spotify_client_secret, config);
 
@@ -196,7 +275,31 @@ async function playYoutube(interaction, searchResults, requestedLocalization, co
         return await interaction.reply({ embeds: [new EmbedBuilder().setColor('Red').setTitle('Error')] })
     }
 
-    const getResults = await getTracks(searchResults, ac_token);
+    const getResults = await getVideo(searchResults);
+
+    const cardEmbed = new EmbedBuilder()
+        .setColor(config.color)
+        .setAuthor({ name: getResults.auther, url: getResults.artists_url, iconURL: getResults.platfrom_icon })
+        .setTitle(`:arrow_double_down: ┃ **${getResults.name}** \`${getResults.length}\``)
+        .setURL(getResults.url)
+        .setThumbnail(getResults.images)
+        .addFields(
+            { name: requestedLocalization.commands.play.execute.view, value: `\`${getResults.view}\``, inline: true },
+            { name: requestedLocalization.commands.play.execute.voice_chat, value: `<#${interaction.member.voice.channel.id}>`, inline: true },
+            { name: requestedLocalization.commands.play.execute.owner, value: `<@${interaction.user.id}>`, inline: true }
+        );
+
+    await interaction.reply({ embeds: [cardEmbed] });
+
+    let connection = await joinVC(interaction);
+
+    const player = createAudioPlayer();
+
+    const dlPath = `downloads/yt-${getResults.id}.mp3`;
+
+    await dlYoutube(interaction, dlPath, getResults, 'youtube', '1156557113548624007', requestedLocalization, config);
+
+    await playMusic(interaction, dlPath, connection, player, 'youtube', '1156557113548624007', getResults.name, requestedLocalization, config);
 
 
 }
@@ -253,14 +356,32 @@ function isYoutubeTrackURL(str) {
         return true;
     } else if (hostname === 'youtu.be' && pathname.length > 1) {
         return true;
+    } else if (
+        (hostname === 'music.youtube.com' || hostname === 'www.music.youtube.com') &&
+        pathname.startsWith('/watch')
+    ) {
+        return true;
     }
 
     return false;
 }
 
+
 function extractSpotifyTrackId(url) {
     const trackIdRegex = /\/track\/([a-zA-Z0-9]+)/;
     const match = url.match(trackIdRegex);
+
+    if (match && match[1]) {
+        return match[1];
+    } else {
+        return null;
+    }
+}
+
+function extractYouTubeVideoId(url) {
+    const videoIdRegex = /[?&]v=([a-zA-Z0-9_-]+)/;
+    const match = url.match(videoIdRegex);
+
     if (match && match[1]) {
         return match[1];
     } else {
@@ -278,4 +399,6 @@ module.exports = {
     makeAccessToken,
     extractSpotifyTrackId,
     searchTracks,
+    playYoutube,
+    extractYouTubeVideoId,
 }
