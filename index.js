@@ -1,8 +1,17 @@
 const { ShardingManager } = require('discord.js');
 const express = require('express');
+const fs = require('fs');
 const configFile = require('./config.json');
 
 const config = configFile.app[configFile.appName] || configFile.app.debug;
+
+const downloadPath = 'downloads';
+if (!fs.existsSync(downloadPath)) {
+    fs.mkdirSync(downloadPath);
+    console.log('Folder created successfully.');
+} else {
+    console.log('Folder already exists.');
+}
 
 const app = express();
 
