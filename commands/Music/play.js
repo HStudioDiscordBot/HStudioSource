@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { spotify_client_id, spotify_client_secret } = require('../../config.json');
+const ytsr = require('ytsr')
 const lang = require('../../lang.json');
 const configFile = require('../../config.json');
 const config = configFile.app[configFile.appName] || configFile.app.debug;
@@ -45,16 +46,32 @@ module.exports = {
 
         const ac_token = await utils.makeAccessToken(interaction, spotify_client_id, spotify_client_secret);
 
+
         if (pl === 'spotify') {
             const spotify_id = utils.extractSpotifyTrackId(query);
             await utils.playSpotify(interaction, spotify_id, ac_token, requestedLocalization, config, spotify_client_id, spotify_client_secret);
         } else if (pl === 'youtube') {
-            await utils.playYoutube(interaction, query, requestedLocalization, config);
+            const onriginal = await interaction.reply({ embeds: [new EmbedBuilder().setTitle('Loading Video').setColor(config.color)]})
+            await utils.playYoutube(interaction, query, requestedLocalization, config, onriginal);
         } else if (pl === 'search') {
-            const spotify_id = await utils.searchTracks(query, ac_token);
-            await utils.playSpotify(interaction, spotify_id, ac_token, requestedLocalization, config, spotify_client_id, spotify_client_secret);
+            if (platform) {
+                if (platform === 'spotify') {
+                    const spotify_id = await utils.searchTracks(query, ac_token);
+                    await utils.playSpotify(interaction, spotify_id, ac_token, requestedLocalization, config, spotify_client_id, spotify_client_secret);
+                } else if (platform === 'youtube') {
+                    const onriginal = await interaction.reply({ embeds: [new EmbedBuilder().setTitle('Loading Video').setColor(config.color)]})
+                    const searchResults = await ytsr(query);
+                    await utils.playYoutube(interaction, searchResults.items[0].url, requestedLocalization, config, onriginal);
+                } else if (platform === 'soundcloud') {
+
+                }
+            } else {
+                const spotify_id = await utils.searchTracks(query, ac_token);
+                await utils.playSpotify(interaction, spotify_id, ac_token, requestedLocalization, config, spotify_client_id, spotify_client_secret);
+            }
         } else {
             return await interaction.reply({ embeds: [new EmbedBuilder().setTitle(`:no_entry:: ${requestedLocalization.error.cant_procress_query}`).setColor('Red').setDescription(`\`\`\`${query}\`\`\``)] });
         }
+
     },
 };

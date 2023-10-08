@@ -1,4 +1,4 @@
-const { Client, GatewayIntentBits, Collection } = require("discord.js");
+const { Client, GatewayIntentBits, Collection, Events } = require("discord.js");
 const fs = require('fs');
 
 const client = new Client({
@@ -23,3 +23,4 @@ const commandFolders = fs.readdirSync("./commands");
     client.handleCommands(commandFolders, "./commands");
     client.login();
 })();
+

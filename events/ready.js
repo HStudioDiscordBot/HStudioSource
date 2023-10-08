@@ -1,12 +1,17 @@
-const discord = require("discord.js");
+const { ActivityType } = require("discord.js");
 const { version } = require('../package.json')
+const { clearConnection } = require('../utils')
 
 module.exports = {
     name: 'ready',
     once: true,
     async execute(client) {
-        client.user.setPresence({ activities: [{ name: `/help | V${version}`, type: discord.ActivityType.Listening }] });
+        client.user.setPresence({ activities: [{ name: `/help | V${version}`, type: ActivityType.Listening }] });
 
         console.log(`[${client.shard.ids}] Ready! Logged in as ${client.user.tag}`);
+
+        setInterval(() => {
+            clearConnection(client);
+        }, 10 * 60 * 1000);
     },
 };

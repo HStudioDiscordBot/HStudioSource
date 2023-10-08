@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, GuildForumThreadManager, ClientUser } = require('discord.js');
 const { joinVoiceChannel, createAudioPlayer, createAudioResource, AudioPlayerStatus, NoSubscriberBehavior, entersState, getVoiceConnection } = require('@discordjs/voice');
 const axios = require('axios');
 var SpotifyWebApi = require('spotify-web-api-node');
@@ -6,6 +6,7 @@ const fs = require('fs');
 const { createReadStream } = require('node:fs');
 const Spotify = require('spotifydl-core').default;
 const ytdl = require('ytdl-core');
+const ytstream = require('yt-stream');
 
 // Time Converter
 function msToSec(milliseconds) {
@@ -122,12 +123,20 @@ async function getVideo(url) {
         }
     }
 
+    let videoLengthFormat;
+    if (videoDetails.isLiveContent) {
+        videoLengthFormat = 'LIVE';
+    } else {
+        videoLengthFormat = convertToHHMMSS(videoDetails.lengthSeconds);
+    }
+
     const redata = {
         id: videoDetails.videoId,
         images: maxResolutionThumbnail.url,
         name: videoDetails.title,
         url: videoDetails.video_url,
-        length: convertToHHMMSS(videoDetails.lengthSeconds),
+        length: videoLengthFormat,
+        lengthSeconds: videoDetails.lengthSeconds,
         auther: videoDetails.author.name,
         artists_url: videoDetails.author.channel_url,
         view: formatNumber(videoDetails.viewCount),
@@ -176,10 +185,26 @@ async function dlSpotify(interaction, dlPath, getResults, emoji_name, emoji_id, 
     await dlMessage.delete();
 }
 
+async function stYoutuve(interaction, dlPath, getResults, emoji_name, emoji_id, requestedLocalization, config) {
+
+}
+
 async function dlYoutube(interaction, dlPath, getResults, emoji_name, emoji_id, requestedLocalization, config) {
     if (fs.existsSync(dlPath)) {
         return;
     }
+
+    // ytstream(getResults.url, {
+    //     quality: 'highestaudio',
+    //     filter: 'audioonly',
+    //     format: 'mp3',
+    // }).stream.pipe(fs.createWriteStream(dlPath))
+
+    // const stream = await ytstream.stream(getResults.url, {
+    //     quality: 'high',
+    //     type: 'audio',
+    // });
+    // stream.stream.pipe(fs.createWriteStream(dlPath));
 
     const progressBar = ['⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜', '🟩⬜⬜⬜⬜⬜⬜⬜⬜⬜', '🟩🟩⬜⬜⬜⬜⬜⬜⬜⬜', '🟩🟩🟩⬜⬜⬜⬜⬜⬜⬜', '🟩🟩🟩🟩⬜⬜⬜⬜⬜⬜', '🟩🟩🟩🟩🟩⬜⬜⬜⬜⬜', '🟩🟩🟩🟩🟩🟩⬜⬜⬜⬜', '🟩🟩🟩🟩🟩🟩🟩⬜⬜⬜', '🟩🟩🟩🟩🟩🟩🟩🟩⬜⬜', '🟩🟩🟩🟩🟩🟩🟩🟩🟩⬜'];
 
@@ -196,6 +221,20 @@ async function dlYoutube(interaction, dlPath, getResults, emoji_name, emoji_id, 
         embeds: [new EmbedBuilder().setColor(config.color).setTitle(`<:${emoji_name}:${emoji_id}> ${requestedLocalization.commands.play.execute.download}`).setDescription(progressBar[0])]
     });
 
+    let updateEvery;
+    if (getResults.lengthSeconds > 60 * 60) {
+        updateEvery = 1000;
+    } else if (getResults.lengthSeconds > 30 * 60) {
+        updateEvery = 600;
+    } else if (getResults.lengthSeconds > 10 * 60) {
+        updateEvery = 500;
+    } else if (getResults.lengthSeconds > 5 * 60) {
+        updateEvery = 400;
+    } else if (getResults.lengthSeconds > 1 * 60) {
+        updateEvery = 300;
+    } else {
+        updateEvery = 100;
+    }
     await Promise.all([
         ytdl(getResults.url, {
             quality: 'highestaudio',
@@ -205,7 +244,7 @@ async function dlYoutube(interaction, dlPath, getResults, emoji_name, emoji_id, 
         (async () => {
             for (let i = 1; i < progressBar.length; i++) {
                 await updateProgressBar();
-                await new Promise(resolve => setTimeout(resolve, 200));
+                await new Promise(resolve => setTimeout(resolve, updateEvery));
             }
         })(),
     ]);
@@ -270,9 +309,9 @@ async function playSpotify(interaction, searchResults, ac_token, requestedLocali
     await playMusic(interaction, dlPath, connection, player, 'spotify', '1156557829486948413', getResults.name, requestedLocalization, config);
 }
 
-async function playYoutube(interaction, searchResults, requestedLocalization, config) {
+async function playYoutube(interaction, searchResults, requestedLocalization, config, onriginalMessage) {
     if (!searchResults) {
-        return await interaction.reply({ embeds: [new EmbedBuilder().setColor('Red').setTitle('Error')] })
+        return await onriginalMessage.edit({ embeds: [new EmbedBuilder().setColor('Red').setTitle('Error')] })
     }
 
     const getResults = await getVideo(searchResults);
@@ -289,7 +328,7 @@ async function playYoutube(interaction, searchResults, requestedLocalization, co
             { name: requestedLocalization.commands.play.execute.owner, value: `<@${interaction.user.id}>`, inline: true }
         );
 
-    await interaction.reply({ embeds: [cardEmbed] });
+    await onriginalMessage.edit({ embeds: [cardEmbed] });
 
     let connection = await joinVC(interaction);
 
@@ -389,6 +428,19 @@ function extractYouTubeVideoId(url) {
     }
 }
 
+
+// Utils
+async function clearConnection(client) {
+    const guilds = await client.guilds.fetch();
+    for (const guild of guilds.toJSON()) {
+        const connection = getVoiceConnection(guild.id);
+
+        if (connection) {
+            connection.destroy();
+        }
+    }
+}
+
 module.exports = {
     msToSec,
     convertToHHMMSS,
@@ -401,4 +453,5 @@ module.exports = {
     searchTracks,
     playYoutube,
     extractYouTubeVideoId,
+    clearConnection,
 }

@@ -75,6 +75,9 @@
             "config": {
                 "description": "Config"
             },
+            "report": {
+                "description": "Send a bug report to the bot devs"
+            },
             "error": {
                 "please_join_before_use_bot": "You must be in the Voice Channel before inviting the bot.",
                 "cant_procress_query": "Unable to process query",
@@ -161,6 +164,9 @@
             },
             "config": {
                 "description": "ดูการตั้งค่า"
+            },
+            "report": {
+                "description": "แจ้งปัญหาการใช้บอทให้ผู้พัฒนา"
             },
             "error": {
                 "please_join_before_use_bot": "คุณต้องอยู่ใน Voice Channel ก่อนเชิญบอท",
