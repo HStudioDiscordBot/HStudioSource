@@ -5,24 +5,15 @@ const lang = require('../../lang.json');
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('pause')
+    .setName('resume')
     .setDescription('Pause the currently playing track'),
-  async execute(interaction, client) {
+  async execute(interaction) {
     const connection = getVoiceConnection(interaction.guild.id);
     const player = new createAudioPlayer();
 
-
-    const isPause = await player.pause();
     connection.subscribe(player);
-
-    console.log(isPause);
-
-    if (isPause) {
-      await interaction.reply("Paused");
+    if (player.unpause()) {
+        await interaction.reply("Resumed");
     }
-
-    player.on(AudioPlayerStatus.Paused, (oldState, newState) => {
-      console.log('Paused');
-    });
   },
 };

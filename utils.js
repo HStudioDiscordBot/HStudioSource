@@ -328,7 +328,7 @@ async function playYoutube(interaction, searchResults, requestedLocalization, co
             { name: requestedLocalization.commands.play.execute.owner, value: `<@${interaction.user.id}>`, inline: true }
         );
 
-    await onriginalMessage.edit({ embeds: [cardEmbed] });
+    await onriginalMessage.edit({ embeds: [cardEmbed], files: [], components: [] });
 
     let connection = await joinVC(interaction);
 
@@ -431,15 +431,21 @@ function extractYouTubeVideoId(url) {
 
 // Utils
 async function clearConnection(client) {
-    const guilds = await client.guilds.fetch();
-    for (const guild of guilds.toJSON()) {
-        const connection = getVoiceConnection(guild.id);
+    try {
+        const guilds = await client.guilds.fetch();
 
-        if (connection) {
-            connection.destroy();
+        for (const guild of guilds.values()) {
+            const connection = getVoiceConnection(guild.id);
+
+            if (connection && !connection.dispatcher && !connection.dispatcher.speaking) {
+                connection.destroy();
+            }
         }
+    } catch (error) {
+        console.error("Error disconnecting from voice channels:", error);
     }
 }
+
 
 module.exports = {
     msToSec,

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, AttachmentBuilder } = require('discord.js');
 const axios = require('axios');
 const configFile = require('../../config.json');
 const config = configFile.app[configFile.appName] || configFile.app.debug;
@@ -17,7 +17,7 @@ async function getConfig(guildID) {
 
 async function updateConfig(guildID, oldConfig, level) {
     try {
-        const response = await axios.post(`https://api.hewkawar.xyz/app/hstuido/config`, { id: guildID, speed: `${level}`});
+        const response = await axios.post(`https://api.hewkawar.xyz/app/hstuido/config`, { id: guildID, speed: `${level}` });
         return response.data;
     } catch (error) {
         console.error(error);
@@ -52,6 +52,8 @@ module.exports = {
 
         const configData = await getConfig(interaction.guild.id);
 
+        const file = new AttachmentBuilder('assets/banner/serverconfig.png');
+
         const configEmbed = new EmbedBuilder()
             .setTitle(`:gear: ${interaction.guild.name}'s Config`)
             .setColor(config.color)
@@ -62,9 +64,10 @@ module.exports = {
                 { name: "Volume", value: `\`\`\`${configData.volume}\`\`\``, inline: true },
             )
             .setFooter({ text: `${client.user.displayName} | ${requestedLocalization.commands.version}: ${version}` })
-            .setThumbnail(`${interaction.guild.iconURL({ extension: 'png' })}`);
+            .setThumbnail(`${interaction.guild.iconURL({ extension: 'png' })}`)
+            .setImage('attachment://serverconfig.png');
 
-        const replyMessage = await interaction.reply({ embeds: [configEmbed] });
+        const replyMessage = await interaction.reply({ embeds: [configEmbed], files: [file] });
 
         const updatedConfig = await updateConfig(interaction.guild.id, configData, parseInt(level) / 10);
 
@@ -80,7 +83,8 @@ module.exports = {
                 )
                 .setFooter({ text: `${client.user.displayName} | ${requestedLocalization.commands.version}: ${version}` })
                 .setThumbnail(`${interaction.guild.iconURL({ extension: 'png' })}`)
-            ]
+                .setImage('attachment://serverconfig.png')
+            ], files: [file]
         });
     },
 };

@@ -25,7 +25,75 @@
             "client_id": "1159773561683193866",
             "color": "NotQuiteBlack",
             "inviteURL": "https://discord.com/oauth2/authorize?client_id=1159773561683193866&scope=bot%20applications.commands&permissions=36825160",
-            "port": 1549
+            "port": 1549,
+            "commands": [
+                {
+                    "name": "config",
+                    "description": "ดูการตั้งค่า",
+                    "id": 1159775767824187397
+                },
+                {
+                    "name": "help",
+                    "description": "คำสั่งช่วยเหลือบอท",
+                    "id": 1160520961167196170
+                },
+                {
+                    "name": "invite",
+                    "description": "เชิญบอท",
+                    "id": 1159775767824187398
+                },
+                {
+                    "name": "join",
+                    "description": "เข้าห้องเสียง",
+                    "id": 1159775767824187400
+                },
+                {
+                    "name": "leave",
+                    "description": "ออกจากห้องเสียง",
+                    "id": 1159775767824187401
+                },
+                {
+                    "name": "loop",
+                    "description": "เปิด/ปิดลูป",
+                    "id": 1159775767824187392
+                },
+                {
+                    "name": "pause",
+                    "description": "หยุดชั่วคราว",
+                    "id": 1159775767824187395
+                },
+                {
+                    "name": "ping",
+                    "description": "เช็คปิง",
+                    "id": 1159775767824187399
+                },
+                {
+                    "name": "play",
+                    "description": "เล่นเพลง / เพิ่มคิว",
+                    "id": 1159775767824187396
+                },
+                {
+                    "name": "report",
+                    "description": "แจ้งปัญหาการใช้บอทให้ผู้พัฒนา",
+                    "id": 1160445456728465418
+                },
+                {
+                    "name": "resume",
+                    "description": "เล่นเพลงต่อ",
+                    "id": 1160511505532465234
+                },
+                {
+                    "name": "speed",
+                    "description": "ปรับความเร็ว",
+                    "id": 1159775767824187393
+                },
+                {
+                    "name": "volume",
+                    "description": "ปรับระดับเสียง",
+                    "id": 1159775767824187394
+                }
+
+            ]
         }
     }
 }
