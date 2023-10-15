@@ -12,6 +12,6 @@ module.exports = {
 
         setInterval(() => {
             clearConnection(client);
-        }, 1000);
+        }, 10 * 60 * 1000);
     },
 };
