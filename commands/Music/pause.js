@@ -6,7 +6,10 @@ const lang = require('../../lang.json');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('pause')
-    .setDescription('Pause the currently playing track'),
+    .setDescription(lang.default.commands.pause.description)
+    .setDescriptionLocalizations({
+      th: lang.th.commands.pause.description,
+  }),
   async execute(interaction, client) {
     const connection = getVoiceConnection(interaction.guild.id);
     const player = new createAudioPlayer();

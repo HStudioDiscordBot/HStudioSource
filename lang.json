@@ -20,9 +20,6 @@
                     "view": "View"
                 }
             },
-            "pause": {
-                "description": "Pause"
-            },
             "leave": {
                 "description": "Leave from Voice Channel",
                 "execute": {
@@ -81,6 +78,12 @@
             "help": {
                 "description": "Help"
             },
+            "pause": {
+                "description": "Pause Current Track"
+            },
+            "resume": {
+                "description": "Resume Current Track"
+            },
             "error": {
                 "please_join_before_use_bot": "You must be in the Voice Channel before inviting the bot.",
                 "cant_procress_query": "Unable to process query",
@@ -112,9 +115,6 @@
                     "download": "กำลังโหลดเพลงนี้สำหรับครั้งแรก",
                     "view": "การดู"
                 }
-            },
-            "pause": {
-                "description": "หยุดชั่วคราว"
             },
             "leave": {
                 "description": "ออกจากห้องเสียง",
@@ -173,6 +173,12 @@
             },
             "help": {
                 "description": "คำสั่งช่วยเหลือบอท"
+            },
+            "pause": {
+                "description": "หยุดชั่วคราว"
+            },
+            "resume": {
+                "description": "เล่นเพลงต่อ"
             },
             "error": {
                 "please_join_before_use_bot": "คุณต้องอยู่ใน Voice Channel ก่อนเชิญบอท",
