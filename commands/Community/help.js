@@ -103,7 +103,6 @@ module.exports = {
           .setColor(config.color)
           .setDescription(`${commandList}`);
 
-
         await i.update({ embeds: [musicEmbed], components: [row] })
       } else if (i.values[0] === 'helpcradit') {
         const helpSelection = new StringSelectMenuBuilder()
@@ -136,6 +135,6 @@ module.exports = {
 
     collecter.on('end', async collected => {
       await interaction.deleteReply()
-    } )
+    })
   },
 };

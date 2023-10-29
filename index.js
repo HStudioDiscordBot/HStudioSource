@@ -1,5 +1,6 @@
 const { ShardingManager } = require('discord.js');
 const express = require('express');
+const cors = require('cors');
 const fs = require('fs');
 const configFile = require('./config.json');
 
@@ -11,6 +12,8 @@ if (!fs.existsSync(downloadPath)) {
 }
 
 const app = express();
+app.use(cors());
+app.use(express.json());
 
 const manager = new ShardingManager('./bot.js', {
     token: config.token,
