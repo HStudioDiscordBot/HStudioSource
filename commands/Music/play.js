@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, AttachmentBuilder } = require('discord.js');
-const { spotify_client_id, spotify_client_secret } = require('../../config.json');
+const { spotify_client_id, spotify_client_secret } = require('../../spotify.json');
 const ytsr = require('ytsr')
 const lang = require('../../lang.json');
 const configFile = require('../../config.json');

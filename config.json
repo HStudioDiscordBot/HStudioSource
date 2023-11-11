@@ -1,7 +1,5 @@
 {
     "appName": "debug",
-    "spotify_client_id": "08e3e233af5b4c3dabae5869658f1d0f",
-    "spotify_client_secret": "627ee9e3dac54262b20667936c48bb78",
     "tw_phone_number": "0610739386",
     "setting": {
         "generateDependencyReport": false
