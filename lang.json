@@ -73,7 +73,14 @@
                 "description": "Config"
             },
             "report": {
-                "description": "Send a bug report to the bot devs"
+                "description": "Send a bug report to the bot devs",
+                "modals": {
+                    "ModalTitle": "Bug & Command Abuse Reporting",
+                    "ModalCommandPlaceholder": "Plase only state the command name",
+                    "ModalCommandLabel": "What command has bug or has been abused",
+                    "ModalDescriptionPlaceHolder": "Be sure to be as detailed as possible so the developers can take action",
+                    "ModalDescriptionLabel": "escibe the bug of command abuse"
+                }
             },
             "help": {
                 "description": "Help"
@@ -83,6 +90,14 @@
             },
             "resume": {
                 "description": "Resume Current Track"
+            },
+            "donate": {
+                "description": "Donate",
+                "modals": {
+                    "ModalTitle": "Donate to Support Bot Developer",
+                    "ModalUrlPlaceholder": "Donate to support HStudio bot developer",
+                    "ModalUrlLabel": "Voucher Link (Truemoney Wallet Voucher)"
+                }
             },
             "error": {
                 "please_join_before_use_bot": "You must be in the Voice Channel before inviting the bot.",
@@ -169,7 +184,14 @@
                 "description": "ดูการตั้งค่า"
             },
             "report": {
-                "description": "แจ้งปัญหาการใช้บอทให้ผู้พัฒนา"
+                "description": "แจ้งปัญหาการใช้บอทให้ผู้พัฒนา",
+                "modals": {
+                    "ModalTitle": "รายงานบั๊กและคำสั่งที่มีปัญหา",
+                    "ModalCommandPlaceholder": "โปรดระบุชื่อคำสั่งนั้น",
+                    "ModalCommandLabel": "คำสั่งที่มีปัญหา",
+                    "ModalDescriptionPlaceHolder": "อธิบานระละเอียดของปัญหา",
+                    "ModalDescriptionLabel": "รายละเอียดของปัญหา"
+                }
             },
             "help": {
                 "description": "คำสั่งช่วยเหลือบอท"
@@ -179,6 +201,14 @@
             },
             "resume": {
                 "description": "เล่นเพลงต่อ"
+            },
+            "donate": {
+                "description": "บริจาคเงินช่วยพัฒนาบอท",
+                "modals": {
+                    "ModalTitle": "บริจาคเงินช่วยนักพัฒนาบอท",
+                    "ModalUrlPlaceholder": "บริจาคเงินเพื่อช่วยพัฒนนาบอท HStudio",
+                    "ModalUrlLabel": "ลิ้งอั่งเปา (Truemoney Wallet Voucher)"
+                }
             },
             "error": {
                 "please_join_before_use_bot": "คุณต้องอยู่ใน Voice Channel ก่อนเชิญบอท",

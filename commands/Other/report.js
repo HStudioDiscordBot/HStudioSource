@@ -12,22 +12,24 @@ module.exports = {
             th: lang.th.commands.report.description,
         }),
     async execute(interaction, client) {
+        const requestedLocalization = lang[interaction.locale] || lang.default;
+
         const modal = new ModalBuilder()
-            .setTitle(`Bug & Command Abuse Reporting`)
+            .setTitle(requestedLocalization.commands.report.modals.ModalTitle)
             .setCustomId('bugreport');
 
         const command = new TextInputBuilder()
             .setCustomId('command')
             .setRequired(true)
-            .setPlaceholder('Plase only state the command name')
-            .setLabel('What command has bug or has been abused')
+            .setPlaceholder(requestedLocalization.commands.report.modals.ModalCommandPlaceholder)
+            .setLabel(requestedLocalization.commands.report.modals.ModalCommandLabel)
             .setStyle(TextInputStyle.Short);
 
         const description = new TextInputBuilder()
             .setCustomId('description')
             .setRequired(true)
-            .setPlaceholder('Be sure to be as detailed as possible so the developers can take action')
-            .setLabel('Descibe the bug of command abuse')
+            .setPlaceholder(requestedLocalization.commands.report.modals.ModalDescriptionPlaceHolder)
+            .setLabel(requestedLocalization.commands.report.modals.ModalDescriptionLabel)
             .setStyle(TextInputStyle.Paragraph);
 
         const one = new ActionRowBuilder().addComponents(command);

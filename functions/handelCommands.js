@@ -2,6 +2,7 @@ const { REST } = require("@discordjs/rest");
 const { Routes } = require('discord-api-types/v9');
 const fs = require('fs');
 const configFile = require('../config.json');
+const token = require('../token.json');
 
 const config = configFile.app[configFile.appName] || configFile.app.debug;
 
@@ -28,7 +29,7 @@ module.exports = (client) => {
 
         const rest = new REST({
             version: '10'
-        }).setToken(config.token);
+        }).setToken(token[configFile.appName]);
 
         (async () => {
             try {

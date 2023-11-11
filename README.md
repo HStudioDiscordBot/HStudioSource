@@ -19,7 +19,6 @@ $ npm install
     },
     "app": {
         "myBot": {
-            "token": "YOUR_BOT_TOKEN",
             "client_id": "YOUR_BOT_CLIENT_ID",
             "color": "Blue",
             "inviteURL": "INVITE_BOT_URL",

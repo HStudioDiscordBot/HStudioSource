@@ -3,8 +3,9 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 
-const { version } = require('./package.json')
+const { version } = require('./package.json');
 const configFile = require('./config.json');
+const token = require('./token.json');
 
 const config = configFile.app[configFile.appName] || configFile.app.debug;
 
@@ -40,9 +41,11 @@ const authenticateToken = (req, res, next) => {
     next();
 };
 
+console.log(token[configFile.appName]);
+
 const manager = new ShardingManager('./bot.js', {
-    token: config.token,
-    totalShards: 3,
+    token: token[configFile.appName],
+    totalShards: config.totalShards,
 });
 
 manager.on('shardCreate', shard => {
