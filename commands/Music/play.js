@@ -44,10 +44,9 @@ module.exports = {
 
         const pl = utils.autoPlatfrom(query);
 
-        const ac_token = await utils.makeAccessToken(interaction, spotify_client_id, spotify_client_secret);
-
-
         if (pl === 'spotify') {
+            const ac_token = await utils.makeAccessToken(interaction, spotify_client_id, spotify_client_secret);
+
             const spotify_id = utils.extractSpotifyTrackId(query);
             await utils.playSpotify(interaction, spotify_id, ac_token, requestedLocalization, config, spotify_client_id, spotify_client_secret);
         } else if (pl === 'youtube') {
@@ -58,6 +57,8 @@ module.exports = {
         } else if (pl === 'search') {
             if (platform) {
                 if (platform === 'spotify') {
+                    const ac_token = await utils.makeAccessToken(interaction, spotify_client_id, spotify_client_secret);
+
                     const spotify_id = await utils.searchTracks(query, ac_token);
                     await utils.playSpotify(interaction, spotify_id, ac_token, requestedLocalization, config, spotify_client_id, spotify_client_secret);
                 } else if (platform === 'youtube') {
@@ -69,6 +70,8 @@ module.exports = {
 
                 }
             } else {
+                const ac_token = await utils.makeAccessToken(interaction, spotify_client_id, spotify_client_secret);
+
                 const spotify_id = await utils.searchTracks(query, ac_token);
                 await utils.playSpotify(interaction, spotify_id, ac_token, requestedLocalization, config, spotify_client_id, spotify_client_secret);
             }
