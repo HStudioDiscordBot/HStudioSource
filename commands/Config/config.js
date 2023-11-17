@@ -27,9 +27,10 @@ module.exports = {
 
         const configData = await getConfig(interaction.guild.id);
 
-        const file = new AttachmentBuilder('assets/banner/serverconfig.png');
+        if (configData.id) {
+            const file = new AttachmentBuilder('assets/banner/serverconfig.png');
 
-        const configEmbed = new EmbedBuilder()
+            const configEmbed = new EmbedBuilder()
             .setTitle(`:gear: ${interaction.guild.name}'s Config`)
             .setColor(config.color)
             .setFields(
@@ -42,6 +43,13 @@ module.exports = {
             .setThumbnail(`${interaction.guild.iconURL({ extension: 'png' })}`)
             .setImage('attachment://serverconfig.png');
 
-        await interaction.reply({ embeds: [configEmbed], files: [file] });
+            return await interaction.reply({ embeds: [configEmbed], files: [file] });
+        } else {
+            const embed = new EmbedBuilder()
+            .setTitle(`⚠️ Can't connect to server!`)
+            .setDescription('Please try again later')
+            .setTimestamp(Date.now())
+            return await interaction.reply({ embeds: [embed]})
+        }
     },
 };

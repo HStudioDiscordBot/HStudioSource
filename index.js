@@ -41,11 +41,9 @@ const authenticateToken = (req, res, next) => {
     next();
 };
 
-console.log(token[configFile.appName]);
-
 const manager = new ShardingManager('./bot.js', {
     token: token[configFile.appName],
-    totalShards: config.totalShards,
+    // totalShards: config.totalShards,
 });
 
 manager.on('shardCreate', shard => {

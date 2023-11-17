@@ -17,7 +17,7 @@ module.exports = {
     async execute(interaction) {
         const requestedLocalization = lang[interaction.locale] || lang.default;
 
-        let connection = getVoiceConnection(interaction.guildId);
+        let connection = getVoiceConnection(interaction.guild.id);
 
         if (!interaction.member.voice.channel) {
             return await interaction.reply({ embeds: [new EmbedBuilder().setTitle(`:warning: ${requestedLocalization.commands.error.please_join_before_use_bot}`).setColor("Yellow")] });
@@ -26,8 +26,8 @@ module.exports = {
         if (!connection) {
             connection = joinVoiceChannel({
                 channelId: interaction.member.voice.channel.id,
-                guildId: interaction.guildId,
-                adapterCreator: interaction.member.voice.channel.guild.voiceAdapterCreator,
+                guildId: interaction.guild.id,
+                adapterCreator: interaction.guild.voiceAdapterCreator,
                 selfDeaf: true,
                 selfMute: false
             });

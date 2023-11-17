@@ -1,12 +1,10 @@
 const { SlashCommandBuilder, EmbedBuilder, GuildForumThreadManager, ClientUser } = require('discord.js');
 const { joinVoiceChannel, createAudioPlayer, createAudioResource, AudioPlayerStatus, NoSubscriberBehavior, entersState, getVoiceConnection } = require('@discordjs/voice');
 const axios = require('axios');
-var SpotifyWebApi = require('spotify-web-api-node');
 const fs = require('fs');
 const { createReadStream } = require('node:fs');
 const Spotify = require('spotifydl-core').default;
 const ytdl = require('ytdl-core');
-const ytstream = require('yt-stream');
 
 // Time Converter
 function msToSec(milliseconds) {

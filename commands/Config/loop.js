@@ -23,7 +23,7 @@ async function updateConfig(guildID, oldConfig) {
         } else if (oldConfig.loop === 'true') {
             isLoop = 'false';
         }
-        const response = await axios.post(`https://api.hewkawar.xyz/app/hstuido/config`, { id: guildID, loop: isLoop});
+        const response = await axios.post(`https://api.hewkawar.xyz/app/hstuido/config`, { id: guildID, loop: isLoop });
         return response.data;
     } catch (error) {
         console.error(error);
@@ -43,39 +43,48 @@ module.exports = {
 
         const configData = await getConfig(interaction.guild.id);
 
-        const file = new AttachmentBuilder('assets/banner/serverconfig.png');
+        if (configData.id) {
 
-        const configEmbed = new EmbedBuilder()
-            .setTitle(`:gear: ${interaction.guild.name}'s Config`)
-            .setColor(config.color)
-            .setFields(
-                { name: "Guild ID", value: `\`\`\`${configData.id}\`\`\``, inline: false },
-                { name: "Loop", value: `\`\`\`${configData.loop}\`\`\``, inline: true },
-                { name: "Speed", value: `\`\`\`x${configData.speed}\`\`\``, inline: true },
-                { name: "Volume", value: `\`\`\`${configData.volume}\`\`\``, inline: true },
-            )
-            .setFooter({ text: `${client.user.displayName} | ${requestedLocalization.commands.version}: ${version}` })
-            .setThumbnail(`${interaction.guild.iconURL({ extension: 'png' })}`)
-            .setImage('attachment://serverconfig.png');
+            const file = new AttachmentBuilder('assets/banner/serverconfig.png');
 
-        const replyMessage = await interaction.reply({ embeds: [configEmbed], files: [file] });
-
-        const updatedConfig = await updateConfig(interaction.guild.id, configData);
-
-        await replyMessage.edit({
-            embeds: [new EmbedBuilder()
+            const configEmbed = new EmbedBuilder()
                 .setTitle(`:gear: ${interaction.guild.name}'s Config`)
                 .setColor(config.color)
                 .setFields(
-                    { name: "Guild ID", value: `\`\`\`${updatedConfig.id}\`\`\``, inline: false },
-                    { name: ":recycle: Loop", value: `\`\`\`${updatedConfig.loop}\`\`\``, inline: true },
-                    { name: "Speed", value: `\`\`\`x${updatedConfig.speed}\`\`\``, inline: true },
-                    { name: "Volume", value: `\`\`\`${updatedConfig.volume}\`\`\``, inline: true },
+                    { name: "Guild ID", value: `\`\`\`${configData.id}\`\`\``, inline: false },
+                    { name: "Loop", value: `\`\`\`${configData.loop}\`\`\``, inline: true },
+                    { name: "Speed", value: `\`\`\`x${configData.speed}\`\`\``, inline: true },
+                    { name: "Volume", value: `\`\`\`${configData.volume}\`\`\``, inline: true },
                 )
                 .setFooter({ text: `${client.user.displayName} | ${requestedLocalization.commands.version}: ${version}` })
                 .setThumbnail(`${interaction.guild.iconURL({ extension: 'png' })}`)
-                .setImage('attachment://serverconfig.png')
-            ], files: [file]
-        });
+                .setImage('attachment://serverconfig.png');
+
+            const replyMessage = await interaction.reply({ embeds: [configEmbed], files: [file] });
+
+            const updatedConfig = await updateConfig(interaction.guild.id, configData);
+
+            await replyMessage.edit({
+                embeds: [new EmbedBuilder()
+                    .setTitle(`:gear: ${interaction.guild.name}'s Config`)
+                    .setColor(config.color)
+                    .setFields(
+                        { name: "Guild ID", value: `\`\`\`${updatedConfig.id}\`\`\``, inline: false },
+                        { name: ":recycle: Loop", value: `\`\`\`${updatedConfig.loop}\`\`\``, inline: true },
+                        { name: "Speed", value: `\`\`\`x${updatedConfig.speed}\`\`\``, inline: true },
+                        { name: "Volume", value: `\`\`\`${updatedConfig.volume}\`\`\``, inline: true },
+                    )
+                    .setFooter({ text: `${client.user.displayName} | ${requestedLocalization.commands.version}: ${version}` })
+                    .setThumbnail(`${interaction.guild.iconURL({ extension: 'png' })}`)
+                    .setImage('attachment://serverconfig.png')
+                ], files: [file]
+            });
+        } else {
+            const embed = new EmbedBuilder()
+            .setTitle(`⚠️ Can't connect to server!`)
+            .setDescription('Please try again later')
+            .setTimestamp(Date.now())
+            return await interaction.reply({ embeds: [embed]})
+        }
     },
 };
