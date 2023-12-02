@@ -1,7 +1,7 @@
 {
   "name": "hstudio",
   "version": "2.1.5",
-  "build": "1",
+  "build": "5",
   "description": "",
   "main": "index.js",
   "scripts": {

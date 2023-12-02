@@ -3,6 +3,7 @@ const { EmbedBuilder, AttachmentBuilder } = require("discord.js");
 const lang = require("../lang.json");
 const configFile = require('../config.json');
 const { version } = require('../package.json');
+const { default: axios } = require("axios");
 
 module.exports = {
     name: 'interactionCreate',
@@ -39,13 +40,16 @@ module.exports = {
         if (interaction.customId === 'donate') {
             await interaction.reply({ embeds: [new EmbedBuilder().setColor('Blue').setDescription('<a:loading:1172816904356896830> กำลังตรวจสอบ Url กรุณารอสักครู่')], ephemeral: true});
 
+            await axios.post('https://api.hewkawar.xyz/donate/truemoney/voucher', {
+                voucher: interaction.fields.getTextInputValue('url')
+            }).then(async response => {
+                if (response.data.status === "SUCCESS") {
+                    return await interaction.editReply({ embeds: [new EmbedBuilder().setDescription(`✅ ขอบคุณสำหรับ \`${response.data.amount}\` บาทที่บริจาคให้ HStudio Teams`)]});
+                } else {
+                    return await interaction.editReply({ embeds: [new EmbedBuilder().setDescription(`❌ ไม่สามารถเปิดอั่งเปาได้`)]});
+                }
+            })
             await interaction.editReply({ embeds: [new EmbedBuilder().setDescription(`❌ ปิดระบบบริจาคชั่วคราว`)]})
-            // await twvoucher(configFile.tw_phone_number, interaction.fields.getTextInputValue('url'))
-            // .then(async redeemed => {
-            //     return await interaction.editReply({ embeds: [new EmbedBuilder().setDescription(`✅ ขอบคุณสำหรับ \`${redeemed.amount}\` บาทที่บริจาคให้ HStudio Teams`)]});
-            // }).catch(async err => {
-            //     return await interaction.editReply({ embeds: [new EmbedBuilder().setDescription(`❌ ไม่สามารถเปิดอั่งเปาได้`)]});
-            // })
         }
     },
 };
