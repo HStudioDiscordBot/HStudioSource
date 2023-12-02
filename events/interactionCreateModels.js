@@ -49,7 +49,6 @@ module.exports = {
                     return await interaction.editReply({ embeds: [new EmbedBuilder().setDescription(`❌ ไม่สามารถเปิดอั่งเปาได้`)]});
                 }
             })
-            await interaction.editReply({ embeds: [new EmbedBuilder().setDescription(`❌ ปิดระบบบริจาคชั่วคราว`)]})
         }
     },
 };
