@@ -1,7 +1,5 @@
 const { SlashCommandBuilder, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle, ButtonBuilder, ButtonStyle } = require('discord.js');
-const configFile = require('../../config.json');
 
-const config = configFile.app[configFile.appName] || configFile.app.debug;
 const lang = require('../../lang.json');
 
 module.exports = {

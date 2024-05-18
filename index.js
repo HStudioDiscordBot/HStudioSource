@@ -4,10 +4,8 @@ const cors = require('cors');
 const fs = require('fs');
 
 const { version } = require('./package.json');
-const configFile = require('./config.json');
-const token = require('./token.json');
 
-const config = configFile.app[configFile.appName] || configFile.app.debug;
+require('dotenv').config();
 
 const downloadPath = 'downloads';
 if (!fs.existsSync(downloadPath)) {
@@ -42,8 +40,7 @@ const authenticateToken = (req, res, next) => {
 };
 
 const manager = new ShardingManager('./bot.js', {
-    token: token[configFile.appName],
-    // totalShards: config.totalShards,
+    token: process.env.TOKEN,
 });
 
 manager.on('shardCreate', shard => {
@@ -85,8 +82,8 @@ app.post('/bot/respawn', authenticateToken, (req, res) => {
     return res.status(500).json({ status: 500, message: `can't respawn shard` });
 })
 
-app.listen(config.port, () => {
-    console.log(`Status page server is running at http://localhost:${config.port}/status`);
+app.listen(process.env.PORT, () => {
+    console.log(`Status page server is running at http://localhost:${process.env.PORT}/status`);
 });
 
 manager.spawn().then(shards => {

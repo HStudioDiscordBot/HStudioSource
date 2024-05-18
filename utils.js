@@ -1,10 +1,11 @@
-const { SlashCommandBuilder, EmbedBuilder, GuildForumThreadManager, ClientUser } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, GuildForumThreadManager, ClientUser, Colors } = require('discord.js');
 const { joinVoiceChannel, createAudioPlayer, createAudioResource, AudioPlayerStatus, NoSubscriberBehavior, entersState, getVoiceConnection } = require('@discordjs/voice');
 const axios = require('axios');
 const fs = require('fs');
 const { createReadStream } = require('node:fs');
 const Spotify = require('spotifydl-core').default;
 const ytdl = require('ytdl-core');
+const { Readable } = require('stream');
 
 // Time Converter
 function msToSec(milliseconds) {
@@ -261,21 +262,24 @@ function autoPlatfrom(query) {
     }
 }
 
-async function playMusic(interaction, dlPath, connection, player, platform, platform_emoji_id, song_name, requestedLocalization, config) {
-    let resource = createAudioResource(createReadStream(dlPath));
+async function playMusic(interaction, buffer, connection, player, platform, platform_emoji_id, song_name, requestedLocalization) {
+    const readableStream = Readable.from(buffer);
+
+    let resource = createAudioResource(readableStream);
+
+    connection.subscribe(player);
 
     player.play(resource);
 
-    await interaction.channel.send({ contant: '@silent', embeds: [new EmbedBuilder().setColor(config.color).setDescription(`<:${platform}:${platform_emoji_id}> ${requestedLocalization.commands.play.execute.start_playing} **${song_name}**`)] });
+    await interaction.channel.send({ contant: '@silent', embeds: [new EmbedBuilder().setColor(Colors.Blue).setDescription(`<:${platform}:${platform_emoji_id}> ${requestedLocalization.commands.play.execute.start_playing} **${song_name}**`)] });
 
-    connection.subscribe(player);
 
     player.on(AudioPlayerStatus.Idle, () => {
         connection.destroy();
     });
 }
 
-async function playSpotify(interaction, searchResults, ac_token, requestedLocalization, config, spotify_client_id, spotify_client_secret) {
+async function playSpotify(interaction, searchResults, ac_token, requestedLocalization, client) {
     if (!searchResults) {
         return await interaction.reply({ embeds: [new EmbedBuilder().setColor('Red').setTitle('Error')] })
     }
@@ -283,7 +287,7 @@ async function playSpotify(interaction, searchResults, ac_token, requestedLocali
     const getResults = await getTracks(searchResults, ac_token);
 
     const cardEmbed = new EmbedBuilder()
-        .setColor(config.color)
+        .setColor(Colors.Blue)
         .setAuthor({ name: getResults.artists, url: getResults.artists_url, iconURL: getResults.platfrom_icon })
         .setTitle(`:arrow_double_down: ┃ **${getResults.name}** \`${getResults.length}\``)
         .setURL(getResults.url)
@@ -300,14 +304,12 @@ async function playSpotify(interaction, searchResults, ac_token, requestedLocali
 
     const player = createAudioPlayer();
 
-    const dlPath = `downloads/sp-${getResults.id}.mp3`;
+    const musicBuffer = await client.music.downloadSpotifyTrack(getResults.id);
 
-    await dlSpotify(interaction, dlPath, getResults, 'spotify', '1156557829486948413', requestedLocalization, spotify_client_id, spotify_client_secret, config);
-
-    await playMusic(interaction, dlPath, connection, player, 'spotify', '1156557829486948413', getResults.name, requestedLocalization, config);
+    await playMusic(interaction, musicBuffer, connection, player, 'spotify', '1156557829486948413', getResults.name, requestedLocalization);
 }
 
-async function playYoutube(interaction, searchResults, requestedLocalization, config, onriginalMessage) {
+async function playYoutube(interaction, searchResults, requestedLocalization, onriginalMessage) {
     if (!searchResults) {
         return await onriginalMessage.edit({ embeds: [new EmbedBuilder().setColor('Red').setTitle('Error')] })
     }
@@ -315,7 +317,7 @@ async function playYoutube(interaction, searchResults, requestedLocalization, co
     const getResults = await getVideo(searchResults);
 
     const cardEmbed = new EmbedBuilder()
-        .setColor(config.color)
+        .setColor(Colors.Blue)
         .setAuthor({ name: getResults.auther, url: getResults.artists_url, iconURL: getResults.platfrom_icon })
         .setTitle(`:arrow_double_down: ┃ **${getResults.name}** \`${getResults.length}\``)
         .setURL(getResults.url)
@@ -332,13 +334,9 @@ async function playYoutube(interaction, searchResults, requestedLocalization, co
 
     const player = createAudioPlayer();
 
-    const dlPath = `downloads/yt-${getResults.id}.mp3`;
+    const musicBuffer = await client.music.downloadYoutubeVideo(getResults.id);
 
-    await dlYoutube(interaction, dlPath, getResults, 'youtube', '1156557113548624007', requestedLocalization, config);
-
-    await playMusic(interaction, dlPath, connection, player, 'youtube', '1156557113548624007', getResults.name, requestedLocalization, config);
-
-
+    await playMusic(interaction, musicBuffer, connection, player, 'youtube', '1156557113548624007', getResults.name, requestedLocalization);
 }
 // Voice Channel
 async function joinVC(interaction) {

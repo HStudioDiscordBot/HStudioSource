@@ -1,8 +1,5 @@
-const configFile = require('../../config.json');
-
 const lang = require('../../lang.json');
-const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require('discord.js');
-const config = configFile.app[configFile.appName] || configFile.app.debug;
+const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, Colors } = require('discord.js');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -13,8 +10,8 @@ module.exports = {
     }),
   async execute(interaction, client) {
     const mainEmbed = new EmbedBuilder()
-      .setColor(config.color)
-      .setDescription(`> If you want to use bot in English\n> Please change discord language to EN (either US or UK)\n> **[คู่มือฉบับเต็ม](https://hstudio.hewkawar.xyz/docs)**\n\n> 📌 ลิงก์ที่มีประโยชน์\n> **[เชิญบอท ${client.user.displayName}](${config.inviteURL})**\n> **[Discord ช่วยเหลือ](https://discord.gg/PmzsmyAY9z)**`)
+      .setColor(Colors.Blue)
+      .setDescription(`> If you want to use bot in English\n> Please change discord language to EN (either US or UK)\n> **[คู่มือฉบับเต็ม](https://hstudio.hewkawar.xyz/docs)**\n\n> 📌 ลิงก์ที่มีประโยชน์\n> **[เชิญบอท ${client.user.displayName}](${"https://discord.com/oauth2/authorize?client_id=" + process.env.CLIENT_ID + "&scope=bot%20applications.commands&permissions=36825160"})**\n> **[Discord ช่วยเหลือ](https://discord.gg/PmzsmyAY9z)**`)
 
     const helpSelection = new StringSelectMenuBuilder()
       .setCustomId('helpselection')
@@ -67,8 +64,8 @@ module.exports = {
           .addComponents(helpSelection);
 
         const helpEmbed = new EmbedBuilder()
-          .setColor(config.color)
-          .setDescription(`> If you want to use bot in English\n> Please change discord language to EN (either US or UK)\n> **[คู่มือฉบับเต็ม](https://hstudio.hewkawar.xyz/docs)**\n\n> 📌 ลิงก์ที่มีประโยชน์\n> **[เชิญบอท ${client.user.displayName}](${config.inviteURL})**\n> **[Discord ช่วยเหลือ](https://discord.gg/PmzsmyAY9z)**`);
+          .setColor(Colors.Blue)
+          .setDescription(`> If you want to use bot in English\n> Please change discord language to EN (either US or UK)\n> **[คู่มือฉบับเต็ม](https://hstudio.hewkawar.xyz/docs)**\n\n> 📌 ลิงก์ที่มีประโยชน์\n> **[เชิญบอท ${client.user.displayName}](${"https://discord.com/oauth2/authorize?client_id=" + process.env.CLIENT_ID + "&scope=bot%20applications.commands&permissions=36825160"})**\n> **[Discord ช่วยเหลือ](https://discord.gg/PmzsmyAY9z)**`);
 
         await i.update({ embeds: [helpEmbed], components: [row] });
       } else if (i.values[0] === 'helpmusic') {
@@ -94,13 +91,14 @@ module.exports = {
           .addComponents(helpSelection);
 
         let commandList = "";
+        console.log(client.commands);
 
-        for (var l = 0; l < config.commands.length; l++) {
-          commandList = commandList + `> </${config.commands[l].name}:${config.commands[l].id}> ${config.commands[l].description} \n`;
-        }
+        // for (var l = 0; l < config.commands.length; l++) {
+        //   commandList = commandList + `> </${config.commands[l].name}:${config.commands[l].id}> ${config.commands[l].description} \n`;
+        // }
 
         const musicEmbed = new EmbedBuilder()
-          .setColor(config.color)
+          .setColor(Colors.Blue)
           .setDescription(`${commandList}`);
 
         await i.update({ embeds: [musicEmbed], components: [row] })
@@ -126,7 +124,7 @@ module.exports = {
         const row = new ActionRowBuilder()
           .addComponents(helpSelection);
         const craditEmbed = new EmbedBuilder()
-          .setColor(config.color)
+          .setColor(Colors.Blue)
           .setDescription(`> **รายชื่อผู้ร่วมพัฒนา ${client.user.displayName}**\n\n> <@758681611251744788> เจ้าของ (ผู้พัฒนาหลัก)`);
 
         await i.update({ embeds: [craditEmbed], components: [row] })
