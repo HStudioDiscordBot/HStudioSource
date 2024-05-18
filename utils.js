@@ -1,9 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder, GuildForumThreadManager, ClientUser, Colors } = require('discord.js');
 const { joinVoiceChannel, createAudioPlayer, createAudioResource, AudioPlayerStatus, NoSubscriberBehavior, entersState, getVoiceConnection } = require('@discordjs/voice');
 const axios = require('axios');
-const fs = require('fs');
-const { createReadStream } = require('node:fs');
-const Spotify = require('spotifydl-core').default;
 const ytdl = require('ytdl-core');
 const { Readable } = require('stream');
 
@@ -143,112 +140,6 @@ async function getVideo(url) {
     };
     return redata;
 
-}
-
-// Downloader
-async function dlSpotify(interaction, dlPath, getResults, emoji_name, emoji_id, requestedLocalization, spotify_client_id, spotify_client_secret, config) {
-    if (fs.existsSync(dlPath)) {
-        return;
-    }
-
-    const spotify = new Spotify({
-        clientId: spotify_client_id,
-        clientSecret: spotify_client_secret,
-    });
-
-    const progressBar = ['⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜', '🟩⬜⬜⬜⬜⬜⬜⬜⬜⬜', '🟩🟩⬜⬜⬜⬜⬜⬜⬜⬜', '🟩🟩🟩⬜⬜⬜⬜⬜⬜⬜', '🟩🟩🟩🟩⬜⬜⬜⬜⬜⬜', '🟩🟩🟩🟩🟩⬜⬜⬜⬜⬜', '🟩🟩🟩🟩🟩🟩⬜⬜⬜⬜', '🟩🟩🟩🟩🟩🟩🟩⬜⬜⬜', '🟩🟩🟩🟩🟩🟩🟩🟩⬜⬜', '🟩🟩🟩🟩🟩🟩🟩🟩🟩⬜'];
-
-    let currentProgress = 0;
-
-    const updateProgressBar = async () => {
-        await dlMessage.edit({
-            embeds: [new EmbedBuilder().setColor(config.color).setTitle(`<:${emoji_name}:${emoji_id}> ${requestedLocalization.commands.play.execute.download}`).setDescription(progressBar[currentProgress])]
-        });
-        currentProgress++;
-    };
-
-    const dlMessage = await interaction.channel.send({
-        embeds: [new EmbedBuilder().setColor(config.color).setTitle(`<:${emoji_name}:${emoji_id}> ${requestedLocalization.commands.play.execute.download}`).setDescription(progressBar[0])]
-    });
-
-    await Promise.all([
-        spotify.downloadTrack(getResults.url, dlPath),
-        (async () => {
-            for (let i = 1; i < progressBar.length; i++) {
-                await updateProgressBar();
-                await new Promise(resolve => setTimeout(resolve, 200));
-            }
-        })(),
-    ]);
-
-    await dlMessage.delete();
-}
-
-async function stYoutuve(interaction, dlPath, getResults, emoji_name, emoji_id, requestedLocalization, config) {
-
-}
-
-async function dlYoutube(interaction, dlPath, getResults, emoji_name, emoji_id, requestedLocalization, config) {
-    if (fs.existsSync(dlPath)) {
-        return;
-    }
-
-    // ytstream(getResults.url, {
-    //     quality: 'highestaudio',
-    //     filter: 'audioonly',
-    //     format: 'mp3',
-    // }).stream.pipe(fs.createWriteStream(dlPath))
-
-    // const stream = await ytstream.stream(getResults.url, {
-    //     quality: 'high',
-    //     type: 'audio',
-    // });
-    // stream.stream.pipe(fs.createWriteStream(dlPath));
-
-    const progressBar = ['⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜', '🟩⬜⬜⬜⬜⬜⬜⬜⬜⬜', '🟩🟩⬜⬜⬜⬜⬜⬜⬜⬜', '🟩🟩🟩⬜⬜⬜⬜⬜⬜⬜', '🟩🟩🟩🟩⬜⬜⬜⬜⬜⬜', '🟩🟩🟩🟩🟩⬜⬜⬜⬜⬜', '🟩🟩🟩🟩🟩🟩⬜⬜⬜⬜', '🟩🟩🟩🟩🟩🟩🟩⬜⬜⬜', '🟩🟩🟩🟩🟩🟩🟩🟩⬜⬜', '🟩🟩🟩🟩🟩🟩🟩🟩🟩⬜'];
-
-    let currentProgress = 0;
-
-    const updateProgressBar = async () => {
-        await dlMessage.edit({
-            embeds: [new EmbedBuilder().setColor(config.color).setTitle(`<:${emoji_name}:${emoji_id}> ${requestedLocalization.commands.play.execute.download}`).setDescription(progressBar[currentProgress])]
-        });
-        currentProgress++;
-    };
-
-    const dlMessage = await interaction.channel.send({
-        embeds: [new EmbedBuilder().setColor(config.color).setTitle(`<:${emoji_name}:${emoji_id}> ${requestedLocalization.commands.play.execute.download}`).setDescription(progressBar[0])]
-    });
-
-    let updateEvery;
-    if (getResults.lengthSeconds > 60 * 60) {
-        updateEvery = 1000;
-    } else if (getResults.lengthSeconds > 30 * 60) {
-        updateEvery = 600;
-    } else if (getResults.lengthSeconds > 10 * 60) {
-        updateEvery = 500;
-    } else if (getResults.lengthSeconds > 5 * 60) {
-        updateEvery = 400;
-    } else if (getResults.lengthSeconds > 1 * 60) {
-        updateEvery = 300;
-    } else {
-        updateEvery = 100;
-    }
-    await Promise.all([
-        ytdl(getResults.url, {
-            quality: 'highestaudio',
-            filter: 'audioonly',
-            format: 'mp3',
-        }).pipe(fs.createWriteStream(dlPath)),
-        (async () => {
-            for (let i = 1; i < progressBar.length; i++) {
-                await updateProgressBar();
-                await new Promise(resolve => setTimeout(resolve, updateEvery));
-            }
-        })(),
-    ]);
-
-    await dlMessage.delete();
 }
 
 // Music Bot Utils
@@ -447,7 +338,6 @@ module.exports = {
     msToSec,
     convertToHHMMSS,
     getTracks,
-    dlSpotify,
     autoPlatfrom,
     playSpotify,
     makeAccessToken,
