@@ -1,10 +1,10 @@
-const { SlashCommandBuilder, EmbedBuilder, AttachmentBuilder } = require('discord.js');
-const { spotify_client_id, spotify_client_secret } = require('../../spotify.json');
+const { SlashCommandBuilder, EmbedBuilder, AttachmentBuilder, Colors } = require('discord.js');
 const ytsr = require('ytsr')
 const lang = require('../../lang.json');
-const configFile = require('../../config.json');
-const config = configFile.app[configFile.appName] || configFile.app.debug;
 const utils = require('../../utils');
+
+const spotify_client_id = process.env.SPOTIFY_CLIENT_ID
+const spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -48,24 +48,24 @@ module.exports = {
             const ac_token = await utils.makeAccessToken(interaction, spotify_client_id, spotify_client_secret);
 
             const spotify_id = utils.extractSpotifyTrackId(query);
-            await utils.playSpotify(interaction, spotify_id, ac_token, requestedLocalization, config, spotify_client_id, spotify_client_secret);
+            await utils.playSpotify(interaction, spotify_id, ac_token, requestedLocalization, client);
         } else if (pl === 'youtube') {
             const file = new AttachmentBuilder('assets/banner/loading.png');
 
-            const onriginal = await interaction.reply({ embeds: [new EmbedBuilder().setTitle('<:youtube_mokey:1160524601026162758> Loading Video').setColor(config.color).setDescription('Wait a moment...').setImage('attachment://loading.png')], files: [file]});
-            await utils.playYoutube(interaction, query, requestedLocalization, config, onriginal);
+            const onriginal = await interaction.reply({ embeds: [new EmbedBuilder().setTitle('<:youtube_mokey:1160524601026162758> Loading Video').setColor(Colors.Blue).setDescription('Wait a moment...').setImage('attachment://loading.png')], files: [file]});
+            await utils.playYoutube(interaction, query, requestedLocalization, onriginal);
         } else if (pl === 'search') {
             if (platform) {
                 if (platform === 'spotify') {
                     const ac_token = await utils.makeAccessToken(interaction, spotify_client_id, spotify_client_secret);
 
                     const spotify_id = await utils.searchTracks(query, ac_token);
-                    await utils.playSpotify(interaction, spotify_id, ac_token, requestedLocalization, config, spotify_client_id, spotify_client_secret);
+                    await utils.playSpotify(interaction, spotify_id, ac_token, requestedLocalization, client);
                 } else if (platform === 'youtube') {
                     const file = new AttachmentBuilder('assets/banner/loading.png');
 
-                    const onriginal = await interaction.reply({ embeds: [new EmbedBuilder().setTitle('<:youtube_mokey:1160524601026162758> Loading Video').setColor(config.color).setDescription('Wait a moment...').setImage('attachment://loading.png')], files: [file]});                    const searchResults = await ytsr(query);
-                    await utils.playYoutube(interaction, searchResults.items[0].url, requestedLocalization, config, onriginal);
+                    const onriginal = await interaction.reply({ embeds: [new EmbedBuilder().setTitle('<:youtube_mokey:1160524601026162758> Loading Video').setColor(Colors.Blue).setDescription('Wait a moment...').setImage('attachment://loading.png')], files: [file]});                    const searchResults = await ytsr(query);
+                    await utils.playYoutube(interaction, searchResults.items[0].url, requestedLocalization, onriginal);
                 } else if (platform === 'soundcloud') {
 
                 }
@@ -73,7 +73,7 @@ module.exports = {
                 const ac_token = await utils.makeAccessToken(interaction, spotify_client_id, spotify_client_secret);
 
                 const spotify_id = await utils.searchTracks(query, ac_token);
-                await utils.playSpotify(interaction, spotify_id, ac_token, requestedLocalization, config, spotify_client_id, spotify_client_secret);
+                await utils.playSpotify(interaction, spotify_id, ac_token, requestedLocalization, client);
             }
         } else {
             return await interaction.reply({ embeds: [new EmbedBuilder().setTitle(`:no_entry:: ${requestedLocalization.error.cant_procress_query}`).setColor('Red').setDescription(`\`\`\`${query}\`\`\``)] });

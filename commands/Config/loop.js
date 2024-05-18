@@ -1,7 +1,5 @@
-const { SlashCommandBuilder, EmbedBuilder, AttachmentBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, AttachmentBuilder, Colors } = require('discord.js');
 const axios = require('axios');
-const configFile = require('../../config.json');
-const config = configFile.app[configFile.appName] || configFile.app.debug;
 const { version } = require('../../package.json')
 const lang = require('../../lang.json');
 
@@ -49,7 +47,7 @@ module.exports = {
 
             const configEmbed = new EmbedBuilder()
                 .setTitle(`:gear: ${interaction.guild.name}'s Config`)
-                .setColor(config.color)
+                .setColor(Colors.Blue)
                 .setFields(
                     { name: "Guild ID", value: `\`\`\`${configData.id}\`\`\``, inline: false },
                     { name: "Loop", value: `\`\`\`${configData.loop}\`\`\``, inline: true },
@@ -67,7 +65,7 @@ module.exports = {
             await replyMessage.edit({
                 embeds: [new EmbedBuilder()
                     .setTitle(`:gear: ${interaction.guild.name}'s Config`)
-                    .setColor(config.color)
+                    .setColor(Colors.Blue)
                     .setFields(
                         { name: "Guild ID", value: `\`\`\`${updatedConfig.id}\`\`\``, inline: false },
                         { name: ":recycle: Loop", value: `\`\`\`${updatedConfig.loop}\`\`\``, inline: true },

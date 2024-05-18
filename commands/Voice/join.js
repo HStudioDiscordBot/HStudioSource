@@ -1,11 +1,8 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { EmbedBuilder } = require('discord.js')
+const { EmbedBuilder, Colors } = require('discord.js')
 const { getVoiceConnection, joinVoiceChannel } = require('@discordjs/voice');
 
 const lang = require('../../lang.json');
-const configFile = require('../../config.json');
-
-const config = configFile.app[configFile.appName] || configFile.app.debug;
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -32,9 +29,9 @@ module.exports = {
                 selfMute: false
             });
 
-            await interaction.reply({ embeds: [new EmbedBuilder().setColor(config.color).setTitle(`🟢 ${requestedLocalization.commands.join.execute.success}`)]});
+            await interaction.reply({ embeds: [new EmbedBuilder().setColor(Colors.Blue).setTitle(`🟢 ${requestedLocalization.commands.join.execute.success}`)]});
         } else {
-            await interaction.reply({ embeds: [new EmbedBuilder().setColor(config.color).setTitle(`🟢 ${requestedLocalization.commands.join.execute.already_join}`)]});
+            await interaction.reply({ embeds: [new EmbedBuilder().setColor(Colors.Blue).setTitle(`🟢 ${requestedLocalization.commands.join.execute.already_join}`)]});
         }
 
         await interaction.guild.members.me.edit({

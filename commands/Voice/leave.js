@@ -1,11 +1,8 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { EmbedBuilder } = require('discord.js')
+const { EmbedBuilder, Colors } = require('discord.js')
 const { getVoiceConnection } = require('@discordjs/voice');
 
 const lang = require('../../lang.json');
-const configFile = require('../../config.json');
-
-const config = configFile.app[configFile.appName] || configFile.app.debug;
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -20,9 +17,9 @@ module.exports = {
 
         if (connection) {
             connection.destroy();
-            await interaction.reply({ embeds: [new EmbedBuilder().setColor(config.color).setTitle(`🔴 ${requestedLocalization.commands.leave.execute.success}`)] });
+            await interaction.reply({ embeds: [new EmbedBuilder().setColor(Colors.Blue).setTitle(`🔴 ${requestedLocalization.commands.leave.execute.success}`)] });
         } else {
-            await interaction.reply({ embeds: [new EmbedBuilder().setColor(config.color).setTitle(`🔴 ${requestedLocalization.commands.leave.execute.not_in_voice_channel}`)] });
+            await interaction.reply({ embeds: [new EmbedBuilder().setColor(Colors.Blue).setTitle(`🔴 ${requestedLocalization.commands.leave.execute.not_in_voice_channel}`)] });
         }
         
     },

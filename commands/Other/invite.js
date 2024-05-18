@@ -1,7 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const configFile = require('../../config.json');
-
-const config = configFile.app[configFile.appName] || configFile.app.debug;
+const { SlashCommandBuilder, EmbedBuilder, Colors } = require('discord.js');
 const { version } = require('../../package.json');
 const lang = require('../../lang.json');
 
@@ -15,6 +12,6 @@ module.exports = {
     async execute(interaction, client) {
         const requestedLocalization = lang[interaction.locale] || lang.default;
 
-        await interaction.reply({ embeds: [ new EmbedBuilder().setColor(config.color).setDescription(`> **${requestedLocalization.commands.invite.execute.main}**\n[${requestedLocalization.commands.invite.execute.click}](${config.inviteURL})`).setFooter({ text: `${client.user.displayName} | ${requestedLocalization.commands.version}: ${version}` })]});
+        await interaction.reply({ embeds: [ new EmbedBuilder().setColor(Colors.Blue).setDescription(`> **${requestedLocalization.commands.invite.execute.main}**\n[${requestedLocalization.commands.invite.execute.click}](${"https://discord.com/oauth2/authorize?client_id=" + process.env.CLIENT_ID + "&scope=bot%20applications.commands&permissions=36825160"})`).setFooter({ text: `${client.user.displayName} | ${requestedLocalization.commands.version}: ${version}` })]});
     },
 };
