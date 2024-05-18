@@ -2,3 +2,5 @@ node_modules/
 downloads/*
 token.json
 spotify.json
+/dist
+.env
