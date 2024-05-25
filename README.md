@@ -1,43 +1,60 @@
-# HStudio - Discord Music Bot Project
+# HSudio Source Code
+The Best Music Bot Create by @hewkawar
 
 ## Step to install
-
+Install Dependencies
 ```bash
-# install dependencies
 $ npm install
 ```
 
-### Edit config before run Bot
-
-```json
-{
-    "appName": "myBot",
-    "spotify_client_id": "YOUR_SPOTIFY_CLIENT_ID",
-    "spotify_client_secret": "YOUR_SPOTIFY_CLIENT_SECRET",
-    "setting": {
-        "generateDependencyReport": false
-    },
-    "app": {
-        "myBot": {
-            "client_id": "YOUR_BOT_CLIENT_ID",
-            "color": "Blue",
-            "inviteURL": "INVITE_BOT_URL",
-            "port": 1550
-        }
-    }
-}
+## Environment (Env)
+**[Discord Developer](https://discord.com/developers/applications)**
 ```
-> YOUR_SPOTIFY_CLIENT_ID is [Spotify Client ID](https://developer.spotify.com/documentation/web-api/concepts/apps)
+TOKEN= # Bot Token
+CLIENT_ID= # Bot Client Id
+PORT= # Port for Status Service
+```
 
-> YOUR_SPOTIFY_CLIENT_SECRET is [Spotify Client Secret](https://developer.spotify.com/documentation/web-api/concepts/apps)
+**[Spotify for Developers](https://developer.spotify.com/)**
+```
+SPOTIFY_CLIENT_ID= # Spotify Client Id
+SPOTIFY_CLIENT_SECRET= # Spotify Client Secret
+```
 
-> YOUR_BOT_TOKEN is [Discord Bot Token](https://discord.com/developers/applications)
+**Truemoney Wallet Voucher**
+```
+TRUEMONEY_PHONE_NUMBER= # Donate: Truemoney Phone Number
+DONATE_WEBHOOK_URL= # Donate: Discord Webhook
+```
 
-> YOUR_BOT_CLIENT_ID is [Discord Bot Client ID](https://discord.com/developers/applications)
-
-> INVITE_BOT_URL is [URL for Invite Your Bot](https://discordapi.com/permissions.html)
+## How to run Bot
+### Docker
 
 ```bash
-# run Bot
-$ node ./index.js
+docker run -d --restart always \
+    --name hstudio \
+    -e TOKEN= \
+    -e CLIENT_ID= \
+    -e PORT=1550 \
+    -e SPOTIFY_CLIENT_ID= \
+    -e SPOTIFY_CLIENT_SECRET= \
+    -e TRUEMONEY_PHONE_NUMBER= \
+    -e DONATE_WEBHOOK_URL= \
+    -p 1550:1550 \
+    hewkawar/hstudio-bot:latest
+```
+
+### Source Code
+```bash
+$ git clone https://github.com/HStudioDiscordBot/HStudioSource.git
+```
+
+```bash
+$ npm install
+```
+
+> Please config **.env** before run bot
+
+```bash
+$ npm run bot
 ```

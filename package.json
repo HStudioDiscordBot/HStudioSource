@@ -16,19 +16,20 @@
     "@discordjs/rest": "^2.3.0",
     "@discordjs/voice": "^0.17.0",
     "@discordjs/ws": "^1.1.0",
-    "axios": "^1.6.8",
+    "@opecgame/twapi": "^1.2.1",
+    "axios": "^1.7.2",
     "cors": "^2.8.5",
     "discord.js": "^14.15.2",
-    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "ffmpeg-static": "^5.2.0",
     "libsodium-wrappers": "^0.7.13",
-    "the-music-tools": "^1.0.8",
+    "the-music-tools": "^1.0.9",
     "youtube-ext": "^1.1.25",
     "ytdl-core": "^4.11.5",
     "ytsr": "^3.8.4"
   },
   "devDependencies": {
+    "dotenv": "^16.4.5",
     "nodemon": "^3.1.0"
   }
 }
