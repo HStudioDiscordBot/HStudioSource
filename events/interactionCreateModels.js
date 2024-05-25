@@ -1,9 +1,8 @@
-const { EmbedBuilder, AttachmentBuilder, Colors, WebhookClient } = require("discord.js");
+const { EmbedBuilder, Colors, WebhookClient } = require("discord.js");
 const twApi = require('@opecgame/twapi')
 const lang = require("../lang.json");
 const configFile = require('../config.json');
 const { version } = require('../package.json');
-const { default: axios } = require("axios");
 
 module.exports = {
     name: 'interactionCreate',
@@ -51,10 +50,10 @@ module.exports = {
                     await webhook.send({ embeds: [
                         new EmbedBuilder()
                         .setColor(Colors.Yellow)
-                        .setDescription(`ขอบคุณคุณ ${tw.data.owner_profile.full_name} สำหรับ \`${tw.data.my_ticket.amount_baht}\` บาทที่บริจาคให้ HStudio Teams`)
+                        .setDescription(`ขอบคุณคุณ ${tw.data.owner_profile.full_name} สำหรับ \`${tw.data.my_ticket.amount_baht}\` บาทที่บริจาคให้ ${configFile.owner.name}`)
                     ]});
 
-                    await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Green).setDescription(`✅ ขอบคุณสำหรับ \`${tw.data.my_ticket.amount_baht}\` บาทที่บริจาคให้ HStudio Teams`)] });
+                    await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Green).setDescription(`✅ ขอบคุณสำหรับ \`${tw.data.my_ticket.amount_baht}\` บาทที่บริจาคให้ ${configFile.owner.name}`)] });
                     break;
                 case "CANNOT_GET_OWN_VOUCHER":
                     await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription(`❌ ไม่สามารถเปิดซองของตัวเองได้`)] });
