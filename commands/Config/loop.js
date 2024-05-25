@@ -1,30 +1,43 @@
 const { SlashCommandBuilder, EmbedBuilder, AttachmentBuilder, Colors } = require('discord.js');
-const axios = require('axios');
 const { version } = require('../../package.json')
 const lang = require('../../lang.json');
+const configSchema = require('../../schemas/config');
 
-async function getConfig(guildID) {
+async function getConfig(guildId) {
     try {
-        const response = await axios.get(`https://api.hewkawar.xyz/app/hstuido/config?id=${guildID}`);
-        return response.data;
-    } catch (error) {
-        console.error(error);
+        let configData = await configSchema.findOne({
+            GuildId: guildId
+        });
+
+        if (!configData) {
+            configData = await configSchema.create({
+                GuildId: guildId,
+                Speed: 1.0,
+                Loop: false,
+                Volume: 100
+            });
+        }
+
+        return configData;
+    } catch (err) {
         return null;
     }
 }
 
-async function updateConfig(guildID, oldConfig) {
+async function updateConfig(guildId, oldConfig) {
     try {
-        let isLoop;
-        if (oldConfig.loop === 'false') {
-            isLoop = 'true';
-        } else if (oldConfig.loop === 'true') {
-            isLoop = 'false';
-        }
-        const response = await axios.post(`https://api.hewkawar.xyz/app/hstuido/config`, { id: guildID, loop: isLoop });
-        return response.data;
+        const toggleLoop = !oldConfig.Loop;
+
+        await configSchema.updateOne({
+            GuildId: guildId
+        }, {
+            Loop: toggleLoop
+        });
+
+        const config = await getConfig(guildId)
+
+        return config
     } catch (error) {
-        console.error(error);
         return null;
     }
 }
@@ -39,50 +52,34 @@ module.exports = {
     async execute(interaction, client) {
         const requestedLocalization = lang[interaction.locale] || lang.default;
 
+        await interaction.deferReply();
+
         const configData = await getConfig(interaction.guild.id);
 
-        if (configData.id) {
-
-            const file = new AttachmentBuilder('assets/banner/serverconfig.png');
-
-            const configEmbed = new EmbedBuilder()
-                .setTitle(`:gear: ${interaction.guild.name}'s Config`)
-                .setColor(Colors.Blue)
-                .setFields(
-                    { name: "Guild ID", value: `\`\`\`${configData.id}\`\`\``, inline: false },
-                    { name: "Loop", value: `\`\`\`${configData.loop}\`\`\``, inline: true },
-                    { name: "Speed", value: `\`\`\`x${configData.speed}\`\`\``, inline: true },
-                    { name: "Volume", value: `\`\`\`${configData.volume}\`\`\``, inline: true },
-                )
-                .setFooter({ text: `${client.user.displayName} | ${requestedLocalization.commands.version}: ${version}` })
-                .setThumbnail(`${interaction.guild.iconURL({ extension: 'png' })}`)
-                .setImage('attachment://serverconfig.png');
-
-            const replyMessage = await interaction.reply({ embeds: [configEmbed], files: [file] });
-
+        if (configData.GuildId) {
             const updatedConfig = await updateConfig(interaction.guild.id, configData);
 
-            await replyMessage.edit({
+            await interaction.editReply({
                 embeds: [new EmbedBuilder()
-                    .setTitle(`:gear: ${interaction.guild.name}'s Config`)
+                    .setTitle(`⚙️ ${interaction.guild.name}'s Config`)
                     .setColor(Colors.Blue)
                     .setFields(
-                        { name: "Guild ID", value: `\`\`\`${updatedConfig.id}\`\`\``, inline: false },
-                        { name: ":recycle: Loop", value: `\`\`\`${updatedConfig.loop}\`\`\``, inline: true },
-                        { name: "Speed", value: `\`\`\`x${updatedConfig.speed}\`\`\``, inline: true },
-                        { name: "Volume", value: `\`\`\`${updatedConfig.volume}\`\`\``, inline: true },
+                        { name: "Guild ID", value: `\`\`\`${updatedConfig.GuildId}\`\`\``, inline: false },
+                        { name: ":recycle: Loop", value: `\`\`\`${updatedConfig.Loop}\`\`\``, inline: true },
+                        { name: "Speed", value: `\`\`\`x${updatedConfig.Speed}\`\`\``, inline: true },
+                        { name: "Volume", value: `\`\`\`${updatedConfig.Volume}\`\`\``, inline: true },
                     )
                     .setFooter({ text: `${client.user.displayName} | ${requestedLocalization.commands.version}: ${version}` })
                     .setThumbnail(`${interaction.guild.iconURL({ extension: 'png' })}`)
-                    .setImage('attachment://serverconfig.png')
-                ], files: [file]
+                    .setImage("https://cdn.jsdelivr.net/gh/HStudioDiscordBot/HStudioSource@main/assets/banner/serverconfig.png")
+                ]
             });
         } else {
             const embed = new EmbedBuilder()
-            .setTitle(`⚠️ Can't connect to server!`)
-            .setDescription('Please try again later')
-            .setTimestamp(Date.now())
-            return await interaction.reply({ embeds: [embed]})
+                .setTitle(`⚠️ Can't connect to server!`)
+                .setDescription('Please try again later')
+                .setTimestamp(Date.now())
+            return await interaction.editReply({ embeds: [embed] })
         }
     },
 };

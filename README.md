@@ -21,6 +21,12 @@ SPOTIFY_CLIENT_ID= # Spotify Client Id
 SPOTIFY_CLIENT_SECRET= # Spotify Client Secret
 ```
 
+**[MongoDB](https://www.mongodb.com/)**
+```
+MONGODB_URI= # MongoDB Uri
+DATABASE_PREFIX= # Database Prefix: release
+```
+
 **Truemoney Wallet Voucher**
 ```
 TRUEMONEY_PHONE_NUMBER= # Donate: Truemoney Phone Number
@@ -40,6 +46,8 @@ docker run -d --restart always \
     -e SPOTIFY_CLIENT_SECRET= \
     -e TRUEMONEY_PHONE_NUMBER= \
     -e DONATE_WEBHOOK_URL= \
+    -e MONGODB_URI= \
+    -e DATABASE_PREFIX= \
     -p 1550:1550 \
     hewkawar/hstudio-bot:latest
 ```

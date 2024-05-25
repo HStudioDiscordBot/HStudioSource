@@ -37,6 +37,8 @@ module.exports = (client) => {
                     },
                 );
 
+                client.commandsData = data;
+
                 console.log(`[${client.shard.ids}] Successfully reloaded ${data.length} application (/) commands.`);
             } catch (error) {
                 console.error(error);

@@ -200,7 +200,7 @@ async function playSpotify(interaction, searchResults, ac_token, requestedLocali
     await playMusic(interaction, musicBuffer, connection, player, 'spotify', '1156557829486948413', getResults.name, requestedLocalization);
 }
 
-async function playYoutube(interaction, searchResults, requestedLocalization, onriginalMessage) {
+async function playYoutube(interaction, searchResults, requestedLocalization, onriginalMessage, client) {
     if (!searchResults) {
         return await onriginalMessage.edit({ embeds: [new EmbedBuilder().setColor('Red').setTitle('Error')] })
     }

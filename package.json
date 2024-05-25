@@ -1,15 +1,19 @@
 {
   "name": "hstudio",
-  "version": "2.1.7",
-  "build": "1",
-  "description": "",
+  "version": "2.1.8",
+  "description": "HStudio Discord Music Bot Source Code",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
     "bot": "node index.js"
   },
-  "author": "HStudio Teams",
-  "license": "ISC",
+  "author": "HewkawAr",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HStudioDiscordBot/HStudioSource.git"
+  },
+  "homepage": "https://github.com/HStudioDiscordBot/HStudioSource#readme",
+  "license": "MIT",
   "dependencies": {
     "@discordjs/builders": "^1.8.1",
     "@discordjs/opus": "^0.9.0",
@@ -23,8 +27,8 @@
     "express": "^4.19.2",
     "ffmpeg-static": "^5.2.0",
     "libsodium-wrappers": "^0.7.13",
+    "mongoose": "^8.4.0",
     "the-music-tools": "^1.0.9",
-    "youtube-ext": "^1.1.25",
     "ytdl-core": "^4.11.5",
     "ytsr": "^3.8.4"
   },

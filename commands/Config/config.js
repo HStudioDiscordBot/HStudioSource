@@ -1,14 +1,25 @@
-const { SlashCommandBuilder, EmbedBuilder, AttachmentBuilder, Colors } = require('discord.js');
-const axios = require('axios');
-const { version } = require('../../package.json')
+const { SlashCommandBuilder, EmbedBuilder, Colors } = require('discord.js');
+const { version } = require('../../package.json');
 const lang = require('../../lang.json');
+const configSchema = require('../../schemas/config');
 
-async function getConfig(guildID) {
+async function getConfig(guildId) {
     try {
-        const response = await axios.get(`https://api.hewkawar.xyz/app/hstuido/config?id=${guildID}`);
-        return response.data;
-    } catch (error) {
-        console.error(error);
+        let configData = await configSchema.findOne({
+            GuildId: guildId
+        });
+
+        if (!configData) {
+            configData = await configSchema.create({
+                GuildId: guildId,
+                Speed: 1.0,
+                Loop: false,
+                Volume: 100
+            });
+        }
+
+        return configData;
+    } catch (err) {
         return null;
     }
 }
@@ -23,31 +34,31 @@ module.exports = {
     async execute(interaction, client) {
         const requestedLocalization = lang[interaction.locale] || lang.default;
 
+        await interaction.deferReply();
+
         const configData = await getConfig(interaction.guild.id);
 
         if (configData.id) {
-            const file = new AttachmentBuilder('assets/banner/serverconfig.png');
-
             const configEmbed = new EmbedBuilder()
-            .setTitle(`:gear: ${interaction.guild.name}'s Config`)
-            .setColor(Colors.Blue)
-            .setFields(
-                { name: "Guild ID", value: `\`\`\`${configData.id}\`\`\``, inline: false },
-                { name: "Loop", value: `\`\`\`${configData.loop}\`\`\``, inline: true },
-                { name: "Speed", value: `\`\`\`x${configData.speed}\`\`\``, inline: true },
-                { name: "Volume", value: `\`\`\`${configData.volume}\`\`\``, inline: true },
-            )
-            .setFooter({ text: `${client.user.displayName} | ${requestedLocalization.commands.version}: ${version}` })
-            .setThumbnail(`${interaction.guild.iconURL({ extension: 'png' })}`)
-            .setImage('attachment://serverconfig.png');
+                .setTitle(`⚙️ ${interaction.guild.name}'s Config`)
+                .setColor(Colors.Blue)
+                .setFields(
+                    { name: "Guild Id", value: `\`\`\`${configData.GuildId}\`\`\``, inline: false },
+                    { name: "Loop", value: `\`\`\`${configData.Loop}\`\`\``, inline: true },
+                    { name: "Speed", value: `\`\`\`x${configData.Speed}\`\`\``, inline: true },
+                    { name: "Volume", value: `\`\`\`${configData.Volume}\`\`\``, inline: true },
+                )
+                .setFooter({ text: `${client.user.displayName} | ${requestedLocalization.commands.version}: ${version}` })
+                .setThumbnail(`${interaction.guild.iconURL({ extension: 'png' })}`)
+                .setImage("https://cdn.jsdelivr.net/gh/HStudioDiscordBot/HStudioSource@main/assets/banner/serverconfig.png");
 
-            return await interaction.reply({ embeds: [configEmbed], files: [file] });
+            return await interaction.editReply({ embeds: [configEmbed] });
         } else {
             const embed = new EmbedBuilder()
-            .setTitle(`⚠️ Can't connect to server!`)
-            .setDescription('Please try again later')
-            .setTimestamp(Date.now())
-            return await interaction.reply({ embeds: [embed]})
+                .setTitle(`⚠️ Can't connect to server!`)
+                .setDescription('Please try again later')
+                .setTimestamp(Date.now())
+            return await interaction.editReply({ embeds: [embed] })
         }
     },
 };

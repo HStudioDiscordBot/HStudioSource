@@ -1,4 +1,7 @@
 {
+    "owner": {
+        "name": "HStudio"
+    },
     "setting": {
         "generateDependencyReport": false
     }
