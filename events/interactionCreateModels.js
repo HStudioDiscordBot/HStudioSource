@@ -1,5 +1,5 @@
-const { EmbedBuilder, AttachmentBuilder } = require("discord.js");
-// const twvoucher = require('@fortune-inc/tw-voucher');
+const { EmbedBuilder, AttachmentBuilder, Colors, WebhookClient } = require("discord.js");
+const twApi = require('@opecgame/twapi')
 const lang = require("../lang.json");
 const configFile = require('../config.json');
 const { version } = require('../package.json');
@@ -32,23 +32,52 @@ module.exports = {
                 .setTimestamp()
                 .setFooter({ text: `${client.user.displayName} | ${lang.default.commands.version}: ${version}` })
 
-            await interaction.reply({ content: 'Your report has been Submitted', ephemeral: true});
+            await interaction.reply({ content: 'Your report has been Submitted', ephemeral: true });
 
-            await channel.send({ embeds: [reportEmbed]});
+            await channel.send({ embeds: [reportEmbed] });
         }
 
         if (interaction.customId === 'donate') {
-            await interaction.reply({ embeds: [new EmbedBuilder().setColor('Blue').setDescription('<a:loading:1172816904356896830> กำลังตรวจสอบ Url กรุณารอสักครู่')], ephemeral: true});
+            await interaction.reply({ embeds: [new EmbedBuilder().setColor(Colors.Blue).setDescription('<a:loading:1172816904356896830> กำลังตรวจสอบ Url กรุณารอสักครู่')], ephemeral: true });
 
-            await axios.post('https://api.hewkawar.xyz/donate/truemoney/voucher', {
-                voucher: interaction.fields.getTextInputValue('url')
-            }).then(async response => {
-                if (response.data.status === "SUCCESS") {
-                    return await interaction.editReply({ embeds: [new EmbedBuilder().setDescription(`✅ ขอบคุณสำหรับ \`${response.data.amount}\` บาทที่บริจาคให้ HStudio Teams`)]});
-                } else {
-                    return await interaction.editReply({ embeds: [new EmbedBuilder().setDescription(`❌ ไม่สามารถเปิดอั่งเปาได้`)]});
-                }
-            })
+            const url = interaction.fields.getTextInputValue('url');
+            const voucher_code = url.replace('https://gift.truemoney.com/campaign/?v=', '');
+
+            const tw = await twApi(voucher_code, process.env.TRUEMONEY_PHONE_NUMBER);
+
+            switch (tw.status.code) {
+                case "SUCCESS":
+                    const webhook = new WebhookClient({ url: process.env.DONATE_WEBHOOK_URL });
+                    await webhook.send({ embeds: [
+                        new EmbedBuilder()
+                        .setColor(Colors.Yellow)
+                        .setDescription(`ขอบคุณคุณ ${tw.data.owner_profile.full_name} สำหรับ \`${tw.data.my_ticket.amount_baht}\` บาทที่บริจาคให้ HStudio Teams`)
+                    ]});
+
+                    await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Green).setDescription(`✅ ขอบคุณสำหรับ \`${tw.data.my_ticket.amount_baht}\` บาทที่บริจาคให้ HStudio Teams`)] });
+                    break;
+                case "CANNOT_GET_OWN_VOUCHER":
+                    await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription(`❌ ไม่สามารถเปิดซองของตัวเองได้`)] });
+                    break;
+                case "TARGET_USER_NOT_FOUND":
+                    await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription(`❌ ไม่มีซองนี้ในระบบ`)] });
+                    break;
+                case "INTERNAL_ERROR":
+                    await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription(`❌ ไม่มีซองนี้ในระบบ หรือลิ้งค์ไม่ถูกต้อง`)] });
+                    break;
+                case "VOUCHER_OUT_OF_STOCK":
+                    await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription(`❌ มีคนรับซองไปแล้ว`)] });
+                    break;
+                case "VOUCHER_NOT_FOUND":
+                    await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription(`❌ ไม่พบซองนี้ในระบบ`)] });
+                    break;
+                case "VOUCHER_EXPIRED":
+                    await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription(`❌ ซองของขวัญหมดอายุแล้ว`)] });
+                    break;
+                default:
+                    await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription(`❌ ไม่สามารถเปิดซองของขวัญได้`)] });
+                    break;
+            }
         }
     },
 };
