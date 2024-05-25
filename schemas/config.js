@@ -1,4 +1,5 @@
 const { Schema, model, Types } = require("mongoose");
+const prefix = process.env.DATABASE_PREFIX;
 
 const schema = new Schema({
     GuildId: String,
@@ -7,4 +8,4 @@ const schema = new Schema({
     Volume: Number
 });
 
-module.exports = model('config', schema);
+module.exports = model(`${prefix}_config`, schema);
