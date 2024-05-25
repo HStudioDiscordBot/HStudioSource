@@ -29,7 +29,6 @@
     "libsodium-wrappers": "^0.7.13",
     "mongoose": "^8.4.0",
     "the-music-tools": "^1.0.9",
-    "youtube-ext": "^1.1.25",
     "ytdl-core": "^4.11.5",
     "ytsr": "^3.8.4"
   },

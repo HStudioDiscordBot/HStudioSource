@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, AttachmentBuilder, Colors } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, Colors } = require('discord.js');
 const ytsr = require('ytsr')
 const lang = require('../../lang.json');
 const utils = require('../../utils');
@@ -30,7 +30,6 @@ module.exports = {
                 .addChoices(
                     { name: 'Spotify', value: 'spotify' },
                     { name: 'Youtube', value: 'youtube' },
-                    { name: 'SoundCloud', value: 'soundcloud' },
                 )),
     async execute(interaction, client) {
         const query = interaction.options.getString('query');
@@ -50,10 +49,8 @@ module.exports = {
             const spotify_id = utils.extractSpotifyTrackId(query);
             await utils.playSpotify(interaction, spotify_id, ac_token, requestedLocalization, client);
         } else if (pl === 'youtube') {
-            const file = new AttachmentBuilder('assets/banner/loading.png');
-
-            const onriginal = await interaction.reply({ embeds: [new EmbedBuilder().setTitle('<:youtube_mokey:1160524601026162758> Loading Video').setColor(Colors.Blue).setDescription('Wait a moment...').setImage('attachment://loading.png')], files: [file]});
-            await utils.playYoutube(interaction, query, requestedLocalization, onriginal);
+            const onriginal = await interaction.reply({ embeds: [new EmbedBuilder().setTitle('<:youtube_mokey:1160524601026162758> Loading Video').setColor(Colors.Blue).setDescription('Wait a moment...').setImage('https://cdn.jsdelivr.net/gh/HStudioDiscordBot/HStudioSource@main/assets/banner/loading.png')] });
+            await utils.playYoutube(interaction, query, requestedLocalization, onriginal, client);
         } else if (pl === 'search') {
             if (platform) {
                 if (platform === 'spotify') {
@@ -62,12 +59,9 @@ module.exports = {
                     const spotify_id = await utils.searchTracks(query, ac_token);
                     await utils.playSpotify(interaction, spotify_id, ac_token, requestedLocalization, client);
                 } else if (platform === 'youtube') {
-                    const file = new AttachmentBuilder('assets/banner/loading.png');
-
-                    const onriginal = await interaction.reply({ embeds: [new EmbedBuilder().setTitle('<:youtube_mokey:1160524601026162758> Loading Video').setColor(Colors.Blue).setDescription('Wait a moment...').setImage('attachment://loading.png')], files: [file]});                    const searchResults = await ytsr(query);
-                    await utils.playYoutube(interaction, searchResults.items[0].url, requestedLocalization, onriginal);
-                } else if (platform === 'soundcloud') {
-
+                    const onriginal = await interaction.reply({ embeds: [new EmbedBuilder().setTitle('<:youtube_mokey:1160524601026162758> Loading Video').setColor(Colors.Blue).setDescription('Wait a moment...').setImage('https://cdn.jsdelivr.net/gh/HStudioDiscordBot/HStudioSource@main/assets/banner/loading.png')] });
+                    const searchResults = await ytsr(query);
+                    await utils.playYoutube(interaction, searchResults.items[0].url, requestedLocalization, onriginal, client);
                 }
             } else {
                 const ac_token = await utils.makeAccessToken(interaction, spotify_client_id, spotify_client_secret);
@@ -76,7 +70,7 @@ module.exports = {
                 await utils.playSpotify(interaction, spotify_id, ac_token, requestedLocalization, client);
             }
         } else {
-            return await interaction.reply({ embeds: [new EmbedBuilder().setTitle(`:no_entry:: ${requestedLocalization.error.cant_procress_query}`).setColor('Red').setDescription(`\`\`\`${query}\`\`\``)] });
+            return await interaction.reply({ embeds: [new EmbedBuilder().setTitle(`:no_entry: ${requestedLocalization.error.cant_procress_query}`).setColor('Red').setDescription(`\`\`\`${query}\`\`\``)] });
         }
 
     },
