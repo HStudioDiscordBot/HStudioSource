@@ -60,6 +60,9 @@ module.exports = {
         }
 
         if (res.loadType === "playlist") {
+            let sourceIcon;
+            if (res.tracks[0].sourceName == "spotify") sourceIcon = "https://open.spotifycdn.com/cdn/images/favicon32.b64ecc03.png";
+            
             interaction.reply({
                 embeds: [
                     new EmbedBuilder()
