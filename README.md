@@ -22,6 +22,12 @@ DONATE_WEBHOOK_URL= # Donate: Discord Webhook
 
 **Lavalink**
 ```
+TRUEMONEY_PHONE_NUMBER= # Donate: Truemoney Phone Number
+DONATE_WEBHOOK_URL= # Donate: Discord Webhook
+```
+
+**Lavalink**
+```
 LAVALINK_HOST= # Lavalink Host
 LAVALINK_PORT= # Lavalink Port
 LAVALINK_PASSWORD= # Lavalink Password
