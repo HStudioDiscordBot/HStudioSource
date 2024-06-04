@@ -20,7 +20,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
-        run: docker build -t hewkawar/hstudio-bot:latest -f ./build/Dockerfile .
+        run: docker build -t hewkawar/hstudio-bot:latest -f ./.docker/Dockerfile .
         
       - name: Push Docker image
         run: docker push hewkawar/hstudio-bot:latest

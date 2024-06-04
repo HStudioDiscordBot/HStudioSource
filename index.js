@@ -1,16 +1,10 @@
 const { ShardingManager } = require('discord.js');
 const express = require('express');
 const cors = require('cors');
-const fs = require('fs');
 
 const { version } = require('./package.json');
 
 require('dotenv').config();
-
-const downloadPath = 'downloads';
-if (!fs.existsSync(downloadPath)) {
-    fs.mkdirSync(downloadPath);
-}
 
 const app = express();
 app.use(cors());
@@ -82,8 +76,8 @@ app.post('/bot/respawn', authenticateToken, (req, res) => {
     return res.status(500).json({ status: 500, message: `can't respawn shard` });
 })
 
-app.listen(process.env.PORT, () => {
-    console.log(`Status page server is running at http://localhost:${process.env.PORT}/status`);
+app.listen(8233, () => {
+    console.log(`Status page server is running at http://localhost:8233/status`);
 });
 
 manager.spawn().then(shards => {
@@ -92,5 +86,4 @@ manager.spawn().then(shards => {
             console.log(`Shard[${shard.id}] : ${message._eval} : ${message._result}`);
         });
     });
-})
-    .catch(console.error);
+}).catch(console.error);

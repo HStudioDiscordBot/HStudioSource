@@ -1,6 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { EmbedBuilder, Colors } = require('discord.js')
-const { getVoiceConnection } = require('@discordjs/voice');
+const { EmbedBuilder, Colors, SlashCommandBuilder } = require('discord.js')
 
 const lang = require('../../lang.json');
 
@@ -11,16 +9,41 @@ module.exports = {
         .setDescriptionLocalizations({
             th: lang.th.commands.leave.description,
         }),
-    async execute(interaction) {
-        const connection = getVoiceConnection(interaction.guild.id);
-        const requestedLocalization = lang[interaction.locale] || lang.default;
+    async execute(interaction, client) {
+        let player = client.moon.players.create({
+            guildId: interaction.guild.id,
+            voiceChannel: interaction.member.voice.channel.id,
+            textChannel: interaction.channel.id,
+            autoLeave: true
+        });
 
-        if (connection) {
-            connection.destroy();
-            await interaction.reply({ embeds: [new EmbedBuilder().setColor(Colors.Blue).setTitle(`🔴 ${requestedLocalization.commands.leave.execute.success}`)] });
-        } else {
-            await interaction.reply({ embeds: [new EmbedBuilder().setColor(Colors.Blue).setTitle(`🔴 ${requestedLocalization.commands.leave.execute.not_in_voice_channel}`)] });
+        if (!player.connected) {
+            player.destroy();
+            return interaction.reply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(Colors.Red)
+                        .setDescription("⚠️ บอทยังไม่ได้เข้าห้องเสียง")
+                ]
+            });
         }
-        
+
+        if (player.destroy()) {
+            interaction.reply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(Colors.Red)
+                        .setDescription("🔴 ออกจากห้องเสียงแล้ว")
+                ]
+            });
+        } else {
+            interaction.reply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(Colors.Red)
+                        .setDescription("🔴 ไม่สามารถออกจากห้องเสียงได้")
+                ]
+            });
+        }
     },
 };

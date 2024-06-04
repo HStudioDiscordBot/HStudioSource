@@ -1,5 +1,5 @@
 const lang = require('../../lang.json');
-const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, Colors } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, Colors } = require('discord.js');
 
 function createSelectMenu(help, music, cradit, locale) {
   const langs = {
