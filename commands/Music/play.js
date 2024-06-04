@@ -1,10 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder, Colors } = require('discord.js');
-const ytsr = require('ytsr')
 const lang = require('../../lang.json');
-const utils = require('../../utils');
-
-const spotify_client_id = process.env.SPOTIFY_CLIENT_ID
-const spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET
+const { convertToHHMMSS, msToSec } = require('../../utils');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -19,59 +15,94 @@ module.exports = {
                 .setRequired(true)
                 .setDescriptionLocalizations({
                     th: lang.th.commands.play.StringOption.query.description,
-                }))
-        .addStringOption(option =>
-            option.setName('platform')
-                .setDescription(lang.default.commands.play.StringOption.platform.description)
-                .setDescriptionLocalizations({
-                    th: lang.th.commands.play.StringOption.platform.description,
-                })
-                .setRequired(false)
-                .addChoices(
-                    { name: 'Spotify', value: 'spotify' },
-                    { name: 'Youtube', value: 'youtube' },
-                )),
+                })),
     async execute(interaction, client) {
         const query = interaction.options.getString('query');
-        const platform = interaction.options.getString('platform');
 
-        const requestedLocalization = lang[interaction.locale] || lang.default;
+        if (!interaction.member.voice.channel) return await interaction.reply({ embeds: [new EmbedBuilder().setTitle(`:warning: คุณต้องอยู่ใน Voice Channel ก่อนเชิญบอท`).setColor(Colors.Yellow)] });
 
-        if (!interaction.member.voice.channel) {
-            return await interaction.reply({ embeds: [new EmbedBuilder().setTitle(`:warning: ${requestedLocalization.commands.error.please_join_before_use_bot}`).setColor("Yellow")] });
+        let player = client.moon.players.create({
+            guildId: interaction.guild.id,
+            voiceChannel: interaction.member.voice.channel.id,
+            textChannel: interaction.channel.id,
+            autoLeave: true
+        });
+
+        if (!player.connected) {
+            player.connect({
+                setDeaf: true,
+                setMute: false
+            });
         }
 
-        const pl = utils.autoPlatfrom(query);
+        let res = await client.moon.search({
+            query,
+            source: "spsearch",
+            requester: interaction.user.id
+        });
 
-        if (pl === 'spotify') {
-            const ac_token = await utils.makeAccessToken(interaction, spotify_client_id, spotify_client_secret);
+        if (res.loadType === "loadfailed") {
+            return interaction.reply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(Colors.Yellow)
+                        .setTitle(`:x: โหลดไม่สำเร็จ ปัญหาภายในระบบ`)
+                ]
+            });
+        } else if (res.loadType === "empty") {
+            return interaction.reply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(Colors.Yellow)
+                        .setTitle(`:x: ไม่พบเพลง`)
+                ]
+            });
+        }
 
-            const spotify_id = utils.extractSpotifyTrackId(query);
-            await utils.playSpotify(interaction, spotify_id, ac_token, requestedLocalization, client);
-        } else if (pl === 'youtube') {
-            const onriginal = await interaction.reply({ embeds: [new EmbedBuilder().setTitle('<:youtube_mokey:1160524601026162758> Loading Video').setColor(Colors.Blue).setDescription('Wait a moment...').setImage('https://cdn.jsdelivr.net/gh/HStudioDiscordBot/HStudioSource@main/assets/banner/loading.png')] });
-            await utils.playYoutube(interaction, query, requestedLocalization, onriginal, client);
-        } else if (pl === 'search') {
-            if (platform) {
-                if (platform === 'spotify') {
-                    const ac_token = await utils.makeAccessToken(interaction, spotify_client_id, spotify_client_secret);
+        if (res.loadType === "playlist") {
+            interaction.reply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(Colors.Blue)
+                        .setAuthor({ name: res.playlistInfo.author, iconURL: sourceIcon })
+                        .setTitle(`:arrow_double_down: ┃ **${res.playlistInfo.name}** \`${res.playlistInfo.totalTracks} เพลง\``)
+                        .setURL(res.playlistInfo.url)
+                        .setThumbnail(res.playlistInfo.artworkUrl)
+                        .addFields(
+                            { name: "จำนวนเพลง", value: `\`\`\`${res.playlistInfo.totalTracks}\`\`\``, inline: true },
+                            { name: "ช่องเสียง", value: `<#${interaction.member.voice.channel.id}>`, inline: true },
+                            { name: "เพิ่มโดย", value: `<@${interaction.user.id}>`, inline: true }
+                        )
+                ]
+            });
 
-                    const spotify_id = await utils.searchTracks(query, ac_token);
-                    await utils.playSpotify(interaction, spotify_id, ac_token, requestedLocalization, client);
-                } else if (platform === 'youtube') {
-                    const onriginal = await interaction.reply({ embeds: [new EmbedBuilder().setTitle('<:youtube_mokey:1160524601026162758> Loading Video').setColor(Colors.Blue).setDescription('Wait a moment...').setImage('https://cdn.jsdelivr.net/gh/HStudioDiscordBot/HStudioSource@main/assets/banner/loading.png')] });
-                    const searchResults = await ytsr(query);
-                    await utils.playYoutube(interaction, searchResults.items[0].url, requestedLocalization, onriginal, client);
-                }
-            } else {
-                const ac_token = await utils.makeAccessToken(interaction, spotify_client_id, spotify_client_secret);
-
-                const spotify_id = await utils.searchTracks(query, ac_token);
-                await utils.playSpotify(interaction, spotify_id, ac_token, requestedLocalization, client);
+            for (const track of res.tracks) {
+                player.queue.add(track);
             }
         } else {
-            return await interaction.reply({ embeds: [new EmbedBuilder().setTitle(`:no_entry: ${requestedLocalization.error.cant_procress_query}`).setColor('Red').setDescription(`\`\`\`${query}\`\`\``)] });
+            player.queue.add(res.tracks[0]);
+
+            let sourceIcon;
+            if (res.tracks[0].sourceName == "spotify") sourceIcon = "https://open.spotifycdn.com/cdn/images/favicon32.b64ecc03.png";
+
+            interaction.reply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(Colors.Blue)
+                        .setAuthor({ name: res.tracks[0].author, iconURL: sourceIcon })
+                        .setTitle(`:arrow_double_down: ┃ **${res.tracks[0].title}** \`${convertToHHMMSS(msToSec(res.tracks[0].duration))}\``)
+                        .setURL(res.tracks[0].url)
+                        .setThumbnail(res.tracks[0].artworkUrl)
+                        .addFields(
+                            { name: "ช่องเสียง", value: `<#${interaction.member.voice.channel.id}>`, inline: true },
+                            { name: "เพิ่มโดย", value: `<@${interaction.user.id}>`, inline: true }
+                        )
+                ]
+            });
         }
 
+        if (!player.playing) {
+            player.play();
+        }
     },
 };

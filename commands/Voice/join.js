@@ -1,6 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { EmbedBuilder, Colors } = require('discord.js')
-const { getVoiceConnection, joinVoiceChannel } = require('@discordjs/voice');
+const { EmbedBuilder, SlashCommandBuilder, Colors } = require('discord.js')
 
 const lang = require('../../lang.json');
 
@@ -11,32 +9,34 @@ module.exports = {
         .setDescriptionLocalizations({
             th: lang.th.commands.join.description,
         }),
-    async execute(interaction) {
-        const requestedLocalization = lang[interaction.locale] || lang.default;
+    async execute(interaction, client) {
+        if (!interaction.member.voice.channel) return await interaction.reply({ embeds: [new EmbedBuilder().setTitle(`:warning: คุณต้องอยู่ใน Voice Channel ก่อนเชิญบอท`).setColor(Colors.Yellow)] });
 
-        let connection = getVoiceConnection(interaction.guild.id);
-
-        if (!interaction.member.voice.channel) {
-            return await interaction.reply({ embeds: [new EmbedBuilder().setTitle(`:warning: ${requestedLocalization.commands.error.please_join_before_use_bot}`).setColor("Yellow")] });
-        }
-
-        if (!connection) {
-            connection = joinVoiceChannel({
-                channelId: interaction.member.voice.channel.id,
-                guildId: interaction.guild.id,
-                adapterCreator: interaction.guild.voiceAdapterCreator,
-                selfDeaf: true,
-                selfMute: false
-            });
-
-            await interaction.reply({ embeds: [new EmbedBuilder().setColor(Colors.Blue).setTitle(`🟢 ${requestedLocalization.commands.join.execute.success}`)]});
-        } else {
-            await interaction.reply({ embeds: [new EmbedBuilder().setColor(Colors.Blue).setTitle(`🟢 ${requestedLocalization.commands.join.execute.already_join}`)]});
-        }
-
-        await interaction.guild.members.me.edit({
-            deaf: true,
-            mute: false,
+        let player = client.moon.players.create({
+            guildId: interaction.guild.id,
+            voiceChannel: interaction.member.voice.channel.id,
+            textChannel: interaction.channel.id,
+            autoLeave: true
         });
+
+        if (!player.connected) {
+            if (player.connect({setDeaf: true, setMute: false})) {
+                interaction.reply({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setColor(Colors.Blue)
+                            .setDescription("🟢 เข้าห้องเสียงแล้ว")
+                    ]
+                });
+            } else {
+                interaction.reply({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setColor(Colors.Red)
+                            .setDescription("🔴 ไม่สามารถเข้าห้องเสียงได้")
+                    ]
+                });
+            }
+        }
     },
 };
