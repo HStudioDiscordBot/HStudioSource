@@ -1,5 +1,4 @@
-const { Client, GatewayIntentBits, Collection, Events } = require("discord.js");
-const { Music } = require('the-music-tools');
+const { Client, GatewayIntentBits, Collection } = require("discord.js");
 const fs = require('fs');
 
 const client = new Client({
@@ -9,14 +8,6 @@ const client = new Client({
         GatewayIntentBits.GuildVoiceStates,
     ]
 });
-
-const music = new Music();
-music.spotifyLogin({
-    clientId: process.env.SPOTIFY_CLIENT_ID,
-    clientSecret: process.env.SPOTIFY_CLIENT_SECRET
-});
-
-client.music = music;
 
 client.commands = new Collection();
 
