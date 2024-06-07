@@ -49,6 +49,7 @@
 
     "command.join.userNotInVoiceChannel": "⚠️ You must be in a voice channel to invite the bot",
     "command.join.joined": "🟢 Joined the voice channel",
+    "command.join.alreadyJoined": "🟢 Already join the voice channel",
     "command.join.fail": "🔴 Failed to join the voice channel",
 
     "command.leave.botNotInVoiceChannel": "⚠️ The bot is not in a voice channel",
