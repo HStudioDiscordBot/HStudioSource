@@ -1,15 +1,21 @@
-const { EmbedBuilder, Colors, SlashCommandBuilder } = require('discord.js')
-
-const lang = require('../../lang.json');
+const { SlashCommandBuilder, EmbedBuilder, Colors } = require("discord.js");
+const Locale = require("../../class/Locale");
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('leave')
-        .setDescription(lang.default.commands.leave.description)
+        .setName("leave")
+        .setDescription("Leave from Voice Channel")
         .setDescriptionLocalizations({
-            th: lang.th.commands.leave.description,
+            th: "ออกจากห้องเสียง"
         }),
-    async execute(interaction, client) {
+
+    /**
+     * 
+     * @param {CommandInteraction} interaction 
+     * @param {Client} client 
+     * @param {Locale} locale 
+     */
+    async execute(interaction, client, locale) {
         let player = client.moon.players.create({
             guildId: interaction.guild.id,
             voiceChannel: interaction.member.voice.channel.id,
@@ -23,7 +29,7 @@ module.exports = {
                 embeds: [
                     new EmbedBuilder()
                         .setColor(Colors.Red)
-                        .setDescription("⚠️ บอทยังไม่ได้เข้าห้องเสียง")
+                        .setDescription(locale.getLocaleString("command.leave.botNotInVoiceChannel"))
                 ]
             });
         }
@@ -33,7 +39,7 @@ module.exports = {
                 embeds: [
                     new EmbedBuilder()
                         .setColor(Colors.Red)
-                        .setDescription("🔴 ออกจากห้องเสียงแล้ว")
+                        .setDescription(locale.getLocaleString("command.leave.leaved"))
                 ]
             });
         } else {
@@ -41,9 +47,9 @@ module.exports = {
                 embeds: [
                     new EmbedBuilder()
                         .setColor(Colors.Red)
-                        .setDescription("🔴 ไม่สามารถออกจากห้องเสียงได้")
+                        .setDescription(locale.getLocaleString("command.leave.fail"))
                 ]
             });
         }
-    },
-};
+    }
+}
