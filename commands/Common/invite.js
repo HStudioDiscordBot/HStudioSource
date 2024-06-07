@@ -20,7 +20,7 @@ module.exports = {
             embeds: [
                 new EmbedBuilder()
                     .setColor(Colors.Blue)
-                    .setDescription(locale.replacePlaceholders(locale.getLocaleString(command.invite.description), [`https://discord.com/oauth2/authorize?client_id=${process.env.CLIENT_ID}`]))
+                    .setDescription(locale.replacePlaceholders(locale.getLocaleString("command.invite.description"), [`https://discord.com/oauth2/authorize?client_id=${process.env.CLIENT_ID}`]))
                     .setFooter({
                         text: locale.replacePlaceholders(locale.getLocaleString("command.footer"), [client.user.displayName, version])
                     })
