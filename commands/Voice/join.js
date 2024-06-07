@@ -1,16 +1,22 @@
-const { EmbedBuilder, SlashCommandBuilder, Colors } = require('discord.js')
-
-const lang = require('../../lang.json');
+const { SlashCommandBuilder, CommandInteraction, Client, EmbedBuilder, Colors } = require("discord.js");
+const Locale = require("../../class/Locale");
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('join')
-        .setDescription(lang.default.commands.join.description)
+        .setName("join")
+        .setDescription("Join Voice Channel")
         .setDescriptionLocalizations({
-            th: lang.th.commands.join.description,
+            th: "เข้าห้องเสียง"
         }),
-    async execute(interaction, client) {
-        if (!interaction.member.voice.channel) return await interaction.reply({ embeds: [new EmbedBuilder().setTitle(`:warning: คุณต้องอยู่ใน Voice Channel ก่อนเชิญบอท`).setColor(Colors.Yellow)] });
+
+    /**
+     * 
+     * @param {CommandInteraction} interaction 
+     * @param {Client} client 
+     * @param {Locale} locale 
+     */
+    async execute(interaction, client, locale) {
+        if (!interaction.member.voice.channel) return await interaction.reply({ embeds: [new EmbedBuilder().setColor(Colors.Yellow).setTitle(locale.getLocaleString("command.join.userNotInVoiceChannel"))] });
 
         let player = client.moon.players.create({
             guildId: interaction.guild.id,
@@ -20,12 +26,12 @@ module.exports = {
         });
 
         if (!player.connected) {
-            if (player.connect({setDeaf: true, setMute: false})) {
+            if (player.connect({ setDeaf: true, setMute: false })) {
                 interaction.reply({
                     embeds: [
                         new EmbedBuilder()
                             .setColor(Colors.Blue)
-                            .setDescription("🟢 เข้าห้องเสียงแล้ว")
+                            .setDescription(locale.getLocaleString("command.join.joined"))
                     ]
                 });
             } else {
@@ -33,10 +39,10 @@ module.exports = {
                     embeds: [
                         new EmbedBuilder()
                             .setColor(Colors.Red)
-                            .setDescription("🔴 ไม่สามารถเข้าห้องเสียงได้")
+                            .setDescription(locale.getLocaleString("command.join.fail"))
                     ]
                 });
             }
         }
-    },
-};
+    }
+}

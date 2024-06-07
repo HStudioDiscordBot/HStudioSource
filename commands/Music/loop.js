@@ -1,14 +1,20 @@
-const { SlashCommandBuilder, EmbedBuilder, Colors } = require('discord.js');
-const lang = require('../../lang.json');
+const { SlashCommandBuilder, CommandInteraction, Client, EmbedBuilder, Colors } = require("discord.js");
+const Locale = require("../../class/Locale");
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('loop')
-        .setDescription(lang.default.commands.loop.description)
+        .setName("loop")
+        .setDescription("Toggle On/Off loop")
         .setDescriptionLocalizations({
-            th: lang.th.commands.loop.description,
+            th: "เปิดปิดลูป"
         }),
-    async execute(interaction, client) {
+    /**
+     * 
+     * @param {CommandInteraction} interaction 
+     * @param {Client} client 
+     * @param {Locale} locale 
+     */
+    async execute(interaction, client, locale) {
         let player = client.moon.players.create({
             guildId: interaction.guild.id,
             voiceChannel: interaction.member.voice.channel.id,
@@ -22,43 +28,41 @@ module.exports = {
                 embeds: [
                     new EmbedBuilder()
                         .setColor(Colors.Red)
-                        .setDescription("⚠️ บอทยังไม่ได้เข้าห้องเสียง")
+                        .setDescription(locale.getLocaleString("command.loop.botNotInVoiceChannel"))
                 ]
             });
         }
 
         if (player.loop == 0) {
-            player.setLoop(1);
-            if (player.loop == 1) interaction.reply({
+            if (player.setLoop(1)) interaction.reply({
                 embeds: [
                     new EmbedBuilder()
                         .setColor(Colors.Blue)
-                        .setDescription("🔁 เปิดเล่นซ้ำแล้ว")
+                        .setDescription(locale.getLocaleString("command.loop.on.success"))
                 ]
             });
             else interaction.reply({
                 embeds: [
                     new EmbedBuilder()
                         .setColor(Colors.Red)
-                        .setDescription("❌ ไม่สามารถเปิดเล่นซ้ำได้")
+                        .setDescription(locale.getLocaleString("command.loop.on.fail"))
                 ]
             });
         } else if (player.loop == 1) {
-            player.setLoop(0);
-            if (player.loop == 0) interaction.reply({
+            if (player.setLoop(0)) interaction.reply({
                 embeds: [
                     new EmbedBuilder()
                         .setColor(Colors.Blue)
-                        .setDescription("🔁 ปิดเล่นซ้ำแล้ว")
+                        .setDescription(locale.getLocaleString("command.loop.off.success"))
                 ]
             });
             else interaction.reply({
                 embeds: [
                     new EmbedBuilder()
                         .setColor(Colors.Red)
-                        .setDescription("❌ ไม่สามารถปิดเล่นซ้ำได้")
+                        .setDescription(locale.getLocaleString("command.loop.off.fail"))
                 ]
             });
         }
-    },
-};
+    }
+}

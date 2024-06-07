@@ -1,13 +1,23 @@
-const { ActivityType } = require("discord.js");
-const { version } = require('../package.json');
+const { Events, Client, ActivityType } = require("discord.js");
+const { version } = require("../package.json");
 
 module.exports = {
-    name: 'ready',
+    name: Events.ClientReady,
     once: true,
+    /**
+    * 
+    * @param {Client} client - The Discord client.
+    */
     async execute(client) {
-        client.user.setPresence({ activities: [{ name: `/help | V${version}`, type: ActivityType.Listening }] });
+        function setActivity() {
+            client.user.setPresence({ activities: [{ name: `/help | V${version}`, type: ActivityType.Listening }]});
+        }
+
+        setActivity();
 
         console.log(`[${client.shard.ids}] Ready! Logged in as ${client.user.tag}`);
         console.log(`[${client.shard.ids}] Server Count: ${client.guilds.cache.size}`);
-    },
-};
+
+        setInterval(setActivity, 60 * 1000);
+    }
+}

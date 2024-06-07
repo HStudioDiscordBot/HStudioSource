@@ -1,4 +1,3 @@
-// Time Converter
 function msToSec(milliseconds) {
     return Math.ceil(milliseconds / 1000);
 }
@@ -17,6 +16,7 @@ function convertToHHMMSS(seconds) {
         return formattedTime;
     }
 }
+
 module.exports = {
     msToSec,
     convertToHHMMSS,

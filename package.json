@@ -1,30 +1,31 @@
 {
   "name": "hstudio",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "HStudio Discord Music Bot Source Code",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
     "bot": "node index.js"
   },
-  "author": "HewkawAr",
   "repository": {
     "type": "git",
-    "url": "https://github.com/HStudioDiscordBot/HStudioSource.git"
+    "url": "git+https://github.com/HStudioDiscordBot/HStudioSource.git"
+  },
+  "keywords": [
+    "HStudio"
+  ],
+  "author": "HewkawAr",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HStudioDiscordBot/HStudioSource/issues"
   },
   "homepage": "https://github.com/HStudioDiscordBot/HStudioSource#readme",
-  "license": "MIT",
   "dependencies": {
-    "@discordjs/rest": "^2.3.0",
     "@opecgame/twapi": "^1.2.1",
-    "axios": "^1.7.2",
     "cors": "^2.8.5",
-    "discord.js": "^14.15.2",
+    "discord.js": "^14.15.3",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "moonlink.js": "^3.6.32"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.0"
   }
 }

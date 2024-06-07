@@ -1,25 +1,33 @@
-const { SlashCommandBuilder, EmbedBuilder, Colors } = require('discord.js');
-const lang = require('../../lang.json');
-const { convertToHHMMSS, msToSec } = require('../../utils');
+const { SlashCommandBuilder, CommandInteraction, Client, EmbedBuilder, Colors } = require("discord.js");
+const { convertToHHMMSS, msToSec } = require("../../utils/time");
+const { isYouTubeUrl, isHStudioPlayUrl } = require("../../utils/youtube");
+const Locale = require("../../class/Locale");
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('play')
-        .setDescription(lang.default.commands.play.description)
+        .setName("play")
+        .setDescription("Play or add to queue")
         .setDescriptionLocalizations({
-            th: lang.th.commands.play.description,
+            th: "เล่นเพลง / เพิ่มคิว"
         })
-        .addStringOption(option =>
-            option.setName('query')
-                .setDescription(lang.default.commands.play.StringOption.query.description)
-                .setRequired(true)
-                .setDescriptionLocalizations({
-                    th: lang.th.commands.play.StringOption.query.description,
-                })),
-    async execute(interaction, client) {
-        const query = interaction.options.getString('query');
+        .addStringOption(option => option
+            .setName("query")
+            .setDescription("Search term or Url")
+            .setDescriptionLocalizations({
+                th: "ชื่อเพลง หรือ ลิ้งค์"
+            })
+            .setRequired(true)
+        ),
+    /**
+     * 
+     * @param {CommandInteraction} interaction 
+     * @param {Client} client 
+     * @param {Locale} locale 
+     */
+    async execute(interaction, client, locale) {
+        if (!interaction.member.voice.channel) return await interaction.reply({ embeds: [new EmbedBuilder().setColor(Colors.Yellow).setTitle(locale.getLocaleString("command.play.userNotInVoiceChannel"))] })
 
-        if (!interaction.member.voice.channel) return await interaction.reply({ embeds: [new EmbedBuilder().setTitle(`:warning: คุณต้องอยู่ใน Voice Channel ก่อนเชิญบอท`).setColor(Colors.Yellow)] });
+        let query = interaction.options.getString("query");
 
         let player = client.moon.players.create({
             guildId: interaction.guild.id,
@@ -27,6 +35,21 @@ module.exports = {
             textChannel: interaction.channel.id,
             autoLeave: true
         });
+
+        if (isYouTubeUrl(query)) {
+            return interaction.reply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(Colors.Red)
+                        .setTitle(locale.getLocaleString("command.play.youtube.disabled"))
+                        .setDescription(locale.getLocaleString("command.play.youtube.disabled.discription"))
+                ]
+            });
+        }
+
+        if (isHStudioPlayUrl(query)) {
+            query = query.replace("play.hstudio.hewkawar.xyz", "www.youtube.com");
+        }
 
         if (!player.connected) {
             player.connect({
@@ -46,7 +69,7 @@ module.exports = {
                 embeds: [
                     new EmbedBuilder()
                         .setColor(Colors.Yellow)
-                        .setTitle(`:x: โหลดไม่สำเร็จ ปัญหาภายในระบบ`)
+                        .setTitle(locale.getLocaleString("command.play.loadFail"))
                 ]
             });
         } else if (res.loadType === "empty") {
@@ -54,27 +77,21 @@ module.exports = {
                 embeds: [
                     new EmbedBuilder()
                         .setColor(Colors.Yellow)
-                        .setTitle(`:x: ไม่พบเพลง`)
+                        .setTitle(locale.getLocaleString("command.play.notfound"))
                 ]
             });
         }
 
         if (res.loadType === "playlist") {
-            let sourceIcon;
-            if (res.tracks[0].sourceName == "spotify") sourceIcon = "https://open.spotifycdn.com/cdn/images/favicon32.b64ecc03.png";
-            
             interaction.reply({
                 embeds: [
                     new EmbedBuilder()
                         .setColor(Colors.Blue)
-                        .setAuthor({ name: res.playlistInfo.author, iconURL: sourceIcon })
-                        .setTitle(`:arrow_double_down: ┃ **${res.playlistInfo.name}** \`${res.playlistInfo.totalTracks} เพลง\``)
-                        .setURL(res.playlistInfo.url)
-                        .setThumbnail(res.playlistInfo.artworkUrl)
+                        .setTitle(`▶️ ${res.playlistInfo.name}`)
                         .addFields(
-                            { name: "จำนวนเพลง", value: `\`\`\`${res.playlistInfo.totalTracks}\`\`\``, inline: true },
-                            { name: "ช่องเสียง", value: `<#${interaction.member.voice.channel.id}>`, inline: true },
-                            { name: "เพิ่มโดย", value: `<@${interaction.user.id}>`, inline: true }
+                            { name: locale.getLocaleString("command.play.duration"), value: `\`\`\`${convertToHHMMSS(msToSec(res.playlistInfo.duration))}\`\`\``, inline: true },
+                            { name: locale.getLocaleString("command.play.voiceChannel"), value: `<#${interaction.member.voice.channel.id}>`, inline: true },
+                            { name: locale.getLocaleString("command.play.owner"), value: `<@${interaction.user.id}>`, inline: true }
                         )
                 ]
             });
@@ -85,27 +102,43 @@ module.exports = {
         } else {
             player.queue.add(res.tracks[0]);
 
-            let sourceIcon;
-            if (res.tracks[0].sourceName == "spotify") sourceIcon = "https://open.spotifycdn.com/cdn/images/favicon32.b64ecc03.png";
+            if (res.tracks[0].sourceName == "spotify") {
+                interaction.reply({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setColor(Colors.Blue)
+                            .setAuthor({ name: res.tracks[0].author, iconURL: "https://cdn.jsdelivr.net/gh/HStudioDiscordBot/Storage@main/3rd/spotify-icon.png" })
+                            .setTitle(`▶️ ${res.tracks[0].title}`)
+                            .setURL(res.tracks[0].url)
+                            .setThumbnail(res.tracks[0].artworkUrl)
+                            .addFields(
+                                { name: locale.getLocaleString("command.play.duration"), value: `\`\`\`${res.tracks[0].isStream ? "LIVE" : convertToHHMMSS(msToSec(res.tracks[0].duration))}\`\`\``, inline: true },
+                                { name: locale.getLocaleString("command.play.voiceChannel"), value: `<#${interaction.member.voice.channel.id}>`, inline: true },
+                                { name: locale.getLocaleString("command.play.owner"), value: `<@${interaction.user.id}>`, inline: true }
+                            )
+                    ]
+                });
+            } else {
+                interaction.reply({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setColor(Colors.Blue)
+                            .setAuthor({ name: res.tracks[0].author })
+                            .setTitle(`▶️ ${res.tracks[0].title}`)
+                            .setThumbnail(res.tracks[0].artworkUrl)
+                            .addFields(
+                                { name: locale.getLocaleString("command.play.duration"), value: `\`\`\`${res.tracks[0].isStream ? "LIVE" : convertToHHMMSS(msToSec(res.tracks[0].duration))}\`\`\``, inline: true },
+                                { name: locale.getLocaleString("command.play.voiceChannel"), value: `<#${interaction.member.voice.channel.id}>`, inline: true },
+                                { name: locale.getLocaleString("command.play.owner"), value: `<@${interaction.user.id}>`, inline: true }
+                            )
+                    ]
+                });
+            }
 
-            interaction.reply({
-                embeds: [
-                    new EmbedBuilder()
-                        .setColor(Colors.Blue)
-                        .setAuthor({ name: res.tracks[0].author, iconURL: sourceIcon })
-                        .setTitle(`:arrow_double_down: ┃ **${res.tracks[0].title}** \`${convertToHHMMSS(msToSec(res.tracks[0].duration))}\``)
-                        .setURL(res.tracks[0].url)
-                        .setThumbnail(res.tracks[0].artworkUrl)
-                        .addFields(
-                            { name: "ช่องเสียง", value: `<#${interaction.member.voice.channel.id}>`, inline: true },
-                            { name: "เพิ่มโดย", value: `<@${interaction.user.id}>`, inline: true }
-                        )
-                ]
-            });
         }
 
         if (!player.playing) {
             player.play();
         }
-    },
-};
+    }
+}
