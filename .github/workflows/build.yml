@@ -24,12 +24,3 @@ jobs:
         
       - name: Push Docker image
         run: docker push hewkawar/hstudio-bot:latest
-
-      - name: Login AWS
-        run: aws ecr get-login-password --region us-west-1 | docker login --username AWS --password-stdin 851292282452.dkr.ecr.us-west-1.amazonaws.com
-      
-      - name: Tage AWS image
-        run: docker tag hewkawar/hstudio-bot:latest 851292282452.dkr.ecr.us-west-1.amazonaws.com/hstudio-bot:latest
-
-      - name: Push AWS image
-        run: docker push 851292282452.dkr.ecr.us-west-1.amazonaws.com/hstudio-bot:latest
