@@ -27,6 +27,8 @@ module.exports = {
     async execute(interaction, client, locale) {
         if (!interaction.member.voice.channel) return await interaction.reply({ embeds: [new EmbedBuilder().setColor(Colors.Yellow).setTitle(locale.getLocaleString("command.play.userNotInVoiceChannel"))] })
 
+        await interaction.deferReply();
+
         let query = interaction.options.getString("query");
 
         let player = client.moon.players.create({
@@ -37,7 +39,7 @@ module.exports = {
         });
 
         if (isYouTubeUrl(query)) {
-            return interaction.reply({
+            return interaction.editReply({
                 embeds: [
                     new EmbedBuilder()
                         .setColor(Colors.Red)
@@ -65,7 +67,7 @@ module.exports = {
         });
 
         if (res.loadType === "loadfailed") {
-            return interaction.reply({
+            return interaction.editReply({
                 embeds: [
                     new EmbedBuilder()
                         .setColor(Colors.Yellow)
@@ -73,7 +75,7 @@ module.exports = {
                 ]
             });
         } else if (res.loadType === "empty") {
-            return interaction.reply({
+            return interaction.editReply({
                 embeds: [
                     new EmbedBuilder()
                         .setColor(Colors.Yellow)
@@ -83,7 +85,7 @@ module.exports = {
         }
 
         if (res.loadType === "playlist") {
-            interaction.reply({
+            interaction.editReply({
                 embeds: [
                     new EmbedBuilder()
                         .setColor(Colors.Blue)
@@ -103,7 +105,7 @@ module.exports = {
             player.queue.add(res.tracks[0]);
 
             if (res.tracks[0].sourceName == "spotify") {
-                interaction.reply({
+                interaction.editReply({
                     embeds: [
                         new EmbedBuilder()
                             .setColor(Colors.Blue)
@@ -119,7 +121,7 @@ module.exports = {
                     ]
                 });
             } else {
-                interaction.reply({
+                interaction.editReply({
                     embeds: [
                         new EmbedBuilder()
                             .setColor(Colors.Blue)
