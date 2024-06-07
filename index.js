@@ -6,26 +6,42 @@ const { version } = require("./package.json");
 
 require('dotenv').config();
 
+const maxServersPerShard = 10;
+
+// Function to determine the number of shards needed
+async function determineShardCount() {
+    const response = await manager.fetchClientValues('guilds.cache.size');
+    const totalServers = response.reduce((acc, guildCount) => acc + guildCount, 0);
+    return Math.ceil(totalServers / maxServersPerShard);
+}
+
 // Sharding Manager
 const manager = new ShardingManager("bot.js", {
-    token: process.env.TOKEN
+    token: process.env.TOKEN,
+    totalShards: 'auto',
 });
 
 manager.on('shardCreate', shard => {
     shard.on('death', () => {
         console.log(`[${shard.id}] is Death`);
-        console.log(`[${shard.id}] Reswawning...`)
-    })
+        console.log(`[${shard.id}] Reswawning...`);
+    });
     console.log(`Launched shard ${shard.id}`);
 });
 
-manager.spawn().then(shards => {
-    shards.forEach(shard => {
-        shard.on('message', message => {
-            console.log(`Shard[${shard.id}] : ${message._eval} : ${message._result}`);
+// Adjust shard count based on server limits
+determineShardCount().then(shardCount => {
+    manager.totalShards = shardCount;
+
+    manager.spawn().then(shards => {
+        shards.forEach(shard => {
+            shard.on('message', message => {
+                console.log(`Shard[${shard.id}] : ${message._eval} : ${message._result}`);
+            });
         });
-    });
+    }).catch(console.error);
 }).catch(console.error);
+
 
 // API Manager
 const api = express();
