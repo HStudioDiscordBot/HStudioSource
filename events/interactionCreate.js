@@ -36,7 +36,7 @@ module.exports = {
             const customId = interaction.customId;
 
             if (customId == "donate") {
-                await interaction.reply({ embeds: [new EmbedBuilder().setColor(Colors.Blue).setDescription('<a:loading:1172816904356896830> กำลังตรวจสอบ Url กรุณารอสักครู่')], ephemeral: true });
+                await interaction.reply({ embeds: [new EmbedBuilder().setColor(Colors.Blue).setDescription(locale.getLocaleString("modal.submit.donate.reply"))], ephemeral: true });
 
                 const url = interaction.fields.getTextInputValue('url');
                 const voucher_code = url.replace('https://gift.truemoney.com/campaign/?v=', '');
