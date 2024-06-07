@@ -43,6 +43,14 @@ module.exports = {
                     ]
                 });
             }
+        } else {
+            interaction.reply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(Colors.Blue)
+                        .setDescription(locale.getLocaleString("command.join.joined"))
+                ]
+            });
         }
     }
 }
