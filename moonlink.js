@@ -49,7 +49,7 @@ function initializationMoonlink(client) {
         }
     });
 
-    client.manager.on("queueEnd", async (player, track) => {
+    client.moon.on("queueEnd", async (player, track) => {
         client.channels.cache
             .get(player.textChannel)
             .send({
@@ -62,7 +62,7 @@ function initializationMoonlink(client) {
         player.destroy();
     });
 
-    client.manager.on("playerDisconnect", async (player) => {
+    client.moon.on("playerDisconnect", async (player) => {
         player.destroy();
     });
 
