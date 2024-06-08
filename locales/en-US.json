@@ -55,6 +55,9 @@
     "command.volume.level.less_200": "⚠️ Volume level must be less than 200",
     "command.volume.success": "🔊 Volume set to **{0}**",
     "command.volume.fail": "❌ Failed to set volume",
+    "command.skip.botNotInVoiceChannel": "⚠️ You must be in a voice channel before skip track",
+    "command.skip.success": "⏭️ Skipped track",
+    "command.skip.fail": "❌ Failed to skip track",
     "common.version": "Version",
     "command.footer": "{0} | Version: {1}",
     "interaction.command.error": "An error occurred while executing this command!"
