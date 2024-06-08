@@ -58,6 +58,11 @@
     "command.skip.botNotInVoiceChannel": "⚠️ คุณต้องอยู่ใน Voice Channel ก่อนข้ามเพลง",
     "command.skip.success": "⏭️ ข้ามเพลงแล้ว",
     "command.skip.fail": "❌ ไม่สามารถข้ามเพลงได้",
+    "command.queue.title": "คิวเพลง",
+    "command.queue.noqueue": "⚠️ ไม่มีคิวเพลงที่จะเล่นต่อ",
+    "command.queue.spotify.raw": "{0}. **[{1}]({2})** ของ `{3}`",
+    "command.queue.raw": "{0}. **{1}** ของ `{3}`",
+    "command.queue.totalTracks": "จำนวน {0} เพลง",
     "common.version": "เวอร์ชั่น",
     "command.footer": "{0} | เวอร์ชั่น: {1}",
     "interaction.command.error": "เกิดข้อผิดพลาดขณะดำเนินการคำสั่งนี้!"
