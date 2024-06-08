@@ -49,6 +49,23 @@ function initializationMoonlink(client) {
         }
     });
 
+    client.moon.on("queueEnd", async (player, track) => {
+        client.channels.cache
+            .get(player.textChannel)
+            .send({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(Colors.Red)
+                        .setDescription("There are no more tracks")
+                ]
+            });
+        player.destroy();
+    });
+
+    client.moon.on("playerDisconnect", async (player) => {
+        player.destroy();
+    });
+
     client.on("ready", () => {
         client.moon.init(client.user.id);
     });
