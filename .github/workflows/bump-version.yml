@@ -2,7 +2,7 @@ name: Bump Version on PR
 
 on:
   pull_request:
-    types: [opened]
+    types: [closed]
 
 jobs:
   bump-version:
