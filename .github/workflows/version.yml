@@ -19,15 +19,6 @@ jobs:
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           npm version patch
 
-      # - name: Create a Git tag (optional)
-      #   run: |
-      #     git tag "v$(node -p "require('./package.json').version")"
-
-      - name: Commit version changes (optional)
-        run: |
-          git add package.json
-          git commit -m "Version bump to $(node -p "require('./package.json').version")"
-
       - name: Push changes (optional, requires a secret)
         run: |
           git push origin ${{ github.ref }}
