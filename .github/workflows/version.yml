@@ -1,0 +1,34 @@
+name: Version Increment (Patch)
+
+on:
+  push:
+    branches: [ main ]  # Update on pushes to the main branch (customize as needed)
+
+jobs:
+  version:
+    runs-on: ubuntu-latest  # Replace with your preferred runner
+
+    steps:
+      - uses: actions/checkout@v3  # Checkout the repository code
+
+      - name: Increment version
+        run: |
+          npm version patch
+
+      - name: Create a Git tag (optional)
+        run: |
+          git tag "v$(node -p "require('./package.json').version")"
+
+      - name: Commit version changes (optional)
+        run: |
+          git add package.json
+          git commit -m "Version bump to $(node -p "require('./package.json').version")"
+
+      - name: Push changes (optional, requires a secret)
+        run: |
+          git push origin ${{ github.ref }}
+
+          # Consider using a Personal Access Token with limited permissions for pushing
+          # See https://docs.github.com/en/actions/guides/using-secrets-with-github-actions for details
+          # env:
+          #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
