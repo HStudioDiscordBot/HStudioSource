@@ -1,0 +1,39 @@
+name: Bump Version on PR
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Commit pending changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add .
+          git commit -m "chore: commit pending changes" || echo "No changes to commit"
+
+      - name: Bump version
+        run: |
+          npm version patch
+          git push origin HEAD:${{ github.head_ref }} --follow-tags
+
+      - name: Create a Pull Request comment
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          issue-number: ${{ github.event.number }}
+          body: 'Version bumped to `${{ steps.bump-version.outputs.new_version }}`'
