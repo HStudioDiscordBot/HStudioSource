@@ -1,39 +1,57 @@
-name: Bump Version on PR
+name: Version Increment
 
 on:
-  pull_request:
-    types: [closed]
+  push:
+    branches: [ main ]
 
 jobs:
-  bump-version:
+  version:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '14'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Commit pending changes
+      - name: Configure Git user (optional)
         run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add .
-          git commit -m "chore: commit pending changes" || echo "No changes to commit"
+          git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          git config --global user.name "$GITHUB_ACTOR"
 
-      - name: Bump version
+      - name: Get current version (optional)
         run: |
-          npm version patch
-          git push origin HEAD:${{ github.head_ref }} --follow-tags
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          echo "Current version: $CURRENT_VERSION"
 
-      - name: Create a Pull Request comment
-        uses: peter-evans/create-or-update-comment@v2
-        with:
-          issue-number: ${{ github.event.number }}
-          body: 'Version bumped to `${{ steps.bump-version.outputs.new_version }}`'
+      - name: Determine version increment type (optional)
+        id: version_type
+        run: |
+          if [[ "${{ github.event.commits[0].message }}" =~ ^[fix|patch] ]] ; then
+            echo "patch"
+          elif [[ "${{ github.event.commits[0].message }}" =~ ^[feat|feature|minor] ]] ; then
+            echo "minor"
+          else
+            echo "major"
+          fi
+
+      - name: Increment version (use appropriate command)
+        run: |
+          npm version ${{ steps.version_type.outputs.version }}  # Use npm version command
+          # OR
+          # yarn version ${{ steps.version_type.outputs.version }}  # Use yarn version command (if applicable)
+
+      - name: Create a Git tag (optional)
+        run: |
+          git tag "v$(node -p "require('./package.json').version")"
+
+      - name: Commit version changes (optional)
+        run: |
+          git add package.json
+          git commit -m "Version bump to $(node -p "require('./package.json').version")"
+
+      - name: Push changes (optional, requires a secret)
+        run: |
+          git push origin ${{ github.ref }}
+
+          # Consider using a Personal Access Token with limited permissions for pushing
+          # See https://docs.github.com/en/actions/guides/using-secrets-with-github-actions for details
+          # env:
+          #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
