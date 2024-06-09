@@ -64,3 +64,6 @@ $ npm install
 ```bash
 $ npm run bot
 ```
+
+# Support
+[Discord](https://discord.gg/gAdjmmHxBQ)
