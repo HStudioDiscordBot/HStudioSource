@@ -15,15 +15,20 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22'
+          node-version: '14'
 
       - name: Install dependencies
         run: npm install
 
-      - name: Bump version
+      - name: Commit pending changes
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add .
+          git commit -m "chore: commit pending changes" || echo "No changes to commit"
+
+      - name: Bump version
+        run: |
           npm version patch
           git push origin HEAD:${{ github.head_ref }} --follow-tags
 
