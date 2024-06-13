@@ -39,11 +39,11 @@ module.exports = class Locale {
     getLocaleString(id) {
         try {
             switch (this.locale) {
-                case "id-ID":
+                case "id":
                     return id_ID[id] || en_US[id] || id;
-                case "da-DK":
+                case "da":
                     return da_DK[id] || en_US[id] || id;
-                case "de-DE":
+                case "de":
                     return de_DE[id] || en_US[id] || id;
                 case "en-GB":
                     return en_GB[id] || en_US[id] || id;
@@ -51,53 +51,53 @@ module.exports = class Locale {
                     return en_US[id] || id;
                 case "es-ES":
                     return es_ES[id] || en_US[id] || id;
-                case "fr-FR":
+                case "fr":
                     return fr_FR[id] || en_US[id] || id;
-                case "hr-HR":
+                case "hr":
                     return hr_HR[id] || en_US[id] || id;
-                case "it-IT":
+                case "it":
                     return it_IT[id] || en_US[id] || id;
-                case "lt-LT":
+                case "lt":
                     return lt_LT[id] || en_US[id] || id;
-                case "hu-HU":
+                case "hu":
                     return hu_HU[id] || en_US[id] || id;
-                case "nl-NL":
+                case "nl":
                     return nl_NL[id] || en_US[id] || id;
-                case "no-NO":
+                case "no":
                     return no_NO[id] || en_US[id] || id;
-                case "pl-PL":
+                case "pl":
                     return pl_PL[id] || en_US[id] || id;
                 case "pt-BR":
                     return pt_BR[id] || en_US[id] || id;
-                case "ro-RO":
+                case "ro":
                     return ro_RO[id] || en_US[id] || id;
-                case "fi-FI":
+                case "fi":
                     return fi_FI[id] || en_US[id] || id;
                 case "sv-SE":
                     return sv_SE[id] || en_US[id] || id;
-                case "vi-VN":
+                case "vi":
                     return vi_VN[id] || en_US[id] || id;
-                case "tr-TR":
+                case "tr":
                     return tr_TR[id] || en_US[id] || id;
-                case "cs-CZ":
+                case "cs":
                     return cs_CZ[id] || en_US[id] || id;
-                case "el-GR":
+                case "el":
                     return el_GR[id] || en_US[id] || id;
-                case "bg-BG":
+                case "bg":
                     return bg_BG[id] || en_US[id] || id;
-                case "ru-RU":
+                case "ru":
                     return ru_RU[id] || en_US[id] || id;
-                case "uk-UA":
+                case "uk":
                     return uk_UA[id] || en_US[id] || id;
-                case "hi-IN":
+                case "hi":
                     return hi_IN[id] || en_US[id] || id;
-                case "th-TH":
+                case "th":
                     return th_TH[id] || en_US[id] || id;
-                case "ja-JP":
+                case "ja":
                     return ja_JP[id] || en_US[id] || id;
                 case "zh-CN":
                     return zh_CN[id] || en_US[id] || id;
-                case "ko-KR":
+                case "ko":
                     return ko_KR[id] || en_US[id] || id;
                 default:
                     return en_US[id] || id;
