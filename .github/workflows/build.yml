@@ -1,4 +1,4 @@
-name: Docker Build and Push
+name: Patch Version, Sync Crowdin, Build and Push to Docker Hub
 
 on:
   push:
