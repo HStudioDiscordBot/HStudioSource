@@ -26,7 +26,7 @@
     "command.pause.alreadypaused": "⏸️ หยุดเพลงชั่วคราวอยู่แล้ว",
     "command.play.userNotInVoiceChannel": "⚠️ คุณต้องอยู่ใน Voice Channel ก่อนเชิญบอท",
     "command.play.youtube.disabled": "❌ ไม่สามารถเล่นเพลงจาก Youtube โดยตรงได้",
-    "command.play.youtube.disabled.description": "You need to convert the link before it can be used.\n\nYou can convert the link using /converter youtube-url",
+    "command.play.youtube.disabled.description": "คุณต้องแปลงลิ้งค์ก่อนเล่นเพลง\nคุณสามารถแปลงลิ้งค์ได้โดยใช้คำสั่ง /converter youtube-url",
     "command.play.loadFail": "❌ โหลดไม่สำเร็จ ปัญหาภายในระบบ",
     "command.play.notfound": "🔍 ไม่พบเพลง",
     "command.play.duration": "ระยะเวลา",
