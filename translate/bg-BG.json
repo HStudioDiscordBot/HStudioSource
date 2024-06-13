@@ -1,5 +1,5 @@
 {
-    "modal.submit.donate.reply": "<a:loading:1172816904356896830> กำลังตรวจสอบ Url กรุณารอสักครู่",
+    "modal.submit.donate.reply": "",
     "modal.submit.donate.success": "ขอบคุณคุณ {0} สำหรับ {1} บาทที่บริจาคให้ **HStudio**",
     "modal.submit.donate.reply.success": "✅ ขอบคุณสำหรับ {0} บาทที่บริจาคให้ **HStudio**",
     "modal.submit.donate.reply.fail.CANNOT_GET_OWN_VOUCHER": "❌ ไม่สามารถเปิดซองของตัวเองได้",
