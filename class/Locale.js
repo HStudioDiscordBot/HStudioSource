@@ -1,5 +1,33 @@
-const en_US = require("../locales/en-US.json");
-const th = require("../locales/th.json");
+const id_ID = require("../translate/id-ID.json");
+const da_DK = require("../translate/da-DK.json");
+const de_DE = require("../translate/de-DE.json");
+const en_GB = require("../translate/en-GB.json");
+const en_US = require("../translate/en-US.json");
+const es_ES = require("../translate/es-ES.json");
+const fr_FR = require("../translate/fr-FR.json");
+const hr_HR = require("../translate/hr-HR.json");
+const it_IT = require("../translate/it-IT.json");
+const lt_LT = require("../translate/lt-LT.json");
+const hu_HU = require("../translate/hu-HU.json");
+const nl_NL = require("../translate/nl-NL.json");
+const no_NO = require("../translate/no-NO.json");
+const pl_PL = require("../translate/pl-PL.json");
+const pt_BR = require("../translate/pt-BR.json");
+const ro_RO = require("../translate/ro-RO.json");
+const fi_FI = require("../translate/fi-FI.json");
+const sv_SE = require("../translate/sv-SE.json");
+const vi_VN = require("../translate/vi-VN.json");
+const tr_TR = require("../translate/tr-TR.json");
+const cs_CZ = require("../translate/cs-CZ.json");
+const el_GR = require("../translate/el-GR.json");
+const bg_BG = require("../translate/bg-BG.json");
+const ru_RU = require("../translate/ru-RU.json");
+const uk_UA = require("../translate/uk-UA.json");
+const hi_IN = require("../translate/hi-IN.json");
+const th_TH = require("../translate/th-TH.json");
+const ja_JP = require("../translate/ja-JP.json");
+const zh_CN = require("../translate/zh-CN.json");
+const ko_KR = require("../translate/ko-KR.json");
 
 module.exports = class Locale {
     locale = "en-US";
@@ -11,13 +39,68 @@ module.exports = class Locale {
     getLocaleString(id) {
         try {
             switch (this.locale) {
-                case "th":
-                    if (th[id]) return th[id];
-                    else if (en_US[id]) return en_US[id];
-                    else return id;
+                case "id-ID":
+                    return id_ID[id] || en_US[id] || id;
+                case "da-DK":
+                    return da_DK[id] || en_US[id] || id;
+                case "de-DE":
+                    return de_DE[id] || en_US[id] || id;
+                case "en-GB":
+                    return en_GB[id] || en_US[id] || id;
+                case "en-US":
+                    return en_US[id] || id;
+                case "es-ES":
+                    return es_ES[id] || en_US[id] || id;
+                case "fr-FR":
+                    return fr_FR[id] || en_US[id] || id;
+                case "hr-HR":
+                    return hr_HR[id] || en_US[id] || id;
+                case "it-IT":
+                    return it_IT[id] || en_US[id] || id;
+                case "lt-LT":
+                    return lt_LT[id] || en_US[id] || id;
+                case "hu-HU":
+                    return hu_HU[id] || en_US[id] || id;
+                case "nl-NL":
+                    return nl_NL[id] || en_US[id] || id;
+                case "no-NO":
+                    return no_NO[id] || en_US[id] || id;
+                case "pl-PL":
+                    return pl_PL[id] || en_US[id] || id;
+                case "pt-BR":
+                    return pt_BR[id] || en_US[id] || id;
+                case "ro-RO":
+                    return ro_RO[id] || en_US[id] || id;
+                case "fi-FI":
+                    return fi_FI[id] || en_US[id] || id;
+                case "sv-SE":
+                    return sv_SE[id] || en_US[id] || id;
+                case "vi-VN":
+                    return vi_VN[id] || en_US[id] || id;
+                case "tr-TR":
+                    return tr_TR[id] || en_US[id] || id;
+                case "cs-CZ":
+                    return cs_CZ[id] || en_US[id] || id;
+                case "el-GR":
+                    return el_GR[id] || en_US[id] || id;
+                case "bg-BG":
+                    return bg_BG[id] || en_US[id] || id;
+                case "ru-RU":
+                    return ru_RU[id] || en_US[id] || id;
+                case "uk-UA":
+                    return uk_UA[id] || en_US[id] || id;
+                case "hi-IN":
+                    return hi_IN[id] || en_US[id] || id;
+                case "th-TH":
+                    return th_TH[id] || en_US[id] || id;
+                case "ja-JP":
+                    return ja_JP[id] || en_US[id] || id;
+                case "zh-CN":
+                    return zh_CN[id] || en_US[id] || id;
+                case "ko-KR":
+                    return ko_KR[id] || en_US[id] || id;
                 default:
-                    if (en_US[id]) return en_US[id];
-                    else return id;
+                    return en_US[id] || id;
             }
         } catch (err) {
             return id;
