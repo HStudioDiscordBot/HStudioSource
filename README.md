@@ -65,5 +65,8 @@ $ npm install
 $ npm run bot
 ```
 
+# Translators
+HStudio uses [Crowdin](https://crowdin.com/project/hstudiodiscordbot), the cloud-based localization management tool.
+
 # Support
 [Discord](https://discord.gg/gAdjmmHxBQ)
