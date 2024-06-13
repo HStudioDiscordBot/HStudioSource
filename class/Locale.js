@@ -1,8 +1,9 @@
+const en_US = require("../locales/en-US.json");
+
 const id_ID = require("../translate/id-ID.json");
 const da_DK = require("../translate/da-DK.json");
 const de_DE = require("../translate/de-DE.json");
 const en_GB = require("../translate/en-GB.json");
-const en_US = require("../translate/en-US.json");
 const es_ES = require("../translate/es-ES.json");
 const fr_FR = require("../translate/fr-FR.json");
 const hr_HR = require("../translate/hr-HR.json");
