@@ -28,6 +28,8 @@ manager.spawn().then(shards => {
 }).catch(console.error);
 
 // API Manager
+const port = process.env.PORT || 8233;
+
 const api = express();
 api.use(cors());
 api.use(express.json());
@@ -50,6 +52,6 @@ api.get("/status", async (req, res) => {
     return res.status(200).json(status);
 });
 
-api.listen(8233, () => {
-    console.log(`Status page server is running at http://localhost:8233/status`);
+api.listen(port, () => {
+    console.log(`Status page server is running at http://localhost:${port}/status`);
 });
