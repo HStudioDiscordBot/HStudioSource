@@ -21,15 +21,27 @@ module.exports = {
                 await command.execute(interaction, client, locale);
             } catch (err) {
                 console.log(err);
-                await interaction.reply({
-                    embeds: [
-                        new EmbedBuilder()
-                            .setColor(Colors.Red)
-                            .setTitle(locale.getLocaleString("interaction.command.error"))
-                            .setDescription(`\`\`\`${err}\`\`\``)
-                    ],
-                    ephemeral: true
-                });
+                if (!interaction.deferred) {
+                    await interaction.editReply({
+                        embeds: [
+                            new EmbedBuilder()
+                                .setColor(Colors.Red)
+                                .setTitle(locale.getLocaleString("interaction.command.error"))
+                                .setDescription(`\`\`\`${err}\`\`\``)
+                        ],
+                        ephemeral: true
+                    });
+                } else if (!interaction.replied) {
+                    await interaction.reply({
+                        embeds: [
+                            new EmbedBuilder()
+                                .setColor(Colors.Red)
+                                .setTitle(locale.getLocaleString("interaction.command.error"))
+                                .setDescription(`\`\`\`${err}\`\`\``)
+                        ],
+                        ephemeral: true
+                    });
+                }
             }
         } else if (interaction.isModalSubmit()) {
 
