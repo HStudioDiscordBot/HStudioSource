@@ -7,7 +7,7 @@ const { MoonlinkManager } = require("moonlink.js");
  */
 
 function initializationMoonlink(client) {
-    client.moon = new MoonlinkManager([
+    const moon = new MoonlinkManager([
         {
             host: process.env.LAVALINK_HOST,
             port: parseInt(process.env.LAVALINK_PORT),
@@ -17,11 +17,30 @@ function initializationMoonlink(client) {
         client.guilds.cache.get(guild).shard.send(JSON.parse(sPayload));
     });
 
-    client.moon.on("nodeCreate", node => {
+
+    moon.on("nodeCreate", (node) => {
         console.log(`[${client.shard.ids}] "${node.host}" was connected.`);
     });
 
-    client.moon.on("trackStart", async (player, track) => {
+    moon.on("nodeClose", (node, code, reason) => {
+        console.log(`[${client.shard.ids}] "${node.host}" (${code}) was closed with: ${reason}.`);
+        console.log(`[${client.shard.ids}] "${node.host}" try to reconnect...`);
+        node.reconnect();
+    });
+
+    moon.on("nodeDestroy", (node) => {
+        console.log(`[${client.shard.ids}] "${node.host}" was destroy.`);
+        console.log(`[${client.shard.ids}] "${node.host}" try to reconnect...`);
+        node.reconnect();
+    });
+
+    moon.on("nodeError", (node, error) => {
+        console.log(`[${client.shard.ids}] "${node.host}" have some error: ${error}`);
+        console.log(`[${client.shard.ids}] "${node.host}" try to reconnect...`);
+        node.reconnect();
+    });
+
+    moon.on("trackStart", async (player, track) => {
         let sourceIcon = ":arrow_forward:";
 
         if (track.sourceName == "spotify") {
@@ -49,7 +68,7 @@ function initializationMoonlink(client) {
         }
     });
 
-    client.moon.on("queueEnd", async (player, track) => {
+    moon.on("queueEnd", async (player, track) => {
         client.channels.cache
             .get(player.textChannel)
             .send({
@@ -62,17 +81,49 @@ function initializationMoonlink(client) {
         player.destroy();
     });
 
-    client.moon.on("playerDisconnect", async (player) => {
+    moon.on("playerDisconnect", async (player) => {
         player.destroy();
     });
 
     client.on("ready", () => {
-        client.moon.init(client.user.id);
+        moon.init(client.user.id);
+        if (process.env.ANALYTIC_CHANNEL_ID) Analytics(process.env.ANALYTIC_CHANNEL_ID);
     });
 
-    client.on("raw", data => {
-        client.moon.packetUpdate(data);
+    client.on("raw", (data) => {
+        moon.packetUpdate(data);
     });
+
+    // Analytics
+    async function Analytics(id) {
+        const analyticsChannel = await client.channels.fetch(id);
+
+        if (!analyticsChannel) return;
+
+        moon.on("trackStart", (player, track) => {
+            analyticsChannel.send({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(Colors.Blue)
+                        .setDescription(`\`${player.guildId}\` (${track.sourceName == "spotify" ? "<:spotify:1156557829486948413>" : track.sourceName}) Start playing **${track.title}** (${track.url})`)
+                        .setTimestamp()
+                ]
+            })
+        });
+
+        moon.on("playerCreated", (guildId) => {
+            analyticsChannel.send({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(Colors.Green)
+                        .setDescription(`Created player in \`${guildId}\``)
+                        .setTimestamp()
+                ]
+            })
+        });
+    }
+
+    client.moon = moon;
 }
 
 module.exports = {
