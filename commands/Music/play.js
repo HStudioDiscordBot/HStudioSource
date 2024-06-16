@@ -44,7 +44,7 @@ module.exports = {
                     new EmbedBuilder()
                         .setColor(Colors.Red)
                         .setTitle(locale.getLocaleString("command.play.youtube.disabled"))
-                        .setDescription(locale.getLocaleString("command.play.youtube.disabled.discription"))
+                        .setDescription(locale.getLocaleString("command.play.youtube.disabled.description"))
                 ]
             });
         }
