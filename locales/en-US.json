@@ -65,5 +65,21 @@
     "command.queue.totalTracks": "{0} tracks",
     "common.version": "Version",
     "command.footer": "{0} | Version: {1}",
-    "interaction.command.error": "An error occurred while executing this command!"
+    "interaction.command.error": "An error occurred while executing this command!",
+    "ads.footer": "Ads",
+    "command.ads.create.modal.title": "Create new Advertising",
+    "command.ads.create.modal.description": "Description",
+    "command.ads.create.modal.imageUrl": "Image Url",
+    "command.ads.create.modal.button.text": "Button Text",
+    "command.ads.create.modal.button.text.placeholder": "Open",
+    "command.ads.create.modal.button.text.value": "Open",
+    "command.ads.create.modal.button.url": "Button Url",
+    "command.ads.create.modal.voucher.url": "Voucher Url",
+    "modal.submit.ads.create.reply": "<a:loading:1172816904356896830> Checking Advertising information",
+    "modal.submit.ads.create.undifine.text": "❌ \"{0}\" is required in the form",
+    "modal.submit.ads.create.fail": "❌ Can't Create Advertising please try again later",
+    "modal.submit.ads.create.success": "✅ Thanks for buying advertising with **HStudio**",
+    "modal.submit.ads.create.success.description": "Use /ads enable ad_id:{0} to enable advertising",
+    "ads.create.button": "Create Ads",
+    "command.ads.create.description": "**Terms and Conditions for Advertising Services with HStudio**\n\n1. **Ad Content**: Advertising related to gambling, gambling websites, illegal activities, intoxicants, and drugs is prohibited.\n2. **Refund Policy**: No refunds will be provided under any circumstances, except for issues caused by our system.\n3. **Responsibility**: Clients are responsible for the content and accuracy of the information used in their advertisements.\n4. **Right to Terminate Ads**: HStudio reserves the right to terminate or cancel any advertisement at any time without prior notice.\n5. **Pricing**: A budget of {0} THB allows for promotion of the advertisement for only {1} day. Prices are subject to change at any time.\n\nBy using our services, you agree to these terms and conditions."
 }
