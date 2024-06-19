@@ -3,6 +3,7 @@ const Locale = require("../class/Locale");
 const donateModal = require("../modals/donate");
 const createAdsModal = require("../modals/create_ads");
 const buttonCreateAds = require("../buttons/buttonCreateAds");
+const buttonAdsConfirm = require("../buttons/adsConfirm");
 
 module.exports = {
     name: Events.InteractionCreate,
@@ -63,6 +64,8 @@ module.exports = {
                 case "buttonCreateAds":
                     await buttonCreateAds.execute(interaction, client, locale);
                     break;
+                case "adsConfirm":
+                    await buttonAdsConfirm.execute(interaction, client, locale);
             }
         }
     }
