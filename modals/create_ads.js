@@ -57,9 +57,8 @@ module.exports = {
 
                 try {
                     const needVerifyChannel = await client.channels.fetch(process.env.NEED_VERIFY_CHANNEL_ID);
-                    const verifiedChannel = await client.channels.fetch(process.env.VERIFIED_CHANNEL_ID);
 
-                    if (!needVerifyChannel || !verifiedChannel) throw new Error("needVerifyChannel or verifiedChannel not Found!");
+                    if (!needVerifyChannel) throw new Error("needVerifyChannel not Found!");
 
                     const confirmButton = new ButtonBuilder()
                         .setCustomId("adsConfirm")
