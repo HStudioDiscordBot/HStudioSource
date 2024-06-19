@@ -59,8 +59,10 @@ module.exports = {
         } else if (interaction.isButton()) {
             const customId = interaction.customId;
 
-            if (customId == "buttonCreateAds") {
-                buttonCreateAds.execute(interaction, client, locale);
+            switch (customId) {
+                case "buttonCreateAds":
+                    await buttonCreateAds.execute(interaction, client, locale);
+                    break;
             }
         }
     }
