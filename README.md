@@ -20,17 +20,26 @@ TRUEMONEY_PHONE_NUMBER= # Donate: Truemoney Phone Number
 DONATE_WEBHOOK_URL= # Donate: Discord Webhook
 ```
 
-**Lavalink**
-```
-TRUEMONEY_PHONE_NUMBER= # Donate: Truemoney Phone Number
-DONATE_WEBHOOK_URL= # Donate: Discord Webhook
-```
-
-**Lavalink**
+**[Lavalink](https://lavalink.dev/)**
 ```
 LAVALINK_HOST= # Lavalink Host
 LAVALINK_PORT= # Lavalink Port
 LAVALINK_PASSWORD= # Lavalink Password
+```
+
+**Log**
+```
+ANALYTIC_CHANNEL_ID= Discord Channel to logs
+```
+
+**[MongoDB](https://www.mongodb.com/)**
+```
+MONGODB_URL= # MongoDB Url
+```
+
+**Config**
+```
+PORT=8233 # Status Port default 8233
 ```
 
 ## How to run Bot
@@ -46,6 +55,9 @@ docker run -d --restart always \
     -e LAVALINK_HOST= \
     -e LAVALINK_PORT= \
     -e LAVALINK_PASSWORD= \
+    -e ANALYTIC_CHANNEL_ID= \
+    -e MONGODB_URL= \
+    -e PORT=8233 \
     -p 8233:8233 \
     hewkawar/hstudio-bot:latest
 ```
