@@ -48,10 +48,13 @@ module.exports = {
         } else if (interaction.isModalSubmit()) {
             const customId = interaction.customId;
 
-            if (customId == "donate") {
-                donateModal.execute(interaction, client, locale);
-            } else if (customId == "create_ads") {
-                createAdsModal.execute(interaction, client, locale);
+            switch (customId) {
+                case "donate":
+                    await donateModal.execute(interaction, client, locale);
+                    break;
+                case "create_ads":
+                    await createAdsModal.execute(interaction, client, locale);
+                    break;
             }
         } else if (interaction.isButton()) {
             const customId = interaction.customId;
