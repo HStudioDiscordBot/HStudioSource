@@ -30,14 +30,6 @@ module.exports = {
 
         const tw = await twApi(voucher_code, process.env.TRUEMONEY_PHONE_NUMBER);
 
-        // Debug
-        tw.status.code = "SUCCESS",
-            tw.data = {
-                my_ticket: {
-                    amount_baht: 20
-                }
-            };
-
         switch (tw.status.code) {
             case "SUCCESS":
                 const age = parseFloat(tw.data.my_ticket.amount_baht) / adsConfig.rate.amount;
