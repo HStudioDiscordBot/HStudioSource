@@ -1,4 +1,4 @@
-const { ModalSubmitInteraction, Client, EmbedBuilder, Colors } = require("discord.js");
+const { ModalSubmitInteraction, Client, EmbedBuilder, Colors, WebhookClient, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
 const Locale = require("../class/Locale");
 const twApi = require("@opecgame/twapi");
 const AdSchema = require("../schemas/Ad");
@@ -34,7 +34,7 @@ module.exports = {
         tw.status.code = "SUCCESS",
             tw.data = {
                 my_ticket: {
-                    amount_baht: 5
+                    amount_baht: 20
                 }
             };
 
@@ -55,7 +55,67 @@ module.exports = {
 
                 if (!ad) return await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription(locale.getLocaleString("modal.submit.ads.create.undifine.text"))] });
 
-                await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Green).setTitle(locale.getLocaleString("modal.submit.ads.create.success")).setDescription(locale.replacePlaceholders(locale.getLocaleString("modal.submit.ads.create.success.description"), [ad._id]))] });
+                try {
+                    const needVerifyChannel = await client.channels.fetch(process.env.NEED_VERIFY_CHANNEL_ID);
+                    const verifiedChannel = await client.channels.fetch(process.env.VERIFIED_CHANNEL_ID);
+
+                    if (!needVerifyChannel || !verifiedChannel) throw new Error("needVerifyChannel or verifiedChannel not Found!");
+
+                    const confirmButton = new ButtonBuilder()
+                        .setCustomId("adsConfirm")
+                        .setEmoji("✅")
+                        .setLabel("Confirm")
+                        .setStyle(ButtonStyle.Success);
+
+                    const denyButton = new ButtonBuilder()
+                        .setCustomId("adsDeny")
+                        .setEmoji("✖️")
+                        .setLabel("Deny")
+                        .setStyle(ButtonStyle.Danger);
+
+                    const row = new ActionRowBuilder().addComponents(confirmButton, denyButton);
+
+                    const needVerifyMessage = await needVerifyChannel.send({
+                        embeds: [
+                            new EmbedBuilder()
+                                .setAuthor({
+                                    name: `${interaction.user.username} (${interaction.user.id})`,
+                                    iconURL: interaction.user.avatarURL({ extension: "png" })
+                                })
+                                .setColor(Colors.Yellow)
+                                .setDescription(description)
+                                .setImage(imageUrl)
+                                .addFields(
+                                    {
+                                        name: "Button",
+                                        value: `${buttonText} [${buttonUrl}]`
+                                    },
+                                    {
+                                        name: "Age",
+                                        value: `${age} day`
+                                    }
+                                )
+                                .setFooter({
+                                    text: `${ad._id}`
+                                })
+                        ],
+                        components: [row]
+                    });
+
+                    if (!needVerifyMessage) return await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription(locale.getLocaleString("modal.submit.ads.create.undifine.text"))] });
+
+                    await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Green).setTitle(locale.getLocaleString("modal.submit.ads.create.success")).setDescription(locale.replacePlaceholders(locale.getLocaleString("modal.submit.ads.create.success.description"), [ad._id]))] });
+                } catch (err) {
+                    const errorWebhook = new WebhookClient({ url: process.env.ERROR_WEBHOOK_URL });
+
+                    await errorWebhook.send({
+                        embeds: [
+                            new EmbedBuilder()
+                                .setColor(Colors.Red)
+                                .setDescription(`\`\`\`${err}\`\`\``)
+                        ]
+                    });
+                }
                 break;
             case "CANNOT_GET_OWN_VOUCHER":
                 await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription(locale.getLocaleString("modal.submit.donate.reply.fail.CANNOT_GET_OWN_VOUCHER"))] });
