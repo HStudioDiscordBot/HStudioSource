@@ -1,6 +1,13 @@
 # HSudio Source Code
 The Best Music Bot Create by @hewkawar
 
+---
+[![CodeFactor](https://www.codefactor.io/repository/github/hstudiodiscordbot/hstudiosource/badge)](https://www.codefactor.io/repository/github/hstudiodiscordbot/hstudiosource)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/HStudioDiscordBot/HStudioSource/build.yml)
+![GitHub language count](https://img.shields.io/github/languages/count/HStudioDiscordBot/HStudioSource)
+![GitHub License](https://img.shields.io/github/license/HStudioDiscordBot/HStudioSource)
+![GitHub package.json prod dependency version](https://img.shields.io/github/package-json/dependency-version/HStudioDiscordBot/HStudioSource/moonlink.js)
+
 ## Step to install
 Install Dependencies
 ```bash
