@@ -4,6 +4,7 @@ const donateModal = require("../modals/donate");
 const createAdsModal = require("../modals/create_ads");
 const buttonCreateAds = require("../buttons/buttonCreateAds");
 const buttonAdsConfirm = require("../buttons/adsConfirm");
+const buttonAdsDeny = require("../buttons/adsDeny");
 
 module.exports = {
     name: Events.InteractionCreate,
@@ -66,6 +67,10 @@ module.exports = {
                     break;
                 case "adsConfirm":
                     await buttonAdsConfirm.execute(interaction, client, locale);
+                    break;
+                case "adsDeny":
+                    await buttonAdsDeny.execute(interaction, client, locale);
+                    break;
             }
         }
     }

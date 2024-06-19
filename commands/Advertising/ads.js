@@ -91,7 +91,7 @@ module.exports = {
                 await interaction.deferReply({ ephemeral: true });
 
                 try {
-                    const adsData = await AdSchema.findById(enableAdId);
+                    let adsData = await AdSchema.findById(enableAdId);
 
                     if (!adsData) return await interaction.editReply({
                         content: `🔍 Not found ads with id \`${enableAdId}\``
@@ -122,6 +122,8 @@ module.exports = {
                             expireAt: expireAt
                         });
                     }
+
+                    adsData = await AdSchema.findById(enableAdId);
 
                     return await interaction.editReply({
                         content: `✅ Activated ads\nThis ads will expire at <t:${Math.round(Date.now(adsData.expireAt) / 1000)}:F>`

@@ -31,9 +31,7 @@ module.exports = {
                 ephemeral: false
             });
 
-            await AdSchema.findByIdAndUpdate(adsId, {
-                verify: false
-            });
+            await AdSchema.findByIdAndDelete(adsId);
 
             const adsOwner = await client.users.fetch(adsData.owner);
 
@@ -42,7 +40,7 @@ module.exports = {
                     await adsOwner.send({
                         embeds: [
                             new EmbedBuilder()
-                                .setColor(Colors.Green)
+                                .setColor(Colors.Red)
                                 .setDescription(`Your ad ID \`${adsData._id}\` could not be verified.\nYou can contact the HStudio team to receive a 50% refund.`)
                         ]
                     });
@@ -53,8 +51,7 @@ module.exports = {
                     ephemeral: true
                 });
 
-                embed
-                    .setColor(Colors.Red)
+                embed.setColor(Colors.Red)
 
                 await message.edit({
                     embeds: [embed],
@@ -62,7 +59,7 @@ module.exports = {
                 });
             } catch (err) {
                 await interaction.editReply({
-                    content: `✅ Ad ${adsData._id} has been activated (Unable to send notification to the owner)`,
+                    content: `✅ Ad ${adsData._id} has been deleted (Notification to the owner could not be sent)`,
                     ephemeral: true
                 });
             }
