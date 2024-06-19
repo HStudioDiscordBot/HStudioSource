@@ -25,21 +25,6 @@ module.exports = {
             })
         )
         .addSubcommand(sub => sub
-            .setName("delete")
-            .setDescription("Delete Advertising")
-            .setDescriptionLocalizations({
-                th: "ลบการโฆษณา"
-            })
-            .addStringOption(option => option
-                .setName("ad_id")
-                .setDescription("Ads Id")
-                .setDescriptionLocalizations({
-                    th: "Id โฆษณา"
-                })
-                .setRequired(true)
-            )
-        )
-        .addSubcommand(sub => sub
             .setName("disable")
             .setDescription("Disable Advertising")
             .setDescriptionLocalizations({
