@@ -88,5 +88,27 @@
     "button.ads.confirm.reply.success": "✅ Ad {0} has been activated",
     "button.ads.confirm.verified.channel.success": "Ad `{0}` has been activated!",
     "button.ads.confirm.message.owner.notsend": "✅ Ad {0} has been activated (Unable to send notification to the owner)",
-    "button.ads.confirm.error.message": "Error during ad confirmation"
+    "button.ads.confirm.error.message": "Error during ad confirmation",
+    "button.ads.deny.unknown_id": "Unknown ad ID",
+    "button.ads.deny.message.owner.send": "Your ad ID `{0}` could not be verified.\nYou can contact the HStudio team to receive a 50% refund.",
+    "button.ads.deny.reply.success": "✅ Deleted ad {0}",
+    "button.ads.deny.reply.owner.cant_send": "✅ Ad {0} has been deleted (Notification to the owner could not be sent)",
+    "button.ads.deny.error.message": "Error during ad denial",
+    "command.ads.enable.notfound": "🔍 Not found ads with id `{0}`",
+    "command.ads.enable.onlyownercanedit": "❌ You can edit ads config only your ads",
+    "command.ads.enable.adsnotverify": "❌ Your ads is waiting for verify\nYou can activate ads after verified",
+    "command.ads.enable.alreadyactivate": "✅ Your ads is already activated",
+    "command.ads.enable.reply": "✅ Activated ads\nThis ads will expire at <t:{0}:F>",
+    
+    "command.ads.disable.notfound": "🔍 Not found ads with id `{0}`",
+    "command.ads.disable.onlyownercanedit": "❌ You can edit ads config only your ads",
+    "command.ads.disable.adsnotverify": "❌ Your ads is waiting for verify\nYou can inactivated ads after verified",
+    "command.ads.disable.alreadyinactivate": "✅ Your ads is already inactivated",
+    "command.ads.disable.reply": "✅ Inactivated ads\nWhile inactivated ads the expire date not change it will end in <t:{0}:F>",
+    "command.ads.disable.error": "❌ Can't disable {0}",
+    
+    "command.ads.list.notfound": "⚠️ Not found your ads",
+    "command.ads.list.activated": "Activated 🟢",
+    "command.ads.list.deactivated": "Deactivated 🔴",
+    "command.ads.list": "Ads list"
 }
