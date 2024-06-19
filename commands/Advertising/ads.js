@@ -161,7 +161,12 @@ module.exports = {
                     return await interaction.editReply({
                         content: `✅ Inactivated ads\nWhile inactivated ads the expire date not change it will end in <t:${Math.round(Date.now(adsData.expireAt) / 1000)}:F>`
                     });
-                } catch (err) { }
+                } catch (err) {
+                    await interaction.editReply({
+                        content: `❌ Can't disable ${disableAdId}`
+                    });
+                }
+                break;
             case "list":
                 await interaction.deferReply({ ephemeral: true });
 
