@@ -1,6 +1,8 @@
-const { Events, Client, Interaction, Colors, EmbedBuilder, WebhookClient } = require("discord.js");
+const { Events, Client, Interaction, Colors, EmbedBuilder, WebhookClient, ActionRowBuilder, TextInputStyle, TextInputBuilder, ModalBuilder } = require("discord.js");
 const twApi = require('@opecgame/twapi');
 const Locale = require("../class/Locale");
+const AdSchema = require("../schemas/Ad");
+const adsConfig = require("../configs/ads.json");
 
 module.exports = {
     name: Events.InteractionCreate,
@@ -21,7 +23,7 @@ module.exports = {
                 await command.execute(interaction, client, locale);
             } catch (err) {
                 console.log(err);
-                if (!interaction.deferred) {
+                if (interaction.deferred || interaction.replied) {
                     await interaction.editReply({
                         embeds: [
                             new EmbedBuilder()
@@ -44,7 +46,6 @@ module.exports = {
                 }
             }
         } else if (interaction.isModalSubmit()) {
-
             const customId = interaction.customId;
 
             if (customId == "donate") {
