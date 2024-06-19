@@ -1,5 +1,8 @@
 const { Events, Client, ActivityType } = require("discord.js");
+const mongoose = require('mongoose');
 const { version } = require("../package.json");
+
+const mongoDBUrl = process.env.MONGODB_URL
 
 module.exports = {
     name: Events.ClientReady,
@@ -19,5 +22,11 @@ module.exports = {
         console.log(`[${client.shard.ids}] Server Count: ${client.guilds.cache.size}`);
 
         setInterval(setActivity, 60 * 1000);
+
+        if (mongoDBUrl) {
+            await mongoose.connect(mongoDBUrl);
+
+            console.log(`[${client.shard.ids}] Connected to MongoDB`);
+        }
     }
 }
