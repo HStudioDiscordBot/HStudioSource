@@ -127,7 +127,7 @@ module.exports = {
         const now = new Date();
 
         const ads = await AdsSchema.aggregate([
-            { $match: { activate: true, expireAt: { $gt: now } } },
+            { $match: { activate: true, verify: true, expireAt: { $gt: now } } },
             { $sample: { size: 1 } }
         ]);
 
