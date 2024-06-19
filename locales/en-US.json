@@ -81,5 +81,12 @@
     "modal.submit.ads.create.success": "✅ Thanks for buying advertising with **HStudio**",
     "modal.submit.ads.create.success.description": "Use /ads enable ad_id:{0} to enable advertising",
     "ads.create.button": "Create Ads",
-    "command.ads.create.description": "**Terms and Conditions for Advertising Services with HStudio**\n\n1. **Ad Content**: Advertising related to gambling, gambling websites, illegal activities, intoxicants, and drugs is prohibited.\n2. **Refund Policy**: No refunds will be provided under any circumstances, except for issues caused by our system.\n3. **Responsibility**: Clients are responsible for the content and accuracy of the information used in their advertisements.\n4. **Right to Terminate Ads**: HStudio reserves the right to terminate or cancel any advertisement at any time without prior notice.\n5. **Pricing**: A budget of {0} THB allows for promotion of the advertisement for only {1} day. Prices are subject to change at any time.\n\nBy using our services, you agree to these terms and conditions."
+    "command.ads.create.description": "**Terms and Conditions for Advertising Services with HStudio**\n\n1. **Ad Content**: Advertising related to gambling, gambling websites, illegal activities, intoxicants, and drugs is prohibited.\n2. **Refund Policy**: No refunds will be provided under any circumstances, except for issues caused by our system.\n3. **Responsibility**: Clients are responsible for the content and accuracy of the information used in their advertisements.\n4. **Right to Terminate Ads**: HStudio reserves the right to terminate or cancel any advertisement at any time without prior notice.\n5. **Pricing**: A budget of {0} THB allows for promotion of the advertisement for only {1} day. Prices are subject to change at any time.\n\nBy using our services, you agree to these terms and conditions.",
+    "button.ads.confirm.unknow_id": "Unknown ad ID",
+    "button.ads.confirm.unknow_ad": "Unknown ad",
+    "button.ads.confirm.message.owner.send": "Your ad with ID `{0}` has been verified.\nYou can use the command /ads enable to activate your ad.",
+    "button.ads.confirm.reply.success": "✅ Ad {0} has been activated",
+    "button.ads.confirm.verified.channel.success": "Ad `{0}` has been activated!",
+    "button.ads.confirm.message.owner.notsend": "✅ Ad {0} has been activated (Unable to send notification to the owner)",
+    "button.ads.confirm.error.message": "Error during ad confirmation"
 }

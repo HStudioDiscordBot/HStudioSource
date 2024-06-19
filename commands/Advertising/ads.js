@@ -94,19 +94,19 @@ module.exports = {
                     let adsData = await AdSchema.findById(enableAdId);
 
                     if (!adsData) return await interaction.editReply({
-                        content: `🔍 Not found ads with id \`${enableAdId}\``
+                        content: locale.replacePlaceholders(locale.getLocaleString("command.ads.enable.notfound"), [enableAdId])
                     });
 
                     if (adsData.owner != interaction.user.id) return await interaction.editReply({
-                        content: "❌ You can edit ads config only your ads"
+                        content: locale.getLocaleString("command.ads.enable.onlyownercanedit")
                     });
 
                     if (!adsData.verify) return await interaction.editReply({
-                        content: "❌ Your ads is waiting for verify\nYou can activate ads after verified"
+                        content: locale.getLocaleString("command.ads.enable.adsnotverify")
                     });
 
                     if (adsData.activate) return await interaction.editReply({
-                        content: "✅ Your ads is already activated"
+                        content: locale.getLocaleString("command.ads.enable.alreadyactivate")
                     });
 
                     if (adsData.expireAt) {
@@ -126,7 +126,7 @@ module.exports = {
                     adsData = await AdSchema.findById(enableAdId);
 
                     return await interaction.editReply({
-                        content: `✅ Activated ads\nThis ads will expire at <t:${Math.round(Date.now(adsData.expireAt) / 1000)}:F>`
+                        content: locale.replacePlaceholders(locale.getLocaleString("command.ads.enable.reply"), [Math.round(Date.now(adsData.expireAt) / 1000)])
                     });
                 } catch (err) { }
                 break;
@@ -141,19 +141,19 @@ module.exports = {
                     const adsData = await AdSchema.findById(disableAdId);
 
                     if (!adsData) return await interaction.editReply({
-                        content: `🔍 Not found ads with id \`${disableAdId}\``
+                        content: locale.replacePlaceholders(locale.getLocaleString("command.ads.disable.notfound"), [disableAdId])
                     });
 
                     if (adsData.owner != interaction.user.id) return await interaction.editReply({
-                        content: "❌ You can edit ads config only your ads"
+                        content: locale.getLocaleString("command.ads.disable.onlyownercanedit")
                     });
 
                     if (!adsData.verify) return await interaction.editReply({
-                        content: "❌ Your ads is waiting for verify\nYou can inactivated ads after verified"
+                        content: locale.getLocaleString("command.ads.disable.adsnotverify")
                     });
 
                     if (!adsData.activate) return await interaction.editReply({
-                        content: "✅ Your ads is already inactivated"
+                        content: locale.getLocaleString("command.ads.disable.alreadyinactivate")
                     });
 
                     await AdSchema.findByIdAndUpdate(disableAdId, {
@@ -161,11 +161,11 @@ module.exports = {
                     });
 
                     return await interaction.editReply({
-                        content: `✅ Inactivated ads\nWhile inactivated ads the expire date not change it will end in <t:${Math.round(Date.now(adsData.expireAt) / 1000)}:F>`
+                        content: locale.replacePlaceholders(locale.getLocaleString("command.ads.disable.reply"), [Math.round(Date.now(adsData.expireAt) / 1000)])
                     });
                 } catch (err) {
                     await interaction.editReply({
-                        content: `❌ Can't disable ${disableAdId}`
+                        content: locale.replacePlaceholders(locale.getLocaleString("command.ads.disable.error"), [disableAdId])
                     });
                 }
                 break;
@@ -177,16 +177,16 @@ module.exports = {
                 });
 
                 if (adsList.length == 0) return await interaction.editReply({
-                    content: "⚠️ Not found your ads"
+                    content: locale.getLocaleString("command.ads.list.notfound")
                 });
 
-                const adsText = adsList.map((row, index) => `- (${row.activate ? "Activated 🟢" : "Deactivated 🔴"}) ${row.verify ? "✅" : ""} ${row._id} - ${row.description}`).join("\n");
+                const adsText = adsList.map((row, index) => `- (${row.activate ? locale.getLocaleString("command.ads.list.activated") : locale.getLocaleString("command.ads.list.deactivated")}) ${row.verify ? "✅" : ""} ${row._id} - ${row.description}`).join("\n");
 
                 await interaction.editReply({
                     embeds: [
                         new EmbedBuilder()
                             .setColor(Colors.Blue)
-                            .setTitle("Ads list")
+                            .setTitle(locale.getLocaleString("command.ads.list"))
                             .setDescription(adsText)
                     ]
                 });

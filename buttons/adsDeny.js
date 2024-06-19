@@ -17,7 +17,7 @@ module.exports = {
         const adsId = embed.data.footer.text;
 
         if (!adsId) return await interaction.editReply({
-            content: "Unknown ad ID",
+            content: locale.getLocaleString("button.ads.deny.unknown_id"),
             ephemeral: true
         });
 
@@ -27,7 +27,7 @@ module.exports = {
             const adsData = await AdSchema.findById(adsId);
 
             if (!adsData) return await interaction.editReply({
-                content: "Unknown ad",
+                content: locale.getLocaleString("button.ads.deny.unknown_ad"),
                 ephemeral: false
             });
 
@@ -41,13 +41,13 @@ module.exports = {
                         embeds: [
                             new EmbedBuilder()
                                 .setColor(Colors.Red)
-                                .setDescription(`Your ad ID \`${adsData._id}\` could not be verified.\nYou can contact the HStudio team to receive a 50% refund.`)
+                                .setDescription(locale.replacePlaceholders(locale.getLocaleString("button.ads.deny.message.owner.send"), [adsData._id]))
                         ]
                     });
                 }
 
                 await interaction.editReply({
-                    content: `✅ Deleted ad ${adsData._id}`,
+                    content: locale.replacePlaceholders(locale.getLocaleString("button.ads.deny.reply.success"), [adsData._id]),
                     ephemeral: true
                 });
 
@@ -59,13 +59,13 @@ module.exports = {
                 });
             } catch (err) {
                 await interaction.editReply({
-                    content: `✅ Ad ${adsData._id} has been deleted (Notification to the owner could not be sent)`,
+                    content: locale.replacePlaceholders(locale.getLocaleString("button.ads.deny.reply.owner.cant_send"), [adsData._id]),
                     ephemeral: true
                 });
             }
         } catch (err) {
             await interaction.editReply({
-                content: "Error during ad denial",
+                content: locale.getLocaleString("button.ads.deny.error.message"),
                 ephemeral: true
             });
 

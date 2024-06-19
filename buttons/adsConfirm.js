@@ -17,7 +17,7 @@ module.exports = {
         const adsId = embed.data.footer.text;
 
         if (!adsId) return await interaction.editReply({
-            content: "Unknown ad ID",
+            content: locale.getLocaleString("button.ads.confirm.unknow_id"),
             ephemeral: true
         });
 
@@ -27,7 +27,7 @@ module.exports = {
             const adsData = await AdSchema.findById(adsId);
 
             if (!adsData) return await interaction.editReply({
-                content: "Unknown ad",
+                content: locale.getLocaleString("button.ads.confirm.unknow_ad"),
                 ephemeral: true
             });
 
@@ -43,13 +43,13 @@ module.exports = {
                         embeds: [
                             new EmbedBuilder()
                                 .setColor(Colors.Green)
-                                .setDescription(`Your ad with ID \`${adsData._id}\` has been verified.\nYou can use the command /ads enable to activate your ad.`)
-                            ]
+                                .setDescription(locale.replacePlaceholders("button.ads.confirm.message.owner.send", [adsData._id]))
+                        ]
                     });
                 }
 
                 await interaction.editReply({
-                    content: `✅ Ad ${adsData._id} has been activated`,
+                    content: locale.replacePlaceholders(locale.getLocaleString("button.ads.confirm.reply.success"), [adsData._id]),
                     ephemeral: true
                 });
 
@@ -73,8 +73,8 @@ module.exports = {
                             embeds: [
                                 new EmbedBuilder()
                                     .setColor(Colors.Green)
-                                    .setDescription(`Ad \`${adsData._id}\` has been activated!`)
-                                ]
+                                    .setDescription(locale.replacePlaceholders(locale.getLocaleString("button.ads.confirm.verified.channel.success"), [adsData._id]))
+                            ]
                         });
                     }
                 } catch (err) {
@@ -90,13 +90,13 @@ module.exports = {
                 }
             } catch (err) {
                 await interaction.editReply({
-                    content: `✅ Ad ${adsData._id} has been activated (Unable to send notification to the owner)`,
+                    content: locale.replacePlaceholders(locale.getLocaleString("button.ads.confirm.message.owner.notsend"), [adsData._id]),
                     ephemeral: true
                 });
             }
         } catch (err) {
             await interaction.editReply({
-                content: "Error during ad confirmation",
+                content: locale.getLocaleString("button.ads.confirm.error.message"),
                 ephemeral: true
             });
 
