@@ -1,4 +1,4 @@
-const { ButtonInteraction, Client, EmbedBuilder, Colors } = require("discord.js");
+const { ButtonInteraction, Client, EmbedBuilder, Colors, WebhookClient } = require("discord.js");
 const Locale = require("../class/Locale");
 const AdSchema = require("../schemas/Ad");
 
@@ -17,7 +17,7 @@ module.exports = {
         const adsId = embed.data.footer.text;
 
         if (!adsId) return await interaction.editReply({
-            content: "Unknow ads Id",
+            content: "Unknown ad ID",
             ephemeral: true
         });
 
@@ -27,7 +27,7 @@ module.exports = {
             const adsData = await AdSchema.findById(adsId);
 
             if (!adsData) return await interaction.editReply({
-                content: "Unknow ads",
+                content: "Unknown ad",
                 ephemeral: true
             });
 
@@ -43,20 +43,20 @@ module.exports = {
                         embeds: [
                             new EmbedBuilder()
                                 .setColor(Colors.Green)
-                                .setDescription(`Your ad ID \`${adsData._id}\` has been verified.\nYou can use /ads enable to activate your ad.`)
-                        ]
+                                .setDescription(`Your ad with ID \`${adsData._id}\` has been verified.\nYou can use the command /ads enable to activate your ad.`)
+                            ]
                     });
                 }
 
                 await interaction.editReply({
-                    content: `✅ Activated ads ${adsData._id}`,
+                    content: `✅ Ad ${adsData._id} has been activated`,
                     ephemeral: true
                 });
 
                 embed
                     .setColor(Colors.Green)
                     .addFields({
-                        name: "Activate at",
+                        name: "Activated at",
                         value: new Date().toLocaleDateString()
                     });
 
@@ -64,16 +64,50 @@ module.exports = {
                     embeds: [embed],
                     components: []
                 });
+
+                try {
+                    const verifiedChannel = await client.channels.fetch(process.env.VERIFIED_CHANNEL_ID);
+
+                    if (verifiedChannel) {
+                        await verifiedChannel.send({
+                            embeds: [
+                                new EmbedBuilder()
+                                    .setColor(Colors.Green)
+                                    .setDescription(`Ad \`${adsData._id}\` has been activated!`)
+                                ]
+                        });
+                    }
+                } catch (err) {
+                    const errorWebhook = new WebhookClient({ url: process.env.ERROR_WEBHOOK_URL });
+
+                    await errorWebhook.send({
+                        embeds: [
+                            new EmbedBuilder()
+                                .setColor(Colors.Red)
+                                .setDescription(`\`\`\`${err}\`\`\``)
+                        ]
+                    });
+                }
             } catch (err) {
                 await interaction.editReply({
-                    content: `✅ Activated ads ${adsData._id} (Can't send notification to the owner)`,
+                    content: `✅ Ad ${adsData._id} has been activated (Unable to send notification to the owner)`,
                     ephemeral: true
                 });
             }
         } catch (err) {
             await interaction.editReply({
-                content: "Error while adsConfirm",
+                content: "Error during ad confirmation",
                 ephemeral: true
+            });
+
+            const errorWebhook = new WebhookClient({ url: process.env.ERROR_WEBHOOK_URL });
+
+            await errorWebhook.send({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(Colors.Red)
+                        .setDescription(`\`\`\`${err}\`\`\``)
+                ]
             });
         }
     }
