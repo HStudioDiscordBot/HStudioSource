@@ -1,7 +1,8 @@
-const { SlashCommandBuilder, CommandInteraction, Client, EmbedBuilder, Colors } = require("discord.js");
+const { SlashCommandBuilder, CommandInteraction, Client, EmbedBuilder, Colors, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
 const { convertToHHMMSS, msToSec } = require("../../utils/time");
 const { isYouTubeUrl, isHStudioPlayUrl } = require("../../utils/youtube");
 const Locale = require("../../class/Locale");
+const AdsSchema = require("../../schemas/Ad");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -84,19 +85,16 @@ module.exports = {
             });
         }
 
+        const trackEmbed = new EmbedBuilder()
+            .setColor(Colors.Blue);
+
         if (res.loadType === "playlist") {
-            interaction.editReply({
-                embeds: [
-                    new EmbedBuilder()
-                        .setColor(Colors.Blue)
-                        .setTitle(`▶️ ${res.playlistInfo.name}`)
-                        .addFields(
-                            { name: locale.getLocaleString("command.play.duration"), value: `\`\`\`${convertToHHMMSS(msToSec(res.playlistInfo.duration))}\`\`\``, inline: true },
-                            { name: locale.getLocaleString("command.play.voiceChannel"), value: `<#${interaction.member.voice.channel.id}>`, inline: true },
-                            { name: locale.getLocaleString("command.play.owner"), value: `<@${interaction.user.id}>`, inline: true }
-                        )
-                ]
-            });
+            trackEmbed.setTitle(`▶️ ${res.playlistInfo.name}`)
+                .addFields(
+                    { name: locale.getLocaleString("command.play.duration"), value: `\`\`\`${convertToHHMMSS(msToSec(res.playlistInfo.duration))}\`\`\``, inline: true },
+                    { name: locale.getLocaleString("command.play.voiceChannel"), value: `<#${interaction.member.voice.channel.id}>`, inline: true },
+                    { name: locale.getLocaleString("command.play.owner"), value: `<@${interaction.user.id}>`, inline: true }
+                );
 
             for (const track of res.tracks) {
                 player.queue.add(track);
@@ -105,39 +103,64 @@ module.exports = {
             player.queue.add(res.tracks[0]);
 
             if (res.tracks[0].sourceName == "spotify") {
-                interaction.editReply({
-                    embeds: [
-                        new EmbedBuilder()
-                            .setColor(Colors.Blue)
-                            .setAuthor({ name: res.tracks[0].author, iconURL: "https://cdn.jsdelivr.net/gh/HStudioDiscordBot/Storage@main/3rd/spotify-icon.png" })
-                            .setTitle(`▶️ ${res.tracks[0].title}`)
-                            .setURL(res.tracks[0].url)
-                            .setThumbnail(res.tracks[0].artworkUrl)
-                            .addFields(
-                                { name: locale.getLocaleString("command.play.duration"), value: `\`\`\`${res.tracks[0].isStream ? "LIVE" : convertToHHMMSS(msToSec(res.tracks[0].duration))}\`\`\``, inline: true },
-                                { name: locale.getLocaleString("command.play.voiceChannel"), value: `<#${interaction.member.voice.channel.id}>`, inline: true },
-                                { name: locale.getLocaleString("command.play.owner"), value: `<@${interaction.user.id}>`, inline: true }
-                            )
-                    ]
-                });
+                trackEmbed.setAuthor({ name: res.tracks[0].author, iconURL: "https://cdn.jsdelivr.net/gh/HStudioDiscordBot/Storage@main/3rd/spotify-icon.png" })
+                    .setTitle(`▶️ ${res.tracks[0].title}`)
+                    .setURL(res.tracks[0].url)
+                    .setThumbnail(res.tracks[0].artworkUrl)
+                    .addFields(
+                        { name: locale.getLocaleString("command.play.duration"), value: `\`\`\`${res.tracks[0].isStream ? "LIVE" : convertToHHMMSS(msToSec(res.tracks[0].duration))}\`\`\``, inline: true },
+                        { name: locale.getLocaleString("command.play.voiceChannel"), value: `<#${interaction.member.voice.channel.id}>`, inline: true },
+                        { name: locale.getLocaleString("command.play.owner"), value: `<@${interaction.user.id}>`, inline: true }
+                    );
             } else {
-                interaction.editReply({
-                    embeds: [
-                        new EmbedBuilder()
-                            .setColor(Colors.Blue)
-                            .setAuthor({ name: res.tracks[0].author })
-                            .setTitle(`▶️ ${res.tracks[0].title}`)
-                            .setThumbnail(res.tracks[0].artworkUrl)
-                            .addFields(
-                                { name: locale.getLocaleString("command.play.duration"), value: `\`\`\`${res.tracks[0].isStream ? "LIVE" : convertToHHMMSS(msToSec(res.tracks[0].duration))}\`\`\``, inline: true },
-                                { name: locale.getLocaleString("command.play.voiceChannel"), value: `<#${interaction.member.voice.channel.id}>`, inline: true },
-                                { name: locale.getLocaleString("command.play.owner"), value: `<@${interaction.user.id}>`, inline: true }
-                            )
-                    ]
-                });
+                trackEmbed.setAuthor({ name: res.tracks[0].author })
+                    .setTitle(`▶️ ${res.tracks[0].title}`)
+                    .setThumbnail(res.tracks[0].artworkUrl)
+                    .addFields(
+                        { name: locale.getLocaleString("command.play.duration"), value: `\`\`\`${res.tracks[0].isStream ? "LIVE" : convertToHHMMSS(msToSec(res.tracks[0].duration))}\`\`\``, inline: true },
+                        { name: locale.getLocaleString("command.play.voiceChannel"), value: `<#${interaction.member.voice.channel.id}>`, inline: true },
+                        { name: locale.getLocaleString("command.play.owner"), value: `<@${interaction.user.id}>`, inline: true }
+                    );
             }
-
         }
+
+        const now = new Date();
+
+        const ads = await AdsSchema.aggregate([
+            { $match: { activate: true, expireAt: { $gt: now } } },
+            { $sample: { size: 1 } }
+        ]);
+
+        const ad = ads.length > 0 ? ads[0] : null;
+
+        const replyData = {
+            embeds: [
+                trackEmbed
+            ]
+        };
+
+        if (ad) {
+            const adEmbed = new EmbedBuilder()
+                .setColor(Colors.Blue)
+                .setDescription(ad.description)
+                .setImage(ad.imageUrl)
+                .setFooter({
+                    text: locale.getLocaleString("ads.footer")
+                });
+
+            const adsButton = new ButtonBuilder()
+                .setURL(ad.buttonUrl)
+                .setLabel(ad.buttonText)
+                .setStyle(ButtonStyle.Link);
+
+            const adsActionRow = new ActionRowBuilder()
+                .addComponents(adsButton);
+
+            replyData.embeds.push(adEmbed);
+            replyData.components = [adsActionRow];
+        }
+
+        await interaction.editReply(replyData);
 
         if (!player.playing) {
             player.play();
