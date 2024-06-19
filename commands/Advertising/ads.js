@@ -162,6 +162,27 @@ module.exports = {
                         content: `✅ Inactivated ads\nWhile inactivated ads the expire date not change it will end in <t:${Math.round(Date.now(adsData.expireAt) / 1000)}:F>`
                     });
                 } catch (err) { }
+            case "list":
+                await interaction.deferReply({ ephemeral: true });
+
+                const adsList = await AdSchema.find({
+                    owner: interaction.user.id
+                });
+
+                if (adsList.length == 0) return await interaction.editReply({
+                    content: "⚠️ Not found your ads"
+                });
+
+                const adsText = adsList.map((row, index) => `- (${row.activate ? "Activated 🟢" : "Deactivated 🔴"}) ${row.verify ? "✅" : ""} ${row._id} - ${row.description}`).join("\n");
+
+                await interaction.editReply({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setColor(Colors.Blue)
+                            .setTitle("Ads list")
+                            .setDescription(adsText)
+                    ]
+                });
                 break;
         }
     }
