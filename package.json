@@ -1,6 +1,6 @@
 {
   "name": "hstudio",
-  "version": "2.2.34",
+  "version": "2.2.41",
   "description": "HStudio Discord Music Bot Source Code",
   "main": "index.js",
   "scripts": {
@@ -15,7 +15,7 @@
     "HStudio"
   ],
   "author": "HewkawAr",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/HStudioDiscordBot/HStudioSource/issues"
   },
@@ -26,6 +26,7 @@
     "discord.js": "^14.15.3",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "mongoose": "^8.4.1",
     "moonlink.js": "^3.6.64"
   }
 }

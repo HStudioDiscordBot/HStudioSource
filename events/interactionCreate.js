@@ -1,6 +1,10 @@
-const { Events, Client, Interaction, Colors, EmbedBuilder, WebhookClient } = require("discord.js");
-const twApi = require('@opecgame/twapi');
+const { Events, Client, Interaction, Colors, EmbedBuilder } = require("discord.js");
 const Locale = require("../class/Locale");
+const donateModal = require("../modals/donate");
+const createAdsModal = require("../modals/create_ads");
+const buttonCreateAds = require("../buttons/buttonCreateAds");
+const buttonAdsConfirm = require("../buttons/adsConfirm");
+const buttonAdsDeny = require("../buttons/adsDeny");
 
 module.exports = {
     name: Events.InteractionCreate,
@@ -21,7 +25,7 @@ module.exports = {
                 await command.execute(interaction, client, locale);
             } catch (err) {
                 console.log(err);
-                if (!interaction.deferred) {
+                if (interaction.deferred || interaction.replied) {
                     await interaction.editReply({
                         embeds: [
                             new EmbedBuilder()
@@ -44,52 +48,29 @@ module.exports = {
                 }
             }
         } else if (interaction.isModalSubmit()) {
-
             const customId = interaction.customId;
 
-            if (customId == "donate") {
-                await interaction.reply({ embeds: [new EmbedBuilder().setColor(Colors.Blue).setDescription(locale.getLocaleString("modal.submit.donate.reply"))], ephemeral: true });
+            switch (customId) {
+                case "donate":
+                    await donateModal.execute(interaction, client, locale);
+                    break;
+                case "create_ads":
+                    await createAdsModal.execute(interaction, client, locale);
+                    break;
+            }
+        } else if (interaction.isButton()) {
+            const customId = interaction.customId;
 
-                const url = interaction.fields.getTextInputValue('url');
-                const voucher_code = url.replace('https://gift.truemoney.com/campaign/?v=', '');
-
-                const tw = await twApi(voucher_code, process.env.TRUEMONEY_PHONE_NUMBER);
-
-                switch (tw.status.code) {
-                    case "SUCCESS":
-                        const webhook = new WebhookClient({ url: process.env.DONATE_WEBHOOK_URL });
-                        await webhook.send({
-                            embeds: [
-                                new EmbedBuilder()
-                                    .setColor(Colors.Yellow)
-                                    .setDescription(locale.replacePlaceholders(locale.getLocaleString("modal.submit.donate.success"), [tw.data.owner_profile.full_name, tw.data.my_ticket.amount_baht]))
-                            ]
-                        });
-
-                        await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Green).setDescription(locale.replacePlaceholders(locale.getLocaleString("modal.submit.donate.reply.success"), [tw.data.my_ticket.amount_baht]))] });
-                        break;
-                    case "CANNOT_GET_OWN_VOUCHER":
-                        await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription(locale.getLocaleString("modal.submit.donate.reply.fail.CANNOT_GET_OWN_VOUCHER"))] });
-                        break;
-                    case "TARGET_USER_NOT_FOUND":
-                        await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription(locale.getLocaleString("modal.submit.donate.reply.fail.TARGET_USER_NOT_FOUND"))] });
-                        break;
-                    case "INTERNAL_ERROR":
-                        await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription(locale.getLocaleString("modal.submit.donate.reply.fail.INTERNAL_ERROR"))] });
-                        break;
-                    case "VOUCHER_OUT_OF_STOCK":
-                        await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription(locale.getLocaleString("modal.submit.donate.reply.fail.VOUCHER_OUT_OF_STOCK"))] });
-                        break;
-                    case "VOUCHER_NOT_FOUND":
-                        await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription(locale.getLocaleString("modal.submit.donate.reply.fail.VOUCHER_NOT_FOUND"))] });
-                        break;
-                    case "VOUCHER_EXPIRED":
-                        await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription(locale.getLocaleString("modal.submit.donate.reply.fail.VOUCHER_EXPIRED"))] });
-                        break;
-                    default:
-                        await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription(locale.getLocaleString("modal.submit.donate.reply.fail.default"))] });
-                        break;
-                }
+            switch (customId) {
+                case "buttonCreateAds":
+                    await buttonCreateAds.execute(interaction, client, locale);
+                    break;
+                case "adsConfirm":
+                    await buttonAdsConfirm.execute(interaction, client, locale);
+                    break;
+                case "adsDeny":
+                    await buttonAdsDeny.execute(interaction, client, locale);
+                    break;
             }
         }
     }
