@@ -32,12 +32,19 @@ module.exports = {
 
         let query = interaction.options.getString("query");
 
+        const region = interaction.member.voice.channel.rtcRegion;
+        
+        const server = client.moon._nodes.find(node => node.regions.includes(region)) || client.moon._nodes[0];
+
         let player = client.moon.players.create({
             guildId: interaction.guild.id,
             voiceChannel: interaction.member.voice.channel.id,
             textChannel: interaction.channel.id,
-            autoLeave: true
+            autoLeave: true,
+            node: server.identifier
         });
+
+        console.log(player.node.identifier, region, server.identifier);
 
         if (isYouTubeUrl(query)) {
             return interaction.editReply({

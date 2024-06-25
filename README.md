@@ -1,21 +1,35 @@
-# HSudio Source Code
-The Best Music Bot Create by @hewkawar
+# HStudio Source Code
+The Best Music Bot created by @hewkawar
 
 ---
+
 [![CodeFactor](https://www.codefactor.io/repository/github/hstudiodiscordbot/hstudiosource/badge)](https://www.codefactor.io/repository/github/hstudiodiscordbot/hstudiosource)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/HStudioDiscordBot/HStudioSource/build.yml)
 ![GitHub language count](https://img.shields.io/github/languages/count/HStudioDiscordBot/HStudioSource)
 ![GitHub License](https://img.shields.io/github/license/HStudioDiscordBot/HStudioSource)
 ![GitHub package.json prod dependency version](https://img.shields.io/github/package-json/dependency-version/HStudioDiscordBot/HStudioSource/moonlink.js)
 
-## Step to install
-Install Dependencies
+## Table of Contents
+- [Installation](#installation)
+- [Environment Variables](#environment-variables)
+- [Running the Bot](#running-the-bot)
+  - [Using Docker](#using-docker)
+  - [From Source Code](#from-source-code)
+- [Translators](#translators)
+- [Support](#support)
+
+## Installation
+First, install the necessary dependencies:
 ```bash
-$ npm install
+npm install
 ```
 
-## Environment (Env)
-**[Discord Developer](https://discord.com/developers/applications)**
+## Environment Variables
+Configure the following environment variables before running the bot:
+
+**Discord Developer**
+
+Set up your bot token and client ID from the [Discord Developer Portal](https://discord.com/developers/applications):
 ```
 TOKEN= # Bot Token
 CLIENT_ID= # Bot Client Id
@@ -27,11 +41,11 @@ TRUEMONEY_PHONE_NUMBER= # Donate: Truemoney Phone Number
 DONATE_WEBHOOK_URL= # Donate: Discord Webhook
 ```
 
-**[Lavalink](https://lavalink.dev/)**
+**Lavalink**
+
+Configure your Lavalink nodes. More information [here](https://lavalink.dev/):
 ```
-LAVALINK_HOST= # Lavalink Host
-LAVALINK_PORT= # Lavalink Port
-LAVALINK_PASSWORD= # Lavalink Password
+NODES='[{"host":"0.0.0.0","port":2333,"password":"password","secure":false}]' # Nodes Config
 ```
 
 **Log**
@@ -39,7 +53,10 @@ LAVALINK_PASSWORD= # Lavalink Password
 ANALYTIC_CHANNEL_ID= Discord Channel to logs
 ```
 
-**[MongoDB](https://www.mongodb.com/)**
+**MongoDB**
+
+Set your MongoDB connection URL. More information [here](https://www.mongodb.com/):
+
 ```
 MONGODB_URL= # MongoDB Url
 ```
@@ -49,8 +66,9 @@ MONGODB_URL= # MongoDB Url
 PORT=8233 # Status Port default 8233
 ```
 
-## How to run Bot
-### Docker
+# Running the Bot
+## Using Docker
+Run the bot using Docker with the following command:
 
 ```bash
 docker run -d --restart always \
@@ -59,9 +77,7 @@ docker run -d --restart always \
     -e CLIENT_ID= \
     -e TRUEMONEY_PHONE_NUMBER= \
     -e DONATE_WEBHOOK_URL= \
-    -e LAVALINK_HOST= \
-    -e LAVALINK_PORT= \
-    -e LAVALINK_PASSWORD= \
+    -e NODES='[{"host":"0.0.0.0","port":2333,"password":"password","secure":false}]' \
     -e ANALYTIC_CHANNEL_ID= \
     -e MONGODB_URL= \
     -e PORT=8233 \
@@ -69,23 +85,22 @@ docker run -d --restart always \
     hewkawar/hstudio-bot:latest
 ```
 
-### Source Code
+### From Source Code
+Clone the repository and install the dependencies:
 ```bash
-$ git clone https://github.com/HStudioDiscordBot/HStudioSource.git
+git clone https://github.com/HStudioDiscordBot/HStudioSource.git
+cd HStudioSource
+npm install
 ```
 
-```bash
-$ npm install
-```
-
-> Please config **.env** before run bot
+> Make sure to configure your `.env` file before running the bot:
 
 ```bash
-$ npm run bot
+npm run bot
 ```
 
 # Translators
-HStudio uses [Crowdin](https://crowdin.com/project/hstudiodiscordbot), the cloud-based localization management tool.
+HStudio uses [Crowdin](https://crowdin.com/project/hstudiodiscordbot) for localization management.
 
 # Support
-[Discord](https://discord.gg/gAdjmmHxBQ)
+For support, join our [Discord](https://discord.gg/gAdjmmHxBQ) server.
