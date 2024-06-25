@@ -7,36 +7,29 @@ const { MoonlinkManager } = require("moonlink.js");
  */
 
 function initializationMoonlink(client) {
-    const moon = new MoonlinkManager([
-        {
-            host: process.env.LAVALINK_HOST,
-            port: parseInt(process.env.LAVALINK_PORT),
-            password: process.env.LAVALINK_PASSWORD
-        }
-    ], {}, (guild, sPayload) => {
+    const moon = new MoonlinkManager(JSON.parse(process.env.NODES), {}, (guild, sPayload) => {
         client.guilds.cache.get(guild).shard.send(JSON.parse(sPayload));
     });
 
-
     moon.on("nodeCreate", (node) => {
-        console.log(`[${client.shard.ids}] "${node.host}" was connected.`);
+        console.log(`[${client.shard.ids}] "${node.identifier}" was connected.`);
     });
 
     moon.on("nodeClose", (node, code, reason) => {
-        console.log(`[${client.shard.ids}] "${node.host}" (${code}) was closed with: ${reason}.`);
-        console.log(`[${client.shard.ids}] "${node.host}" try to reconnect...`);
+        console.log(`[${client.shard.ids}] "${node.identifier}" (${code}) was closed with: ${reason}.`);
+        console.log(`[${client.shard.ids}] "${node.identifier}" try to reconnect...`);
         node.reconnect();
     });
 
     moon.on("nodeDestroy", (node) => {
-        console.log(`[${client.shard.ids}] "${node.host}" was destroy.`);
-        console.log(`[${client.shard.ids}] "${node.host}" try to reconnect...`);
+        console.log(`[${client.shard.ids}] "${node.identifier}" was destroy.`);
+        console.log(`[${client.shard.ids}] "${node.identifier}" try to reconnect...`);
         node.reconnect();
     });
 
     moon.on("nodeError", (node, error) => {
-        console.log(`[${client.shard.ids}] "${node.host}" have some error: ${error}`);
-        console.log(`[${client.shard.ids}] "${node.host}" try to reconnect...`);
+        console.log(`[${client.shard.ids}] "${node.identifier}" have some error: ${error}`);
+        console.log(`[${client.shard.ids}] "${node.identifier}" try to reconnect...`);
         node.reconnect();
     });
 
