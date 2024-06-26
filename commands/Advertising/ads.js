@@ -181,7 +181,7 @@ module.exports = {
                     content: locale.getLocaleString("command.ads.list.notfound")
                 });
 
-                const adsText = adsList.map((row, index) => `- (${row.activate ? locale.getLocaleString("command.ads.list.activated") : locale.getLocaleString("command.ads.list.deactivated")}) ${row.verify ? "✅" : ""} ${row._id}\n${row.description.length <= 50 ? row.description : row.description.substring(0, 50) + "..."}`).join("\n");
+                const adsText = adsList.map((row, index) => `- (${row.activate ? locale.getLocaleString("command.ads.list.activated") : locale.getLocaleString("command.ads.list.deactivated")}) ${row.verify ? "✅" : ""} ${row._id} ${row.expireAt ? `<t:${new Date(row.expireAt).getTime()}:F>` : "(ExpireAt not found)"}\n${row.description.length <= 50 ? row.description : row.description.substring(0, 50) + "..."}`).join("\n");
 
                 await interaction.editReply({
                     embeds: [
