@@ -126,7 +126,7 @@ module.exports = {
                     adsData = await AdSchema.findById(enableAdId);
 
                     return await interaction.editReply({
-                        content: locale.replacePlaceholders(locale.getLocaleString("command.ads.enable.reply"), [Math.round(Date.now(adsData.expireAt) / 1000)])
+                        content: locale.replacePlaceholders(locale.getLocaleString("command.ads.enable.reply"), [Math.round(new Date(adsData.expireAt).getTime() / 1000)])
                     });
                 } catch (err) { }
                 break;
@@ -161,7 +161,7 @@ module.exports = {
                     });
 
                     return await interaction.editReply({
-                        content: locale.replacePlaceholders(locale.getLocaleString("command.ads.disable.reply"), [Math.round(Date.now(adsData.expireAt) / 1000)])
+                        content: locale.replacePlaceholders(locale.getLocaleString("command.ads.disable.reply"), [Math.round(new Date(adsData.expireAt).getTime() / 1000)])
                     });
                 } catch (err) {
                     await interaction.editReply({
