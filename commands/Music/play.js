@@ -3,6 +3,8 @@ const { convertToHHMMSS, msToSec } = require("../../utils/time");
 const { isYouTubeUrl, isHStudioPlayUrl } = require("../../utils/youtube");
 const Locale = require("../../class/Locale");
 const AdsSchema = require("../../schemas/Ad");
+const YoutubeDirectSchema = require("../../schemas/YoutubeDirect");
+const { MoonlinkPlayer } = require("moonlink.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -44,10 +46,12 @@ module.exports = {
             node: server.identifier
         });
 
-        console.log(player.node.identifier, region, server.identifier);
-
         if (isYouTubeUrl(query)) {
-            return interaction.editReply({
+            const canDirect = await YoutubeDirectSchema.findOne({
+                userId: interaction.user.id
+            });
+
+            if (!canDirect && canDirect.userId != interaction.user.id) return interaction.editReply({
                 embeds: [
                     new EmbedBuilder()
                         .setColor(Colors.Red)
