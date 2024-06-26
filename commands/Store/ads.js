@@ -126,7 +126,7 @@ module.exports = {
                     adsData = await AdSchema.findById(enableAdId);
 
                     return await interaction.editReply({
-                        content: locale.replacePlaceholders(locale.getLocaleString("command.ads.enable.reply"), [Math.round(Date.now(adsData.expireAt) / 1000)])
+                        content: locale.replacePlaceholders(locale.getLocaleString("command.ads.enable.reply"), [Math.round(new Date(adsData.expireAt).getTime() / 1000)])
                     });
                 } catch (err) { }
                 break;
@@ -161,7 +161,7 @@ module.exports = {
                     });
 
                     return await interaction.editReply({
-                        content: locale.replacePlaceholders(locale.getLocaleString("command.ads.disable.reply"), [Math.round(Date.now(adsData.expireAt) / 1000)])
+                        content: locale.replacePlaceholders(locale.getLocaleString("command.ads.disable.reply"), [Math.round(new Date(adsData.expireAt).getTime() / 1000)])
                     });
                 } catch (err) {
                     await interaction.editReply({
@@ -172,15 +172,16 @@ module.exports = {
             case "list":
                 await interaction.deferReply({ ephemeral: true });
 
-                const adsList = await AdSchema.find({
-                    owner: interaction.user.id
+                const adsList = await AdSchema.find({ 
+                    owner: interaction.user.id, 
+                    expireAt: { $gt: now }
                 });
 
                 if (adsList.length == 0) return await interaction.editReply({
                     content: locale.getLocaleString("command.ads.list.notfound")
                 });
 
-                const adsText = adsList.map((row, index) => `- (${row.activate ? locale.getLocaleString("command.ads.list.activated") : locale.getLocaleString("command.ads.list.deactivated")}) ${row.verify ? "✅" : ""} ${row._id} - ${row.description}`).join("\n");
+                const adsText = adsList.map((row, index) => `- (${row.activate ? locale.getLocaleString("command.ads.list.activated") : locale.getLocaleString("command.ads.list.deactivated")}) ${row.verify ? "✅" : ""} ${row._id} ${row.expireAt ? `<t:${new Date(row.expireAt).getTime()}:F>` : "(ExpireAt not found)"}\n${row.description.length <= 50 ? row.description : row.description.substring(0, 50) + "..."}`).join("\n");
 
                 await interaction.editReply({
                     embeds: [

@@ -78,6 +78,11 @@ module.exports = {
             requester: interaction.user.id
         });
 
+        const replyData = {
+            embeds: [],
+            components: []
+        };
+
         if (res.loadType === "loadfailed") {
             return interaction.editReply({
                 embeds: [
@@ -135,6 +140,8 @@ module.exports = {
             }
         }
 
+        replyData.embeds.push(trackEmbed);
+        
         const now = new Date();
 
         const ads = await AdsSchema.aggregate([
@@ -143,12 +150,6 @@ module.exports = {
         ]);
 
         const ad = ads.length > 0 ? ads[0] : null;
-
-        const replyData = {
-            embeds: [
-                trackEmbed
-            ]
-        };
 
         if (ad) {
             const adEmbed = new EmbedBuilder()
@@ -168,7 +169,7 @@ module.exports = {
                 .addComponents(adsButton);
 
             replyData.embeds.push(adEmbed);
-            replyData.components = [adsActionRow];
+            replyData.components.push(adsActionRow);
         }
 
         await interaction.editReply(replyData);
