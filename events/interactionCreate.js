@@ -5,6 +5,30 @@ const createAdsModal = require("../modals/create_ads");
 const buttonCreateAds = require("../buttons/buttonCreateAds");
 const buttonAdsConfirm = require("../buttons/adsConfirm");
 const buttonAdsDeny = require("../buttons/adsDeny");
+const LocaleSchema = require("../schemas/Locale");
+
+/**
+ * Save the last user locale.
+ * 
+ * @param {import("discord.js").Snowflake} userId - The ID of the user.
+ * @param {import("discord.js").Locale} locale - The locale of the user.
+ * @returns {Promise<boolean>} - Returns true if the operation was successful, otherwise false.
+ */
+async function saveLastUserLocale(userId, locale) {
+    try {
+        const updateResult = await LocaleSchema.updateOne(
+            { owner: userId },
+            { $set: { locale: locale } },
+            { upsert: true }
+        );
+
+        return updateResult.acknowledged;
+    } catch (err) {
+        console.error(err);
+        return false;
+    }
+}
+
 
 module.exports = {
     name: Events.InteractionCreate,
@@ -72,6 +96,12 @@ module.exports = {
                     await buttonAdsDeny.execute(interaction, client, locale);
                     break;
             }
+        }
+
+        try {
+            saveLastUserLocale(interaction.user.id, interaction.locale);
+        } catch (err) {
+            console.error(err);
         }
     }
 };
