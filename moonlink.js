@@ -1,11 +1,35 @@
 const { EmbedBuilder, Colors } = require("discord.js");
 const { MoonlinkManager } = require("moonlink.js");
+const Locale = require("./class/Locale");
+const LocaleSchema = require("./schemas/Locale");
+
+/**
+ * 
+ * @param {string} userId 
+ * @returns {Promise<Locale>}
+ */
+async function getLocale(userId) {
+    let userLocale = "en-US";
+
+    try {
+        if (userId) {
+            const data = await LocaleSchema.findOne({
+                owner: userId
+            });
+
+            if (data.locale) userLocale = data.locale;
+        }
+    } catch (err) {
+        console.error(err);
+    }
+
+    return new Locale(userLocale);
+}
 
 /**
  * Initializes MoonlinkManager for the given client.
  * @param {import("discord.js").Client} client - The Discord client.
  */
-
 function initializationMoonlink(client) {
     const moon = new MoonlinkManager(JSON.parse(process.env.NODES), {}, (guild, sPayload) => {
         client.guilds.cache.get(guild).shard.send(JSON.parse(sPayload));
@@ -36,6 +60,8 @@ function initializationMoonlink(client) {
     moon.on("trackStart", async (player, track) => {
         let sourceIcon = ":arrow_forward:";
 
+        const locale = await getLocale(track.requester);
+
         if (track.sourceName == "spotify") {
             sourceIcon = "<:spotify:1156557829486948413>";
 
@@ -45,7 +71,7 @@ function initializationMoonlink(client) {
                     embeds: [
                         new EmbedBuilder()
                             .setColor(Colors.Blue)
-                            .setDescription(`${sourceIcon} Start playing **[${track.title}](${track.url})**`)
+                            .setDescription(locale.replacePlaceholders(locale.getLocaleString("moonlink.trackStart.withUrl"), [sourceIcon, track.title, track.url]))
                     ]
                 });
         } else {
@@ -55,22 +81,25 @@ function initializationMoonlink(client) {
                     embeds: [
                         new EmbedBuilder()
                             .setColor(Colors.Blue)
-                            .setDescription(`${sourceIcon} Start playing **${track.title}**`)
+                            .setDescription(locale.getLocaleString("moonlink.trackStart.withoutUrl"), [sourceIcon, track.title])
                     ]
                 });
         }
     });
 
-    moon.on("queueEnd", async (player) => {
+    moon.on("queueEnd", async (player, track) => {
+        const locale = track ? await getLocale(track.requester) : new Locale("en-US");
+
         client.channels.cache
             .get(player.textChannel)
             .send({
                 embeds: [
                     new EmbedBuilder()
                         .setColor(Colors.Red)
-                        .setDescription("There are no more tracks")
+                        .setDescription(locale.getLocaleString("moonlink.trackEnd"))
                 ]
             });
+
         player.destroy();
     });
 
