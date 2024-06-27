@@ -1,10 +1,8 @@
-const { SlashCommandBuilder, CommandInteraction, Client, EmbedBuilder, Colors, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, Colors, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
 const { convertToHHMMSS, msToSec } = require("../../utils/time");
 const { isYouTubeUrl, isHStudioPlayUrl } = require("../../utils/youtube");
-const Locale = require("../../class/Locale");
 const AdsSchema = require("../../schemas/Ad");
 const YoutubeDirectSchema = require("../../schemas/YoutubeDirect");
-const { MoonlinkPlayer } = require("moonlink.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -23,12 +21,12 @@ module.exports = {
         ),
     /**
      * 
-     * @param {CommandInteraction} interaction 
-     * @param {Client} client 
-     * @param {Locale} locale 
+     * @param {import("discord.js").CommandInteraction} interaction 
+     * @param {import("discord.js").Client} client 
+     * @param {import("../../class/Locale")} locale 
      */
     async execute(interaction, client, locale) {
-        if (!interaction.member.voice.channel) return await interaction.reply({ embeds: [new EmbedBuilder().setColor(Colors.Yellow).setTitle(locale.getLocaleString("command.play.userNotInVoiceChannel"))] })
+        if (!interaction.member.voice.channel) return await interaction.reply({ embeds: [new EmbedBuilder().setColor(Colors.Yellow).setTitle(locale.getLocaleString("command.play.userNotInVoiceChannel"))] });
 
         await interaction.deferReply();
 
@@ -178,4 +176,4 @@ module.exports = {
             player.play();
         }
     }
-}
+};

@@ -1,6 +1,5 @@
-const { SlashCommandBuilder, CommandInteraction, Client, EmbedBuilder, Colors } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, Colors } = require("discord.js");
 const { version } = require("../../package.json");
-const Locale = require("../../class/Locale");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -11,9 +10,9 @@ module.exports = {
         }),
     /**
      * 
-     * @param {CommandInteraction} interaction 
-     * @param {Client} client 
-     * @param {Locale} locale 
+     * @param {import("discord.js").CommandInteraction} interaction 
+     * @param {import("discord.js").Client} client 
+     * @param {import("../../class/Locale")} locale 
      */
     async execute(interaction, client, locale) {
         await interaction.reply({
@@ -25,4 +24,4 @@ module.exports = {
             ]
         });
     }
-}
+};

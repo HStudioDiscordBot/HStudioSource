@@ -1,5 +1,4 @@
-const { SlashCommandBuilder, CommandInteraction, Client, EmbedBuilder, Colors, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
-const Locale = require("../../class/Locale");
+const { SlashCommandBuilder, EmbedBuilder, Colors, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -10,9 +9,9 @@ module.exports = {
         }),
     /**
      * 
-     * @param {CommandInteraction} interaction 
-     * @param {Client} client 
-     * @param {Locale} locale 
+     * @param {import("discord.js").CommandInteraction} interaction 
+     * @param {import("discord.js").Client} client 
+     * @param {import("../../class/Locale")} locale 
      */
     async execute(interaction, client, locale) {
         if (!interaction.member.voice.channel) return await interaction.reply({ embeds: [new EmbedBuilder().setColor(Colors.Yellow).setTitle(locale.getLocaleString("command.join.userNotInVoiceChannel"))] });
@@ -62,7 +61,7 @@ module.exports = {
                 } else {
                     return locale.replacePlaceholders(locale.getLocaleString("command.queue.raw"), [trackIndex, track.title, track.author]);
                 }
-            }).join('\n');
+            }).join("\n");
 
             return new EmbedBuilder()
                 .setColor(Colors.Blue)
@@ -75,17 +74,17 @@ module.exports = {
             return new ActionRowBuilder()
                 .addComponents(
                     new ButtonBuilder()
-                        .setCustomId('previous')
+                        .setCustomId("previous")
                         .setLabel("◀️")
                         .setStyle(ButtonStyle.Primary)
                         .setDisabled(page === 0),
                     new ButtonBuilder()
-                        .setCustomId('totalPages')
+                        .setCustomId("totalPages")
                         .setLabel(`${currentPage}/${totalPages}`)
                         .setStyle(ButtonStyle.Secondary)
                         .setDisabled(true),
                     new ButtonBuilder()
-                        .setCustomId('next')
+                        .setCustomId("next")
                         .setLabel("▶️")
                         .setStyle(ButtonStyle.Primary)
                         .setDisabled(page === totalPages - 1)
@@ -101,10 +100,10 @@ module.exports = {
         const filter = i => i.user.id === interaction.user.id;
         const collector = message.createMessageComponentCollector({ filter, time: 60_000 });
 
-        collector.on('collect', async i => {
-            if (i.customId === 'previous') {
+        collector.on("collect", async i => {
+            if (i.customId === "previous") {
                 currentPage--;
-            } else if (i.customId === 'next') {
+            } else if (i.customId === "next") {
                 currentPage++;
             }
 
@@ -114,7 +113,7 @@ module.exports = {
             });
         });
 
-        collector.on('end', collected => {
+        collector.on("end", () => {
             message.edit({
                 components: []
             });
