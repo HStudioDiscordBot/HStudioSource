@@ -1,5 +1,5 @@
 const { Client, GatewayIntentBits, Collection } = require("discord.js");
-const fs = require('fs');
+const fs = require("fs");
 const { initializationMoonlink } = require("./moonlink");
 
 const client = new Client({

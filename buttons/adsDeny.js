@@ -50,7 +50,7 @@ module.exports = {
                     ephemeral: true
                 });
 
-                embed.setColor(Colors.Red)
+                embed.setColor(Colors.Red);
 
                 await message.edit({
                     embeds: [embed],
@@ -81,4 +81,4 @@ module.exports = {
             });
         }
     }
-}
+};

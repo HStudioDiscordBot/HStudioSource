@@ -112,7 +112,7 @@ module.exports = class Locale {
 
     replacePlaceholders(template, data) {
         return template.replace(/{(\d+)}/g, (match, number) => {
-            return typeof data[number] !== 'undefined' ? data[number] : match;
+            return typeof data[number] !== "undefined" ? data[number] : match;
         });
     }
 
@@ -126,4 +126,4 @@ module.exports = class Locale {
             return id;
         }
     }
-}
+};

@@ -10,4 +10,4 @@ function isValidURL(string) {
 
 module.exports = {
     isValidURL
-}
+};

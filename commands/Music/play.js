@@ -26,7 +26,7 @@ module.exports = {
      * @param {import("../../class/Locale")} locale 
      */
     async execute(interaction, client, locale) {
-        if (!interaction.member.voice.channel) return await interaction.reply({ embeds: [new EmbedBuilder().setColor(Colors.Yellow).setTitle(locale.getLocaleString("command.play.userNotInVoiceChannel"))] })
+        if (!interaction.member.voice.channel) return await interaction.reply({ embeds: [new EmbedBuilder().setColor(Colors.Yellow).setTitle(locale.getLocaleString("command.play.userNotInVoiceChannel"))] });
 
         await interaction.deferReply();
 
@@ -176,4 +176,4 @@ module.exports = {
             player.play();
         }
     }
-}
+};

@@ -1,8 +1,8 @@
 const { Events, ActivityType } = require("discord.js");
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { version } = require("../package.json");
 
-const mongoDBUrl = process.env.MONGODB_URL
+const mongoDBUrl = process.env.MONGODB_URL;
 
 module.exports = {
     name: Events.ClientReady,
@@ -29,4 +29,4 @@ module.exports = {
             console.log(`[${client.shard.ids}] Connected to MongoDB`);
         }
     }
-}
+};

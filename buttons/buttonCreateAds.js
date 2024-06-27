@@ -56,4 +56,4 @@ module.exports = {
 
         await interaction.showModal(createModal);
     }
-}
+};

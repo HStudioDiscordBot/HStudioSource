@@ -25,7 +25,7 @@ module.exports = {
         if (!buttonUrl) return await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription(locale.replacePlaceholders(locale.getLocaleString("modal.submit.ads.create.undifine.text"), ["buttonUrl"]))] });
         if (!voucherUrl) return await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription(locale.replacePlaceholders(locale.getLocaleString("modal.submit.ads.create.undifine.text"), ["voucherUrl"]))] });
 
-        const voucher_code = voucherUrl.replace('https://gift.truemoney.com/campaign/?v=', '');
+        const voucher_code = voucherUrl.replace("https://gift.truemoney.com/campaign/?v=", "");
 
         const tw = await twApi(voucher_code, process.env.TRUEMONEY_PHONE_NUMBER);
 
@@ -138,4 +138,4 @@ module.exports = {
             }
         }
     }
-}
+};

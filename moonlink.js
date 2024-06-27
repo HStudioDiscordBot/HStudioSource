@@ -101,7 +101,7 @@ function initializationMoonlink(client) {
                         .setDescription(`\`${player.guildId}\` (${track.sourceName == "spotify" ? "<:spotify:1156557829486948413>" : track.sourceName}) Start playing **${track.title}** (${track.url})`)
                         .setTimestamp()
                 ]
-            })
+            });
         });
 
         moon.on("playerCreated", (guildId) => {
@@ -112,7 +112,7 @@ function initializationMoonlink(client) {
                         .setDescription(`Created player in \`${guildId}\``)
                         .setTimestamp()
                 ]
-            })
+            });
         });
     }
 
@@ -121,4 +121,4 @@ function initializationMoonlink(client) {
 
 module.exports = {
     initializationMoonlink
-}
+};

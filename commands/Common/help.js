@@ -65,7 +65,7 @@ module.exports = {
         const contributorsEmbed = new EmbedBuilder()
             .setColor(Colors.Blue)
             .setTitle(locale.getLocaleString("command.help.helpselection.contributor"))
-            .setDescription(`${contributors.map(contributor => { return `- **[${contributor.name}](${contributor.links.github.url})** | <@${contributor.links.discord.id}>` })}`);
+            .setDescription(`${contributors.map(contributor => { return `- **[${contributor.name}](${contributor.links.github.url})** | <@${contributor.links.discord.id}>`; })}`);
 
         const selection = createSelectMenu(true, false, false);
         const selectionActionRow = new ActionRowBuilder().addComponents(selection);
@@ -121,6 +121,6 @@ module.exports = {
                 ],
                 components: []
             });
-        })
+        });
     }
-}
+};

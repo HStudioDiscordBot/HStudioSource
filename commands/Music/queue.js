@@ -61,7 +61,7 @@ module.exports = {
                 } else {
                     return locale.replacePlaceholders(locale.getLocaleString("command.queue.raw"), [trackIndex, track.title, track.author]);
                 }
-            }).join('\n');
+            }).join("\n");
 
             return new EmbedBuilder()
                 .setColor(Colors.Blue)
@@ -74,17 +74,17 @@ module.exports = {
             return new ActionRowBuilder()
                 .addComponents(
                     new ButtonBuilder()
-                        .setCustomId('previous')
+                        .setCustomId("previous")
                         .setLabel("◀️")
                         .setStyle(ButtonStyle.Primary)
                         .setDisabled(page === 0),
                     new ButtonBuilder()
-                        .setCustomId('totalPages')
+                        .setCustomId("totalPages")
                         .setLabel(`${currentPage}/${totalPages}`)
                         .setStyle(ButtonStyle.Secondary)
                         .setDisabled(true),
                     new ButtonBuilder()
-                        .setCustomId('next')
+                        .setCustomId("next")
                         .setLabel("▶️")
                         .setStyle(ButtonStyle.Primary)
                         .setDisabled(page === totalPages - 1)
@@ -100,10 +100,10 @@ module.exports = {
         const filter = i => i.user.id === interaction.user.id;
         const collector = message.createMessageComponentCollector({ filter, time: 60_000 });
 
-        collector.on('collect', async i => {
-            if (i.customId === 'previous') {
+        collector.on("collect", async i => {
+            if (i.customId === "previous") {
                 currentPage--;
-            } else if (i.customId === 'next') {
+            } else if (i.customId === "next") {
                 currentPage++;
             }
 
@@ -113,7 +113,7 @@ module.exports = {
             });
         });
 
-        collector.on('end', () => {
+        collector.on("end", () => {
             message.edit({
                 components: []
             });

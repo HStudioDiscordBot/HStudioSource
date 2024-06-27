@@ -11,8 +11,8 @@ module.exports = {
     async execute(interaction, client, locale) {
         await interaction.reply({ embeds: [new EmbedBuilder().setColor(Colors.Blue).setDescription(locale.getLocaleString("modal.submit.donate.reply"))], ephemeral: true });
 
-        const url = interaction.fields.getTextInputValue('url');
-        const voucher_code = url.replace('https://gift.truemoney.com/campaign/?v=', '');
+        const url = interaction.fields.getTextInputValue("url");
+        const voucher_code = url.replace("https://gift.truemoney.com/campaign/?v=", "");
 
         const tw = await twApi(voucher_code, process.env.TRUEMONEY_PHONE_NUMBER);
 
@@ -60,4 +60,4 @@ module.exports = {
             }
         }
     }
-}
+};
