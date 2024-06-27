@@ -108,5 +108,8 @@
     "command.ads.list.notfound": "⚠️ Not found your ads",
     "command.ads.list.activated": "Activated 🟢",
     "command.ads.list.deactivated": "Deactivated 🔴",
-    "command.ads.list": "Ads list"
+    "command.ads.list": "Ads list",
+    "moonlink.trackStart.withUrl": "{0} Start playing **[{1}]({2})**",
+    "moonlink.trackStart.withoutUrl": "{0} Start playing **{1}**",
+    "moonlink.trackEnd": "There are no more tracks"
 }

@@ -33,6 +33,10 @@ const ko_KR = require("../translate/ko-KR.json");
 module.exports = class Locale {
     locale = "en-US";
 
+    /**
+     * 
+     * @param {import("discord.js").Locale} locale 
+     */
     constructor(locale) {
         this.locale = locale;
     }
