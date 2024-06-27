@@ -1,11 +1,12 @@
 {
   "name": "hstudio",
-  "version": "2.2.46",
+  "version": "2.2.47",
   "description": "HStudio Discord Music Bot Source Code",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "bot": "node index.js"
+    "bot": "node index.js",
+    "lint": "npx eslint ."
   },
   "repository": {
     "type": "git",
@@ -28,5 +29,10 @@
     "express": "^4.19.2",
     "mongoose": "^8.4.4",
     "moonlink.js": "^3.6.64"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.5.0",
+    "eslint": "^9.5.0",
+    "globals": "^15.6.0"
   }
 }

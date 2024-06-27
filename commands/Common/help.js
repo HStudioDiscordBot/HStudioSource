@@ -1,5 +1,4 @@
-const { SlashCommandBuilder, CommandInteraction, Client, EmbedBuilder, Colors, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder } = require("discord.js");
-const Locale = require("../../class/Locale");
+const { SlashCommandBuilder, EmbedBuilder, Colors, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder } = require("discord.js");
 
 const contributors = require("../../contributors.json");
 
@@ -12,9 +11,9 @@ module.exports = {
         }),
     /**
      * 
-     * @param {CommandInteraction} interaction 
-     * @param {Client} client 
-     * @param {Locale} locale 
+     * @param {import("discord.js").CommandInteraction} interaction 
+     * @param {import("discord.js").Client} client 
+     * @param {import("../../class/Locale")} locale 
      */
     async execute(interaction, client, locale) {
         function createSelectMenu(help, command, contributor) {
@@ -66,7 +65,7 @@ module.exports = {
         const contributorsEmbed = new EmbedBuilder()
             .setColor(Colors.Blue)
             .setTitle(locale.getLocaleString("command.help.helpselection.contributor"))
-            .setDescription(`${contributors.map(contributor => { return `- **[${contributor.name}](${contributor.links.github.url})** | <@${contributor.links.discord.id}>` })}`);
+            .setDescription(`${contributors.map(contributor => { return `- **[${contributor.name}](${contributor.links.github.url})** | <@${contributor.links.discord.id}>`; })}`);
 
         const selection = createSelectMenu(true, false, false);
         const selectionActionRow = new ActionRowBuilder().addComponents(selection);
@@ -82,7 +81,7 @@ module.exports = {
 
         collecter.on("collect", async (i) => {
             switch (i.values[0]) {
-                case "helphelp":
+                case "helphelp": {
                     const helpActionRow = new ActionRowBuilder().addComponents(createSelectMenu(true, false, false));
 
                     await i.update({
@@ -90,7 +89,8 @@ module.exports = {
                         components: [helpActionRow]
                     });
                     break;
-                case "helpcommand":
+                }
+                case "helpcommand": {
                     const commandsActionRow = new ActionRowBuilder().addComponents(createSelectMenu(false, true, false));
 
                     await i.update({
@@ -98,7 +98,8 @@ module.exports = {
                         components: [commandsActionRow]
                     });
                     break;
-                case "helpcontributor":
+                }
+                case "helpcontributor": {
                     const contributorActionRow = new ActionRowBuilder().addComponents(createSelectMenu(false, false, true));
 
                     await i.update({
@@ -106,11 +107,12 @@ module.exports = {
                         components: [contributorActionRow]
                     });
                     break;
+                }
             }
             collecter.resetTimer();
         });
 
-        collecter.on("end", async (collected) => {
+        collecter.on("end", async () => {
             await interaction.editReply({
                 embeds: [
                     new EmbedBuilder()
@@ -119,6 +121,6 @@ module.exports = {
                 ],
                 components: []
             });
-        })
+        });
     }
-}
+};

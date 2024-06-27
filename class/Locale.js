@@ -104,13 +104,15 @@ module.exports = class Locale {
                     return en_US[id] || id;
             }
         } catch (err) {
+            console.error(err);
+
             return id;
         }
     }
 
     replacePlaceholders(template, data) {
         return template.replace(/{(\d+)}/g, (match, number) => {
-            return typeof data[number] !== 'undefined' ? data[number] : match;
+            return typeof data[number] !== "undefined" ? data[number] : match;
         });
     }
 
@@ -119,7 +121,9 @@ module.exports = class Locale {
             if (en_US[id]) return en_US[id];
             else return id;
         } catch (err) {
+            console.error(err);
+
             return id;
         }
     }
-}
+};

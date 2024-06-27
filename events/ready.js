@@ -1,15 +1,15 @@
-const { Events, Client, ActivityType } = require("discord.js");
-const mongoose = require('mongoose');
+const { Events, ActivityType } = require("discord.js");
+const mongoose = require("mongoose");
 const { version } = require("../package.json");
 
-const mongoDBUrl = process.env.MONGODB_URL
+const mongoDBUrl = process.env.MONGODB_URL;
 
 module.exports = {
     name: Events.ClientReady,
     once: true,
     /**
     * 
-    * @param {Client} client - The Discord client.
+    * @param {import("discord.js").Client} client - The Discord client.
     */
     async execute(client) {
         function setActivity() {
@@ -29,4 +29,4 @@ module.exports = {
             console.log(`[${client.shard.ids}] Connected to MongoDB`);
         }
     }
-}
+};

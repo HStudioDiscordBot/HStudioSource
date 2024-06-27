@@ -1,13 +1,13 @@
 const { REST } = require("@discordjs/rest");
-const { Routes } = require('discord-api-types/v10');
-const fs = require('fs');
+const { Routes } = require("discord-api-types/v10");
+const fs = require("fs");
 
 module.exports = (client) => {
     client.handleCommands = async (commandFolders, path) => {
         client.commandArray = [];
         const commandNames = new Set();
         for (const folder of commandFolders) {
-            const commandFiles = fs.readdirSync(`${path}/${folder}`).filter(file => file.endsWith('.js'));
+            const commandFiles = fs.readdirSync(`${path}/${folder}`).filter(file => file.endsWith(".js"));
             for (const file of commandFiles) {
                 const command = require(`../commands/${folder}/${file}`);
                 const commandName = command.data.name;
@@ -24,7 +24,7 @@ module.exports = (client) => {
         }
 
         const rest = new REST({
-            version: '10'
+            version: "10"
         }).setToken(process.env.TOKEN);
 
         (async () => {
