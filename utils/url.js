@@ -2,7 +2,8 @@ function isValidURL(string) {
     try {
         new URL(string);
         return true;
-    } catch (_) {
+    } catch (err) {
+        console.error(err);
         return false;
     }
 }

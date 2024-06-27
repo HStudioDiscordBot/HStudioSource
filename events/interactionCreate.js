@@ -1,4 +1,4 @@
-const { Events, Client, Interaction, Colors, EmbedBuilder } = require("discord.js");
+const { Events, Colors, EmbedBuilder } = require("discord.js");
 const Locale = require("../class/Locale");
 const donateModal = require("../modals/donate");
 const createAdsModal = require("../modals/create_ads");
@@ -10,8 +10,8 @@ module.exports = {
     name: Events.InteractionCreate,
     /**
      * 
-     * @param {Interaction} interaction 
-     * @param {Client} client 
+     * @param {import("discord.js").Interaction} interaction 
+     * @param {import("discord.js").Client} client 
      */
     async execute(interaction, client) {
         const locale = new Locale(interaction.locale);

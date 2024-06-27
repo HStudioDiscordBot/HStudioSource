@@ -1,13 +1,12 @@
-const { ButtonInteraction, Client, EmbedBuilder, Colors, WebhookClient } = require("discord.js");
-const Locale = require("../class/Locale");
+const { EmbedBuilder, Colors, WebhookClient } = require("discord.js");
 const AdSchema = require("../schemas/Ad");
 
 module.exports = {
     /**
      * 
-     * @param {ButtonInteraction} interaction 
-     * @param {Client} client 
-     * @param {Locale} locale 
+     * @param {import("discord.js").ButtonInteraction} interaction 
+     * @param {import("discord.js").Client} client 
+     * @param {import("../class/Locale")} locale 
      */
     async execute(interaction, client, locale) {
         const message = interaction.message;
@@ -62,6 +61,8 @@ module.exports = {
                     content: locale.replacePlaceholders(locale.getLocaleString("button.ads.deny.reply.owner.cant_send"), [adsData._id]),
                     ephemeral: true
                 });
+                
+                console.error(err);
             }
         } catch (err) {
             await interaction.editReply({

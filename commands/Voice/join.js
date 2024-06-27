@@ -1,5 +1,4 @@
-const { SlashCommandBuilder, CommandInteraction, Client, EmbedBuilder, Colors } = require("discord.js");
-const Locale = require("../../class/Locale");
+const { SlashCommandBuilder, EmbedBuilder, Colors } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -11,9 +10,9 @@ module.exports = {
 
     /**
      * 
-     * @param {CommandInteraction} interaction 
-     * @param {Client} client 
-     * @param {Locale} locale 
+     * @param {import("discord.js").CommandInteraction} interaction 
+     * @param {import("discord.js").Client} client 
+     * @param {import("../../class/Locale")} locale 
      */
     async execute(interaction, client, locale) {
         if (!interaction.member.voice.channel) return await interaction.reply({ embeds: [new EmbedBuilder().setColor(Colors.Yellow).setTitle(locale.getLocaleString("command.join.userNotInVoiceChannel"))] });

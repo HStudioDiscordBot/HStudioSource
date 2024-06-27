@@ -1,9 +1,9 @@
-const { EmbedBuilder, Colors, Client } = require("discord.js");
+const { EmbedBuilder, Colors } = require("discord.js");
 const { MoonlinkManager } = require("moonlink.js");
 
 /**
  * Initializes MoonlinkManager for the given client.
- * @param {Client} client - The Discord client.
+ * @param {import("discord.js").Client} client - The Discord client.
  */
 
 function initializationMoonlink(client) {
@@ -61,7 +61,7 @@ function initializationMoonlink(client) {
         }
     });
 
-    moon.on("queueEnd", async (player, track) => {
+    moon.on("queueEnd", async (player) => {
         client.channels.cache
             .get(player.textChannel)
             .send({

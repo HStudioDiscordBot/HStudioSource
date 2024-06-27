@@ -1,5 +1,4 @@
-const { SlashCommandBuilder, CommandInteraction, Client, EmbedBuilder, Colors } = require("discord.js");
-const Locale = require("../../class/Locale");
+const { SlashCommandBuilder, EmbedBuilder, Colors } = require("discord.js");
 const { isValidURL } = require("../../utils/url");
 const { isYouTubeUrl } = require("../../utils/youtube");
 
@@ -28,15 +27,15 @@ module.exports = {
 
     /**
      * 
-     * @param {CommandInteraction} interaction 
-     * @param {Client} client 
-     * @param {Locale} locale 
+     * @param {import("discord.js").CommandInteraction} interaction 
+     * @param {import("discord.js").Client} client 
+     * @param {import("../../class/Locale")} locale 
      */
-    async execute(interaction, client, locale) {
+    async execute(interaction, locale) {
         const sub = interaction.options.getSubcommand();
 
         switch (sub) {
-            case "youtube-url":
+            case "youtube-url": {
                 const url = interaction.options.getString("url");
 
                 if (!isValidURL(url)) return await interaction.reply({
@@ -66,6 +65,7 @@ module.exports = {
                     ]
                 });
                 break;
+            }
         }
     }
 }

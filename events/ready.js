@@ -1,4 +1,4 @@
-const { Events, Client, ActivityType } = require("discord.js");
+const { Events, ActivityType } = require("discord.js");
 const mongoose = require('mongoose');
 const { version } = require("../package.json");
 
@@ -9,7 +9,7 @@ module.exports = {
     once: true,
     /**
     * 
-    * @param {Client} client - The Discord client.
+    * @param {import("discord.js").Client} client - The Discord client.
     */
     async execute(client) {
         function setActivity() {

@@ -1,14 +1,13 @@
-const { ButtonInteraction, Client, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = require("discord.js");
-const Locale = require("../class/Locale");
+const { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = require("discord.js");
 
 module.exports = {
     /**
      * 
-     * @param {ButtonInteraction} interaction 
-     * @param {Client} client 
-     * @param {Locale} locale 
+     * @param {import("discord.js").ButtonInteraction} interaction 
+     * @param {import("discord.js").Client} client 
+     * @param {import("../class/Locale")} locale 
      */
-    async execute(interaction, client, locale) {
+    async execute(interaction, locale) {
         const createModal = new ModalBuilder()
             .setCustomId("create_ads")
             .setTitle(locale.getLocaleString("command.ads.create.modal.title"));

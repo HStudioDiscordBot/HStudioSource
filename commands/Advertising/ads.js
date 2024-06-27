@@ -1,5 +1,4 @@
-const { SlashCommandBuilder, CommandInteraction, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, Colors, Client } = require("discord.js");
-const Locale = require("../../class/Locale");
+const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, Colors } = require("discord.js");
 const adsConfig = require("../../configs/ads.json");
 const AdSchema = require("../../schemas/Ad");
 
@@ -56,15 +55,15 @@ module.exports = {
         ),
     /**
      * 
-     * @param {CommandInteraction} interaction 
-     * @param {Client} client 
-     * @param {Locale} locale 
+     * @param {import("discord.js").CommandInteraction} interaction 
+     * @param {import("discord.js").Client} client 
+     * @param {import("../../class/Locale")} locale 
      */
-    async execute(interaction, client, locale) {
+    async execute(interaction, locale) {
         const sub = interaction.options.getSubcommand();
 
         switch (sub) {
-            case "create":
+            case "create": {
                 const createAds = new ButtonBuilder()
                     .setCustomId("buttonCreateAds")
                     .setLabel(locale.getLocaleString("ads.create.button"))
@@ -83,7 +82,9 @@ module.exports = {
                     components: [createAdsRow]
                 });
                 break;
-            case "enable":
+            }
+            case "enable": {
+
                 const enableAdId = interaction.options.getString("ad_id");
 
                 if (!enableAdId) return;
@@ -128,9 +129,12 @@ module.exports = {
                     return await interaction.editReply({
                         content: locale.replacePlaceholders(locale.getLocaleString("command.ads.enable.reply"), [Math.round(new Date(adsData.expireAt).getTime() / 1000)])
                     });
-                } catch (err) { }
+                } catch (err) {
+                    console.error(err);
+                }
                 break;
-            case "disable":
+            }
+            case "disable": {
                 const disableAdId = interaction.options.getString("ad_id");
 
                 if (!disableAdId) return;
@@ -164,16 +168,20 @@ module.exports = {
                         content: locale.replacePlaceholders(locale.getLocaleString("command.ads.disable.reply"), [Math.round(new Date(adsData.expireAt).getTime() / 1000)])
                     });
                 } catch (err) {
+                    console.error(err);
                     await interaction.editReply({
                         content: locale.replacePlaceholders(locale.getLocaleString("command.ads.disable.error"), [disableAdId])
                     });
                 }
                 break;
-            case "list":
+            }
+            case "list": {
                 await interaction.deferReply({ ephemeral: true });
 
-                const adsList = await AdSchema.find({ 
-                    owner: interaction.user.id, 
+                const now = new Date();
+
+                const adsList = await AdSchema.find({
+                    owner: interaction.user.id,
                     expireAt: { $gt: now }
                 });
 
@@ -181,7 +189,7 @@ module.exports = {
                     content: locale.getLocaleString("command.ads.list.notfound")
                 });
 
-                const adsText = adsList.map((row, index) => `- (${row.activate ? locale.getLocaleString("command.ads.list.activated") : locale.getLocaleString("command.ads.list.deactivated")}) ${row.verify ? "✅" : ""} ${row._id} ${row.expireAt ? `<t:${new Date(row.expireAt).getTime()}:F>` : "(ExpireAt not found)"}\n${row.description.length <= 50 ? row.description : row.description.substring(0, 50) + "..."}`).join("\n");
+                const adsText = adsList.map((row) => `- (${row.activate ? locale.getLocaleString("command.ads.list.activated") : locale.getLocaleString("command.ads.list.deactivated")}) ${row.verify ? "✅" : ""} ${row._id} ${row.expireAt ? `<t:${new Date(row.expireAt).getTime()}:F>` : "(ExpireAt not found)"}\n${row.description.length <= 50 ? row.description : row.description.substring(0, 50) + "..."}`).join("\n");
 
                 await interaction.editReply({
                     embeds: [
@@ -192,6 +200,7 @@ module.exports = {
                     ]
                 });
                 break;
+            }
         }
     }
 }

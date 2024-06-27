@@ -104,6 +104,8 @@ module.exports = class Locale {
                     return en_US[id] || id;
             }
         } catch (err) {
+            console.error(err);
+
             return id;
         }
     }
@@ -119,6 +121,8 @@ module.exports = class Locale {
             if (en_US[id]) return en_US[id];
             else return id;
         } catch (err) {
+            console.error(err);
+
             return id;
         }
     }

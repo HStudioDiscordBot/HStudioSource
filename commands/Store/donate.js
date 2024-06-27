@@ -1,5 +1,4 @@
-const { SlashCommandBuilder, CommandInteraction, Client, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = require("discord.js");
-const Locale = require("../../class/Locale");
+const { SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -10,11 +9,11 @@ module.exports = {
         }),
     /**
      * 
-     * @param {CommandInteraction} interaction 
-     * @param {Client} client 
-     * @param {Locale} locale 
+     * @param {import("discord.js").CommandInteraction} interaction 
+     * @param {import("discord.js").Client} client 
+     * @param {import("../../class/Locale")} locale 
      */
-    async execute(interaction, client, locale) {
+    async execute(interaction, locale) {
         const modal = new ModalBuilder()
             .setTitle(locale.getLocaleString("command.donate.modal.title"))
             .setCustomId("donate");
