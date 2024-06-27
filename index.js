@@ -4,24 +4,24 @@ const cors = require("cors");
 
 const { version } = require("./package.json");
 
-require('dotenv').config();
+require("dotenv").config();
 
 // Sharding Manager
 const manager = new ShardingManager("bot.js", {
     token: process.env.TOKEN
 });
 
-manager.on('shardCreate', shard => {
-    shard.on('death', () => {
+manager.on("shardCreate", shard => {
+    shard.on("death", () => {
         console.log(`[${shard.id}] is Death`);
-        console.log(`[${shard.id}] Reswawning...`)
-    })
+        console.log(`[${shard.id}] Reswawning...`);
+    });
     console.log(`Launched shard ${shard.id}`);
 });
 
 manager.spawn().then(shards => {
     shards.forEach(shard => {
-        shard.on('message', message => {
+        shard.on("message", message => {
             console.log(`Shard[${shard.id}] : ${message._eval} : ${message._result}`);
         });
     });
@@ -38,7 +38,7 @@ api.get("/status", async (req, res) => {
     const status = {
         version: version,
         totalShards: manager.totalShards
-    }
+    };
 
     status.shards = [];
 

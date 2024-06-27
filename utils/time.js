@@ -9,10 +9,10 @@ function convertToHHMMSS(seconds) {
     const remainingSecondsFinal = remainingSeconds % 60;
 
     if (hours > 0) {
-        const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(remainingSecondsFinal).padStart(2, '0')}`;
+        const formattedTime = `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(remainingSecondsFinal).padStart(2, "0")}`;
         return formattedTime;
     } else {
-        const formattedTime = `${String(minutes).padStart(2, '0')}:${String(remainingSecondsFinal).padStart(2, '0')}`;
+        const formattedTime = `${String(minutes).padStart(2, "0")}:${String(remainingSecondsFinal).padStart(2, "0")}`;
         return formattedTime;
     }
 }
@@ -20,4 +20,4 @@ function convertToHHMMSS(seconds) {
 module.exports = {
     msToSec,
     convertToHHMMSS,
-}
+};

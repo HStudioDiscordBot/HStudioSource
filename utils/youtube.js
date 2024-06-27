@@ -11,4 +11,4 @@ function isHStudioPlayUrl(url) {
 module.exports = {
     isYouTubeUrl,
     isHStudioPlayUrl
-}
+};

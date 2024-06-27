@@ -1,9 +1,9 @@
-const { EmbedBuilder, Colors, Client } = require("discord.js");
+const { EmbedBuilder, Colors } = require("discord.js");
 const { MoonlinkManager } = require("moonlink.js");
 
 /**
  * Initializes MoonlinkManager for the given client.
- * @param {Client} client - The Discord client.
+ * @param {import("discord.js").Client} client - The Discord client.
  */
 
 function initializationMoonlink(client) {
@@ -61,7 +61,7 @@ function initializationMoonlink(client) {
         }
     });
 
-    moon.on("queueEnd", async (player, track) => {
+    moon.on("queueEnd", async (player) => {
         client.channels.cache
             .get(player.textChannel)
             .send({
@@ -101,7 +101,7 @@ function initializationMoonlink(client) {
                         .setDescription(`\`${player.guildId}\` (${track.sourceName == "spotify" ? "<:spotify:1156557829486948413>" : track.sourceName}) Start playing **${track.title}** (${track.url})`)
                         .setTimestamp()
                 ]
-            })
+            });
         });
 
         moon.on("playerCreated", (guildId) => {
@@ -112,7 +112,7 @@ function initializationMoonlink(client) {
                         .setDescription(`Created player in \`${guildId}\``)
                         .setTimestamp()
                 ]
-            })
+            });
         });
     }
 
@@ -121,4 +121,4 @@ function initializationMoonlink(client) {
 
 module.exports = {
     initializationMoonlink
-}
+};
