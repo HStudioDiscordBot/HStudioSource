@@ -33,7 +33,7 @@ module.exports = {
         let query = interaction.options.getString("query");
 
         const region = interaction.member.voice.channel.rtcRegion;
-        
+
         const server = client.moon._nodes.find(node => node.regions.includes(region)) || client.moon._nodes[0];
 
         let player = client.moon.players.create({
@@ -49,7 +49,7 @@ module.exports = {
                 userId: interaction.user.id
             });
 
-            if (!canDirect && canDirect.userId != interaction.user.id) return interaction.editReply({
+            if (!(canDirect && canDirect.userId && canDirect.userId == interaction.user.id)) return interaction.editReply({
                 embeds: [
                     new EmbedBuilder()
                         .setColor(Colors.Red)
@@ -139,7 +139,7 @@ module.exports = {
         }
 
         replyData.embeds.push(trackEmbed);
-        
+
         const now = new Date();
 
         const ads = await AdsSchema.aggregate([

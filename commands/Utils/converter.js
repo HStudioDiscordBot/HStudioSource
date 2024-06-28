@@ -31,7 +31,7 @@ module.exports = {
      * @param {import("discord.js").Client} client 
      * @param {import("../../class/Locale")} locale 
      */
-    async execute(interaction, locale) {
+    async execute(interaction, client, locale) {
         const sub = interaction.options.getSubcommand();
 
         switch (sub) {
