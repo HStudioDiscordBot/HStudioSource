@@ -81,7 +81,7 @@ function initializationMoonlink(client) {
                     embeds: [
                         new EmbedBuilder()
                             .setColor(Colors.Blue)
-                            .setDescription(locale.getLocaleString("moonlink.trackStart.withoutUrl"), [sourceIcon, track.title])
+                            .setDescription(locale.replacePlaceholders(locale.getLocaleString("moonlink.trackStart.withoutUrl"), [sourceIcon, track.title]))
                     ]
                 });
         }

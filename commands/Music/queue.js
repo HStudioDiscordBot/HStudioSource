@@ -59,6 +59,7 @@ module.exports = {
                 if (track.sourceName == "spotify") {
                     return locale.replacePlaceholders(locale.getLocaleString("command.queue.spotify.raw"), [trackIndex, track.title, track.url, track.author]);
                 } else {
+                    console.log(track);
                     return locale.replacePlaceholders(locale.getLocaleString("command.queue.raw"), [trackIndex, track.title, track.author]);
                 }
             }).join("\n");
