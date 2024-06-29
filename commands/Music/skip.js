@@ -16,6 +16,8 @@ module.exports = {
     async execute(interaction, client, locale) {
         if (!interaction.member.voice.channel) return await interaction.reply({ embeds: [new EmbedBuilder().setColor(Colors.Yellow).setTitle(locale.getLocaleString("command.join.userNotInVoiceChannel"))] });
 
+        await interaction.deferReply();
+
         let player = client.moon.players.create({
             guildId: interaction.guild.id,
             voiceChannel: interaction.member.voice.channel.id,
@@ -25,7 +27,7 @@ module.exports = {
 
         if (!player.connected) {
             player.destroy();
-            return interaction.reply({
+            return interaction.editReply({
                 embeds: [
                     new EmbedBuilder()
                         .setColor(Colors.Red)
@@ -35,7 +37,7 @@ module.exports = {
         }
 
         if (player.skip()) {
-            interaction.reply({
+            interaction.editReply({
                 embeds: [
                     new EmbedBuilder()
                         .setColor(Colors.Blue)
@@ -43,7 +45,7 @@ module.exports = {
                 ]
             });
         } else {
-            interaction.reply({
+            interaction.editReply({
                 embeds: [
                     new EmbedBuilder()
                         .setColor(Colors.Red)

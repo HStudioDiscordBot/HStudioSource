@@ -14,6 +14,8 @@ module.exports = {
      * @param {import("../../class/Locale")} locale 
      */
     async execute(interaction, client, locale) {
+        if (!interaction.member.voice.channel) return await interaction.reply({ embeds: [new EmbedBuilder().setColor(Colors.Yellow).setTitle(locale.getLocaleString("command.join.userNotInVoiceChannel"))] });
+
         let player = client.moon.players.create({
             guildId: interaction.guild.id,
             voiceChannel: interaction.member.voice.channel.id,
