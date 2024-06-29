@@ -38,93 +38,99 @@ module.exports = {
                 );
         }
 
-        let commandList = "";
+        try {
+            await interaction.deferReply();
 
-        await client.commandsData.map((command) => {
-            if (interaction.locale == "th") commandList += `> </${command.name}:${command.id}> | ${command.description_localizations.th} \n`;
-            else commandList += `> </${command.name}:${command.id}> | ${command.description} \n`;
-        });
+            let commandList = "";
 
-        const mainEmbed = new EmbedBuilder()
-            .setColor(Colors.Blue)
-            .setTitle(locale.getLocaleString("command.help.helpselection.help"))
-            .setDescription(locale.getLocaleString("command.help.help.description"))
-            .addFields(
-                {
-                    name: locale.getLocaleString("command.help.help.field.usefullinks"),
-                    value: locale.replacePlaceholders(locale.getLocaleString("command.help.help.field.usefullinks.value"), [`https://discord.com/oauth2/authorize?client_id=${process.env.CLIENT_ID}`]),
-                    inline: false
+            await client.commandsData.map((command) => {
+                if (interaction.locale == "th") commandList += `> </${command.name}:${command.id}> | ${command.description_localizations.th} \n`;
+                else commandList += `> </${command.name}:${command.id}> | ${command.description} \n`;
+            });
+
+            const mainEmbed = new EmbedBuilder()
+                .setColor(Colors.Blue)
+                .setTitle(locale.getLocaleString("command.help.helpselection.help"))
+                .setDescription(locale.getLocaleString("command.help.help.description"))
+                .addFields(
+                    {
+                        name: locale.getLocaleString("command.help.help.field.usefullinks"),
+                        value: locale.replacePlaceholders(locale.getLocaleString("command.help.help.field.usefullinks.value"), [`https://discord.com/oauth2/authorize?client_id=${process.env.CLIENT_ID}`]),
+                        inline: false
+                    }
+                );
+
+            const commandsEmbed = new EmbedBuilder()
+                .setColor(Colors.Blue)
+                .setTitle(locale.getLocaleString("command.help.helpselection.command"))
+                .setDescription(commandList);
+
+            const contributorsEmbed = new EmbedBuilder()
+                .setColor(Colors.Blue)
+                .setTitle(locale.getLocaleString("command.help.helpselection.contributor"))
+                .setDescription(`${contributors.map(contributor => { return `- **[${contributor.name}](${contributor.links.github.url})** | <@${contributor.links.discord.id}>`; })}`);
+
+            const selection = createSelectMenu(true, false, false);
+            const selectionActionRow = new ActionRowBuilder().addComponents(selection);
+
+            const message = await interaction.editReply({
+                embeds: [mainEmbed],
+                components: [selectionActionRow]
+            });
+
+            const filter = (interaction) => interaction.customId === "helpselection";
+
+            const collecter = message.createMessageComponentCollector({ filter, time: 60_000 });
+
+            collecter.on("collect", async (i) => {
+                switch (i.values[0]) {
+                    case "helphelp": {
+                        const helpActionRow = new ActionRowBuilder().addComponents(createSelectMenu(true, false, false));
+
+                        await i.update({
+                            embeds: [mainEmbed],
+                            components: [helpActionRow]
+                        });
+                        break;
+                    }
+                    case "helpcommand": {
+                        const commandsActionRow = new ActionRowBuilder().addComponents(createSelectMenu(false, true, false));
+
+                        await i.update({
+                            embeds: [commandsEmbed],
+                            components: [commandsActionRow]
+                        });
+                        break;
+                    }
+                    case "helpcontributor": {
+                        const contributorActionRow = new ActionRowBuilder().addComponents(createSelectMenu(false, false, true));
+
+                        await i.update({
+                            embeds: [contributorsEmbed],
+                            components: [contributorActionRow]
+                        });
+                        break;
+                    }
                 }
-            );
+                collecter.resetTimer();
+            });
 
-        const commandsEmbed = new EmbedBuilder()
-            .setColor(Colors.Blue)
-            .setTitle(locale.getLocaleString("command.help.helpselection.command"))
-            .setDescription(commandList);
-
-        const contributorsEmbed = new EmbedBuilder()
-            .setColor(Colors.Blue)
-            .setTitle(locale.getLocaleString("command.help.helpselection.contributor"))
-            .setDescription(`${contributors.map(contributor => { return `- **[${contributor.name}](${contributor.links.github.url})** | <@${contributor.links.discord.id}>`; })}`);
-
-        const selection = createSelectMenu(true, false, false);
-        const selectionActionRow = new ActionRowBuilder().addComponents(selection);
-
-        const message = await interaction.reply({
-            embeds: [mainEmbed],
-            components: [selectionActionRow]
-        });
-
-        const filter = (interaction) => interaction.customId === "helpselection";
-
-        const collecter = message.createMessageComponentCollector({ filter, time: 60_000 });
-
-        collecter.on("collect", async (i) => {
-            switch (i.values[0]) {
-                case "helphelp": {
-                    const helpActionRow = new ActionRowBuilder().addComponents(createSelectMenu(true, false, false));
-
-                    await i.update({
-                        embeds: [mainEmbed],
-                        components: [helpActionRow]
+            collecter.on("end", async () => {
+                try {
+                    await interaction.editReply({
+                        embeds: [
+                            new EmbedBuilder()
+                                .setColor(Colors.Yellow)
+                                .setTitle(locale.getLocaleString("command.help.timeout"))
+                        ],
+                        components: []
                     });
-                    break;
+                } catch (err) {
+                    console.error(err);
                 }
-                case "helpcommand": {
-                    const commandsActionRow = new ActionRowBuilder().addComponents(createSelectMenu(false, true, false));
-
-                    await i.update({
-                        embeds: [commandsEmbed],
-                        components: [commandsActionRow]
-                    });
-                    break;
-                }
-                case "helpcontributor": {
-                    const contributorActionRow = new ActionRowBuilder().addComponents(createSelectMenu(false, false, true));
-
-                    await i.update({
-                        embeds: [contributorsEmbed],
-                        components: [contributorActionRow]
-                    });
-                    break;
-                }
-            }
-            collecter.resetTimer();
-        });
-
-        collecter.on("end", async () => {
-            try {
-                await interaction.editReply({
-                    embeds: [
-                        new EmbedBuilder()
-                            .setColor(Colors.Yellow)
-                            .setTitle(locale.getLocaleString("command.help.timeout"))
-                    ],
-                    components: []
-                });
-            } catch (err) {
-                console.error(err);
-            }
-        });
+            });
+        } catch (err) {
+            console.error(err);
+        }
     }
 };
