@@ -127,7 +127,7 @@ function initializationMoonlink(client) {
                 embeds: [
                     new EmbedBuilder()
                         .setColor(Colors.Blue)
-                        .setDescription(`\`${player.guildId}\` (${track.sourceName == "spotify" ? "<:spotify:1156557829486948413>" : track.sourceName}) [${player.node}] Start playing **${track.title}** (${track.url})`)
+                        .setDescription(`\`${player.guildId}\` (${track.sourceName == "spotify" ? "<:spotify:1156557829486948413>" : track.sourceName}) [${player.node.identifier}] Start playing **${track.title}** (${track.url})`)
                         .setTimestamp()
                 ]
             });
