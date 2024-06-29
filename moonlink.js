@@ -17,7 +17,7 @@ async function getLocale(userId) {
                 owner: userId
             });
 
-            if (data.locale) userLocale = data.locale;
+            if (data && data.locale) userLocale = data.locale;
         }
     } catch (err) {
         console.error(err);
