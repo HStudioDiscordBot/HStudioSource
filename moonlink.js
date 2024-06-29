@@ -127,21 +127,24 @@ function initializationMoonlink(client) {
                 embeds: [
                     new EmbedBuilder()
                         .setColor(Colors.Blue)
-                        .setDescription(`\`${player.guildId}\` (${track.sourceName == "spotify" ? "<:spotify:1156557829486948413>" : track.sourceName}) Start playing **${track.title}** (${track.url})`)
+                        .setDescription(`\`${player.guildId}\` (${track.sourceName == "spotify" ? "<:spotify:1156557829486948413>" : track.sourceName}) [${player.node}] Start playing **${track.title}** (${track.url})`)
                         .setTimestamp()
                 ]
             });
         });
 
-        moon.on("playerCreated", (guildId) => {
-            analyticsChannel.send({
-                embeds: [
-                    new EmbedBuilder()
-                        .setColor(Colors.Green)
-                        .setDescription(`Created player in \`${guildId}\``)
-                        .setTimestamp()
-                ]
-            });
+        moon.on("playerCreated", async (guildId) => {
+            const guild = await client.guilds.fetch(guildId);
+            if (guild) {
+                analyticsChannel.send({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setColor(Colors.Green)
+                            .setDescription(`Created player in \`${guild.id}\` (${guild.name})`)
+                            .setTimestamp()
+                    ]
+                });
+            }
         });
     }
 
