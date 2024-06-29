@@ -1,6 +1,6 @@
 {
   "name": "hstudio",
-  "version": "2.2.54",
+  "version": "2.2.55",
   "description": "HStudio Discord Music Bot Source Code",
   "main": "index.js",
   "scripts": {
