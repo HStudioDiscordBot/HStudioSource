@@ -34,7 +34,7 @@ module.exports = {
 
         const region = interaction.member.voice.channel.rtcRegion;
 
-        const server = client.moon._nodes.find(node => node.regions.includes(region)) || client.moon._nodes[0];
+        const server = client.moon._nodes.find(node => node.regions.includes(region)) || client.moon._nodes[Math.floor(Math.random() * client.moon._nodes.length)];
 
         let player = client.moon.players.create({
             guildId: interaction.guild.id,
