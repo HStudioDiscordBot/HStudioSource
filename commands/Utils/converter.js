@@ -36,9 +36,10 @@ module.exports = {
 
         switch (sub) {
             case "youtube-url": {
+                await interaction.deferReply();
                 const url = interaction.options.getString("url");
 
-                if (!isValidURL(url)) return await interaction.reply({
+                if (!isValidURL(url)) return await interaction.editReply({
                     embeds: [
                         new EmbedBuilder()
                             .setColor(Colors.Red)
@@ -47,7 +48,7 @@ module.exports = {
                     ]
                 });
 
-                if (!isYouTubeUrl(url)) return await interaction.reply({
+                if (!isYouTubeUrl(url)) return await interaction.editReply({
                     embeds: [
                         new EmbedBuilder()
                             .setColor(Colors.Red)
@@ -56,12 +57,12 @@ module.exports = {
                     ]
                 });
 
-                await interaction.reply({
+                await interaction.editReply({
                     embeds: [
                         new EmbedBuilder()
                             .setColor(Colors.Blue)
                             .setTitle(locale.getLocaleString("command.converter.youtube-url.success"))
-                            .setDescription(`\`\`\`${url.replace("www.youtube.com", "play.hstudio.hewkawar.xyz").replace("youtu.be", "play.hstudio.hewkawar.xyz")}\`\`\``)
+                            .setDescription(`\`\`\`${url.replace("www.youtube.com", "play.hstudio.hewkawar.xyz").replace("youtu.be", "play.hstudio.hewkawar.xyz/watch?v=")}\`\`\``)
                     ]
                 });
                 break;
