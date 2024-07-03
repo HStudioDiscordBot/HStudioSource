@@ -62,43 +62,51 @@ function initializationMoonlink(client) {
 
         const locale = await getLocale(track.requester);
 
-        if (track.sourceName == "spotify") {
-            sourceIcon = "<:spotify:1156557829486948413>";
+        try {
+            if (track.sourceName == "spotify") {
+                sourceIcon = "<:spotify:1156557829486948413>";
 
-            client.channels.cache
-                .get(player.textChannel)
-                .send({
-                    embeds: [
-                        new EmbedBuilder()
-                            .setColor(Colors.Blue)
-                            .setDescription(locale.replacePlaceholders(locale.getLocaleString("moonlink.trackStart.withUrl"), [sourceIcon, track.title, track.url]))
-                    ]
-                });
-        } else {
-            client.channels.cache
-                .get(player.textChannel)
-                .send({
-                    embeds: [
-                        new EmbedBuilder()
-                            .setColor(Colors.Blue)
-                            .setDescription(locale.replacePlaceholders(locale.getLocaleString("moonlink.trackStart.withoutUrl"), [sourceIcon, track.title]))
-                    ]
-                });
+                client.channels.cache
+                    .get(player.textChannel)
+                    .send({
+                        embeds: [
+                            new EmbedBuilder()
+                                .setColor(Colors.Blue)
+                                .setDescription(locale.replacePlaceholders(locale.getLocaleString("moonlink.trackStart.withUrl"), [sourceIcon, track.title, track.url]))
+                        ]
+                    });
+            } else {
+                client.channels.cache
+                    .get(player.textChannel)
+                    .send({
+                        embeds: [
+                            new EmbedBuilder()
+                                .setColor(Colors.Blue)
+                                .setDescription(locale.replacePlaceholders(locale.getLocaleString("moonlink.trackStart.withoutUrl"), [sourceIcon, track.title]))
+                        ]
+                    });
+            }
+        } catch (err) {
+            console.error(err);
         }
     });
 
     moon.on("queueEnd", async (player, track) => {
         const locale = track ? await getLocale(track.requester) : new Locale("en-US");
 
-        client.channels.cache
-            .get(player.textChannel)
-            .send({
-                embeds: [
-                    new EmbedBuilder()
-                        .setColor(Colors.Red)
-                        .setDescription(locale.getLocaleString("moonlink.trackEnd"))
-                ]
-            });
+        try {
+            client.channels.cache
+                .get(player.textChannel)
+                .send({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setColor(Colors.Red)
+                            .setDescription(locale.getLocaleString("moonlink.trackEnd"))
+                    ]
+                });
+        } catch (err) {
+            console.error(err);
+        }
 
         player.destroy();
     });
@@ -122,30 +130,34 @@ function initializationMoonlink(client) {
 
         if (!analyticsChannel) return;
 
-        moon.on("trackStart", (player, track) => {
-            analyticsChannel.send({
-                embeds: [
-                    new EmbedBuilder()
-                        .setColor(Colors.Blue)
-                        .setDescription(`\`${player.guildId}\` (${track.sourceName == "spotify" ? "<:spotify:1156557829486948413>" : track.sourceName}) [${player.node.identifier}] Start playing **${track.title}** (${track.url})`)
-                        .setTimestamp()
-                ]
-            });
-        });
-
-        moon.on("playerCreated", async (guildId) => {
-            const guild = await client.guilds.fetch(guildId);
-            if (guild) {
+        try {
+            moon.on("trackStart", (player, track) => {
                 analyticsChannel.send({
                     embeds: [
                         new EmbedBuilder()
-                            .setColor(Colors.Green)
-                            .setDescription(`Created player in \`${guild.id}\` (${guild.name})`)
+                            .setColor(Colors.Blue)
+                            .setDescription(`\`${player.guildId}\` (${track.sourceName == "spotify" ? "<:spotify:1156557829486948413>" : track.sourceName}) [${player.node.identifier}] Start playing **${track.title}** (${track.url})`)
                             .setTimestamp()
                     ]
                 });
-            }
-        });
+            });
+
+            moon.on("playerCreated", async (guildId) => {
+                const guild = await client.guilds.fetch(guildId);
+                if (guild) {
+                    analyticsChannel.send({
+                        embeds: [
+                            new EmbedBuilder()
+                                .setColor(Colors.Green)
+                                .setDescription(`Created player in \`${guild.id}\` (${guild.name})`)
+                                .setTimestamp()
+                        ]
+                    });
+                }
+            });
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     client.moon = moon;
