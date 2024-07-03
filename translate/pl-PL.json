@@ -61,7 +61,6 @@
     "command.queue.title": "Kolejka śladów",
     "command.queue.noqueue": "⚠️ Brak kolejki dla następnego utworu",
     "command.queue.spotify.raw": "{0}. **[{1}]({2})** autorstwa `{3}`",
-    "command.queue.raw": "{0}. **{1}** autorstwa `{3}`",
     "command.queue.totalTracks": "จำนวน {0} เพลง",
     "common.version": "Wersja",
     "command.footer": "{0} | Wersja: {1}",

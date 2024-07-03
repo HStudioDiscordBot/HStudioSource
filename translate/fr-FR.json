@@ -61,7 +61,6 @@
     "command.queue.title": "File d'attente des traces",
     "command.queue.noqueue": "⚠️ Pas de file d'attente pour la piste suivante",
     "command.queue.spotify.raw": "{0}. **[{1}]({2})** par `{3}`",
-    "command.queue.raw": "{0}. **{1}** par `{3}`",
     "command.queue.totalTracks": "{0} pistes",
     "common.version": "Version",
     "command.footer": "{0} | Version : {1}",

@@ -61,7 +61,6 @@
     "command.queue.title": "Cola de pistas",
     "command.queue.noqueue": "⚠️ No hay cola para la siguiente pista",
     "command.queue.spotify.raw": "{0}. **[{1}]({2})** por `{3}`",
-    "command.queue.raw": "{0}. **{1}** por `{3}`",
     "command.queue.totalTracks": "Rutas {0}",
     "common.version": "Versión",
     "command.footer": "{0} | Versión: {1}",

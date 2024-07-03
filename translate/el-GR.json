@@ -61,7 +61,6 @@
     "command.queue.title": "Ουρά κομματιών",
     "command.queue.noqueue": "⚠️ Δεν υπάρχει ουρά για το επόμενο κομμάτι",
     "command.queue.spotify.raw": "{0}. **[{1}]({2})** από `{3}`",
-    "command.queue.raw": "{0}. **{1}** από `{3}`",
     "command.queue.totalTracks": "จำนวน {0} เพลง",
     "common.version": "Έκδοση",
     "command.footer": "{0} - Έκδοση: {1}",

@@ -61,7 +61,6 @@
     "command.queue.title": "Kappaleiden jono",
     "command.queue.noqueue": "⚠️ Ei jonoa seuraavalle kappaleelle",
     "command.queue.spotify.raw": "{0}. **[{1}]({2})** kirjoittaja `{3}`",
-    "command.queue.raw": "{0}. **{1}** kirjoittaja `{3}`",
     "command.queue.totalTracks": "{0} kappaletta",
     "common.version": "Versio",
     "command.footer": "{0} - Versio: {1}",
