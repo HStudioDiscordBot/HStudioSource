@@ -61,7 +61,6 @@
     "command.queue.title": "Fronta skladeb",
     "command.queue.noqueue": "⚠️ Žádná fronta pro další skladbu",
     "command.queue.spotify.raw": "{0}. **[{1}]({2})** od `{3}`",
-    "command.queue.raw": "{0}. **{1}** od `{3}`",
     "command.queue.totalTracks": "{0} skladby",
     "common.version": "Verze",
     "command.footer": "{0} | Verze: {1}",
