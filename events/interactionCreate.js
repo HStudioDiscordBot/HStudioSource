@@ -29,6 +29,67 @@ async function saveLastUserLocale(userId, locale) {
     }
 }
 
+/**
+ * Handle command execution.
+ * 
+ * @param {import("discord.js").Interaction} interaction 
+ * @param {import("discord.js").Client} client 
+ * @param {Locale} locale 
+ */
+async function handleCommand(interaction, client, locale) {
+    const command = client.commands.get(interaction.commandName);
+    if (!command) return;
+
+    try {
+        await command.execute(interaction, client, locale);
+    } catch (err) {
+        console.log(err);
+        const replyPayload = {
+            embeds: [
+                new EmbedBuilder()
+                    .setColor(Colors.Red)
+                    .setTitle(locale.getLocaleString("interaction.command.error"))
+                    .setDescription(`\`\`\`${err}\`\`\``)
+            ],
+            ephemeral: true
+        };
+        if (interaction.deferred || interaction.replied) {
+            await interaction.editReply(replyPayload);
+        } else if (!interaction.replied) {
+            await interaction.reply(replyPayload);
+        }
+    }
+}
+
+/**
+ * Handle interaction based on type.
+ * 
+ * @param {import("discord.js").Interaction} interaction 
+ * @param {import("discord.js").Client} client 
+ * @param {Locale} locale 
+ */
+async function handleInteraction(interaction, client, locale) {
+    if (interaction.isCommand()) {
+        await handleCommand(interaction, client, locale);
+    } else if (interaction.isModalSubmit()) {
+        const modals = {
+            "donate": donateModal.execute,
+            "create_ads": createAdsModal.execute
+        };
+
+        const action = modals[interaction.customId];
+        if (action) await action(interaction, client, locale);
+    } else if (interaction.isButton()) {
+        const buttons = {
+            "buttonCreateAds": buttonCreateAds.execute,
+            "adsConfirm": buttonAdsConfirm.execute,
+            "adsDeny": buttonAdsDeny.execute
+        };
+
+        const action = buttons[interaction.customId];
+        if (action) await action(interaction, client, locale);
+    }
+}
 
 module.exports = {
     name: Events.InteractionCreate,
@@ -40,66 +101,10 @@ module.exports = {
     async execute(interaction, client) {
         const locale = new Locale(interaction.locale);
 
-        if (interaction.isCommand()) {
-            const command = client.commands.get(interaction.commandName);
-
-            if (!command) return;
-
-            try {
-                await command.execute(interaction, client, locale);
-            } catch (err) {
-                console.log(err);
-                if (interaction.deferred || interaction.replied) {
-                    await interaction.editReply({
-                        embeds: [
-                            new EmbedBuilder()
-                                .setColor(Colors.Red)
-                                .setTitle(locale.getLocaleString("interaction.command.error"))
-                                .setDescription(`\`\`\`${err}\`\`\``)
-                        ],
-                        ephemeral: true
-                    });
-                } else if (!interaction.replied) {
-                    await interaction.reply({
-                        embeds: [
-                            new EmbedBuilder()
-                                .setColor(Colors.Red)
-                                .setTitle(locale.getLocaleString("interaction.command.error"))
-                                .setDescription(`\`\`\`${err}\`\`\``)
-                        ],
-                        ephemeral: true
-                    });
-                }
-            }
-        } else if (interaction.isModalSubmit()) {
-            const customId = interaction.customId;
-
-            switch (customId) {
-                case "donate":
-                    await donateModal.execute(interaction, client, locale);
-                    break;
-                case "create_ads":
-                    await createAdsModal.execute(interaction, client, locale);
-                    break;
-            }
-        } else if (interaction.isButton()) {
-            const customId = interaction.customId;
-
-            switch (customId) {
-                case "buttonCreateAds":
-                    await buttonCreateAds.execute(interaction, client, locale);
-                    break;
-                case "adsConfirm":
-                    await buttonAdsConfirm.execute(interaction, client, locale);
-                    break;
-                case "adsDeny":
-                    await buttonAdsDeny.execute(interaction, client, locale);
-                    break;
-            }
-        }
+        await handleInteraction(interaction, client, locale);
 
         try {
-            saveLastUserLocale(interaction.user.id, interaction.locale);
+            await saveLastUserLocale(interaction.user.id, interaction.locale);
         } catch (err) {
             console.error(err);
         }
