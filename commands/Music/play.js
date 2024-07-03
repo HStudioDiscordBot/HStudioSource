@@ -102,7 +102,16 @@ module.exports = {
         const trackEmbed = new EmbedBuilder()
             .setColor(Colors.Blue);
 
-        if (res.loadType === "playlist") {
+        if (res.loadType == "error") {
+            return await interaction.editReply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(Colors.Yellow)
+                        .setTitle(locale.getLocaleString("command.play.notfound"))
+                        .setDescription(`\`\`\`${res.data.message}\`\`\``)
+                ]
+            });
+        } else if (res.loadType === "playlist") {
             trackEmbed.setTitle(`▶️ ${res.playlistInfo.name}`)
                 .addFields(
                     { name: locale.getLocaleString("command.play.duration"), value: `\`\`\`${convertToHHMMSS(msToSec(res.playlistInfo.duration))}\`\`\``, inline: true },
