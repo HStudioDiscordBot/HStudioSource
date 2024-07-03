@@ -53,10 +53,14 @@ async function handleCommand(interaction, client, locale) {
             ],
             ephemeral: true
         };
-        if (interaction.deferred || interaction.replied) {
-            await interaction.editReply(replyPayload);
-        } else if (!interaction.replied) {
-            await interaction.reply(replyPayload);
+        try {
+            if (interaction.deferred || interaction.replied) {
+                await interaction.editReply(replyPayload);
+            } else if (!interaction.replied) {
+                await interaction.reply(replyPayload);
+            }
+        } catch (err) {
+            console.error(err);
         }
     }
 }
