@@ -123,14 +123,6 @@ module.exports = {
                 player.queue.add(track);
             }
         } else {
-            if (res.tracks.length == 0) return interaction.editReply({
-                embeds: [
-                    new EmbedBuilder()
-                        .setColor(Colors.Yellow)
-                        .setTitle(locale.getLocaleString("command.play.notfound"))
-                ]
-            });
-
             player.queue.add(res.tracks[0]);
 
             if (res.tracks[0].sourceName == "spotify") {
