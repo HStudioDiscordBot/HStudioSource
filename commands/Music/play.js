@@ -121,7 +121,7 @@ module.exports = {
                         .setTitle(locale.getLocaleString("command.play.notfound"))
                 ]
             });
-            
+
             player.queue.add(res.tracks[0]);
 
             if (res.tracks[0].sourceName == "spotify") {
