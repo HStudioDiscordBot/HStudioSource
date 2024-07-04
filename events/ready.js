@@ -14,7 +14,7 @@ module.exports = {
     async execute(client) {
         function setActivity() {
             client.user.setActivity({
-                name: `🔊 /help | ${client.guilds.cache.size.toLocaleString()} servers | V${version}`,
+                name: `/help | ${client.guilds.cache.size.toLocaleString()} servers | V${version}`,
                 type: ActivityType.Custom
             });
         }
