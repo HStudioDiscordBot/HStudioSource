@@ -73,6 +73,15 @@ NODES='[{"host":"0.0.0.0","port":2333,"password":"your_lavalink_password","secur
 ```dotenv
 # Analytics channel ID
 ANALYTIC_CHANNEL_ID=your_analytic_channel_id_here
+
+# Log channel ID
+GUILD_LOG=your_guilds_log_channel_id_here
+```
+
+**Shards**
+```dotenv
+# Total Shards default "auto"
+SHARDS=auto
 ```
 
 **MongoDB**
@@ -107,6 +116,8 @@ docker run -d --restart always \
     -e NODES='[{"host":"0.0.0.0","port":2333,"password":"your_lavalink_password","secure":false}]' \
     -e ANALYTIC_CHANNEL_ID=your_analytic_channel_id_here \
     -e MONGODB_URL=your_mongodb_url_here \
+    -e GUILD_LOG=your_log_channel_id_here \
+    -e SHARDS=auto \
     -e PORT=8233 \
     -p 8233:8233 \
     hewkawar/hstudio-bot:latest
