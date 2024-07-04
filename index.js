@@ -8,7 +8,8 @@ require("dotenv").config();
 
 // Sharding Manager
 const manager = new ShardingManager("bot.js", {
-    token: process.env.TOKEN
+    token: process.env.TOKEN,
+    totalShards: parseInt(process.env.SHARDS) || process.env.SHARDS || "auto"
 });
 
 manager.on("shardCreate", shard => {
