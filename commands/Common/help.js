@@ -117,14 +117,16 @@ module.exports = {
 
             collecter.on("end", async () => {
                 try {
-                    await interaction.editReply({
-                        embeds: [
-                            new EmbedBuilder()
-                                .setColor(Colors.Yellow)
-                                .setTitle(locale.getLocaleString("command.help.timeout"))
-                        ],
-                        components: []
-                    });
+                    if (message) {
+                        await interaction.editReply({
+                            embeds: [
+                                new EmbedBuilder()
+                                    .setColor(Colors.Yellow)
+                                    .setTitle(locale.getLocaleString("command.help.timeout"))
+                            ],
+                            components: []
+                        });
+                    }
                 } catch (err) {
                     console.error(err);
                 }
