@@ -22,7 +22,7 @@ module.exports = {
         setActivity();
 
         console.log(`[${client.shard.ids}] Ready! Logged in as ${client.user.tag}`);
-        console.log(`[${client.shard.ids}] Server Count: ${client.guilds.cache.size}`);
+        console.log(`[${client.shard.ids}] Server Count: ${client.guilds.cache.size.toLocaleString()}`);
 
         setInterval(setActivity, 60 * 1000);
 
