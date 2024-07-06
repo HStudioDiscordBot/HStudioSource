@@ -62,7 +62,7 @@ module.exports = {
                         new EmbedBuilder()
                             .setColor(Colors.Blue)
                             .setTitle(locale.getLocaleString("command.converter.youtube-url.success"))
-                            .setDescription(`\`\`\`${url.replace("www.youtube.com", "play.hstudio.hewkawar.xyz").replace("youtu.be", "play.hstudio.hewkawar.xyz/watch?v=")}\`\`\``)
+                            .setDescription(`\`\`\`${url.replace("www.youtube.com", "play.hstudio.hewkawar.xyz").replace("youtu.be/", "play.hstudio.hewkawar.xyz/watch?v=")}\`\`\``)
                     ]
                 });
                 break;
