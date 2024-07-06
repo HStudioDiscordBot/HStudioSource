@@ -118,7 +118,7 @@ module.exports = {
             collecter.on("end", async () => {
                 try {
                     if (message) {
-                        await interaction.editReply({
+                        await message.edit({
                             embeds: [
                                 new EmbedBuilder()
                                     .setColor(Colors.Yellow)
