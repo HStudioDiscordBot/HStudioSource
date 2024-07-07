@@ -64,7 +64,7 @@ module.exports = {
             });
         }
 
-        if (player.setVolume(level)) {
+        if (player.playing && player.setVolume(level)) {
             interaction.reply({
                 embeds: [
                     new EmbedBuilder()
