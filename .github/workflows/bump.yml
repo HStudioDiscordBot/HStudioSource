@@ -1,0 +1,29 @@
+name: Patch Version
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  version:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Increment version
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          npm version patch
+
+      - name: Push changes (optional, requires a secret)
+        run: |
+          git push origin ${{ github.ref }}
+          # Consider using a Personal Access Token with limited permissions for pushing
+          # See https://docs.github.com/en/actions/guides/using-secrets-with-github-actions for details
