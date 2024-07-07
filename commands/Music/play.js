@@ -26,9 +26,9 @@ module.exports = {
      * @param {import("../../class/Locale")} locale 
      */
     async execute(interaction, client, locale) {
-        if (!interaction.member.voice.channel) return await interaction.reply({ embeds: [new EmbedBuilder().setColor(Colors.Yellow).setTitle(locale.getLocaleString("command.play.userNotInVoiceChannel"))] });
-
         await interaction.deferReply();
+
+        if (!interaction.member.voice.channel) return await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Yellow).setTitle(locale.getLocaleString("command.play.userNotInVoiceChannel"))] });
 
         let query = interaction.options.getString("query");
 
