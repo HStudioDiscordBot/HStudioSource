@@ -27,7 +27,7 @@
     "discord.js": "^14.15.3",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "mongoose": "^8.4.4",
+    "mongoose": "^8.4.5",
     "moonlink.js": "^3.6.64"
   },
   "devDependencies": {
