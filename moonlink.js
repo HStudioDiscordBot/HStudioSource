@@ -6,7 +6,7 @@ const LocaleSchema = require("./schemas/Locale");
 /**
  * 
  * @param {string} userId 
- * @returns {Promise<Locale>}
+ * @returns {Promise<import("./class/Locale")>}
  */
 async function getLocale(userId) {
     let userLocale = "en-US";
