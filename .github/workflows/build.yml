@@ -2,8 +2,7 @@ name: Build and Push to Docker Hub
 
 on:
   release: 
-    types: 
-      - published
+    types: [published]
 
 jobs:
   build:
