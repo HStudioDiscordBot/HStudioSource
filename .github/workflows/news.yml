@@ -1,0 +1,20 @@
+name: News Webhook
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Discord Webhook
+        uses: tsickert/discord-webhook@v6.0.0
+        with:
+          webhook-url: ${{ secrets.NEWS_WEBHOOK }}
+          content: |
+            New Version for <@&1165863996927250432>
+            
+            Release: ${{ github.event.release.html_url }}
+            
+            <@&1165868974710456421>
