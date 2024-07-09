@@ -1,9 +1,7 @@
 name: Patch Version
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch: 
 
 jobs:
   version:
