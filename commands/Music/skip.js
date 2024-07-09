@@ -36,6 +36,25 @@ module.exports = {
             });
         }
 
+        if (!player.playing) return await interaction.reply({
+            embeds: [
+                new EmbedBuilder()
+                    .setTitle(locale.getLocaleString("command.skip.fail"))
+                    .setColor(Colors.Yellow)
+            ],
+            ephemeral: true
+        });
+
+        const queue = player.queue.getQueue();
+
+        if (queue.length == 0) return await interaction.reply({
+            embeds: [
+                new EmbedBuilder()
+                    .setColor(Colors.Yellow)
+                    .setTitle(locale.getLocaleString("command.queue.noqueue"))
+            ]
+        });
+
         if (player.skip()) {
             interaction.editReply({
                 embeds: [

@@ -34,6 +34,15 @@ module.exports = {
             });
         }
 
+        if (!player.playing) return await interaction.reply({
+            embeds: [
+                new EmbedBuilder()
+                    .setTitle(locale.getLocaleString("command.resume.fail"))
+                    .setColor(Colors.Yellow)
+            ],
+            ephemeral: true
+        });
+
         if (player.resume()) {
             await interaction.reply({
                 embeds: [

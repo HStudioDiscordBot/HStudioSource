@@ -49,7 +49,7 @@ module.exports = {
                 embeds: [
                     new EmbedBuilder()
                         .setTitle(locale.getLocaleString("command.volume.level.more_0"))
-                        .setColor(Colors.Blue)
+                        .setColor(Colors.Yellow)
                 ],
                 ephemeral: true
             });
@@ -58,13 +58,22 @@ module.exports = {
                 embeds: [
                     new EmbedBuilder()
                         .setTitle(locale.getLocaleString("command.volume.level.less_200"))
-                        .setColor(Colors.Blue)
+                        .setColor(Colors.Yellow)
                 ],
                 ephemeral: true
             });
         }
 
-        if (player.playing && player.setVolume(level)) {
+        if (!player.playing) return await interaction.reply({
+            embeds: [
+                new EmbedBuilder()
+                    .setTitle(locale.getLocaleString("command.volume.fail"))
+                    .setColor(Colors.Yellow)
+            ],
+            ephemeral: true
+        });
+
+        if (player.setVolume(level)) {
             interaction.reply({
                 embeds: [
                     new EmbedBuilder()
