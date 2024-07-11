@@ -32,11 +32,7 @@ async function getLocale(userId) {
  */
 function initializationMoonlink(client) {
     const moon = new MoonlinkManager(JSON.parse(process.env.NODES), {}, (guild, sPayload) => {
-        try {
-            client.guilds.cache.get(guild).shard.send(JSON.parse(sPayload));
-        } catch (err) {
-            console.error(err);
-        }
+        client.guilds.cache.get(guild).shard.send(JSON.parse(sPayload));
     });
 
     moon.on("nodeCreate", (node) => {
