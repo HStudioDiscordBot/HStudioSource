@@ -64,7 +64,7 @@ function initializationMoonlink(client) {
 
         try {
             if (track.sourceName == "spotify") {
-                sourceIcon = "<:spotify:1156557829486948413>";
+                sourceIcon = "<:spotify:1264178732739072020>";
 
                 client.channels.cache
                     .get(player.textChannel)
@@ -136,7 +136,7 @@ function initializationMoonlink(client) {
                     embeds: [
                         new EmbedBuilder()
                             .setColor(Colors.Blue)
-                            .setDescription(`\`${player.guildId}\` (${track.sourceName == "spotify" ? "<:spotify:1156557829486948413>" : track.sourceName}) [${player.node.identifier}] Start playing **${track.title}** (${track.url})`)
+                            .setDescription(`\`${player.guildId}\` (${track.sourceName == "spotify" ? "<:spotify:1264178732739072020>" : track.sourceName}) [${player.node.identifier}] Start playing **${track.title}** (${track.url})`)
                             .setTimestamp()
                     ]
                 });
