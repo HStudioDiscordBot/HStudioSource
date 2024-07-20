@@ -74,14 +74,31 @@ api.get("/status/all", async (req, res) => {
 });
 
 api.get("/guilds", async (req, res) => {
-    const guilds = await rest.get(Routes.userGuilds());
+    let guildsList = [];
+    let before = null;
 
-    const guildsList = guilds.map((val) => val.id);
+    try {
+        while (true) {
+            const queryParams = before ? { before, limit: 200 } : { limit: 200 };
+            const guilds = await rest.get(Routes.userGuilds(), { query: queryParams });
 
-    return res.status(200).json({
-        total: guildsList.length,
-        list: guildsList
-    });
+            if (guilds.length === 0) break;
+
+            guildsList.push(...guilds.map((val) => val.id));
+
+            if (guilds.length < 200) break;
+
+            before = guilds[guilds.length - 1].id;
+        }
+
+        return res.status(200).json({
+            total: guildsList.length,
+            list: guildsList
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'An error occurred while fetching guilds' });
+    }
 });
 
 api.listen(port, () => {
