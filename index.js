@@ -75,11 +75,11 @@ api.get("/status/all", async (req, res) => {
 
 api.get("/guilds", async (req, res) => {
     let guildsList = [];
-    let before = null;
+    let after = null;
 
     try {
         while (true) {
-            const queryParams = before ? { before, limit: 200 } : { limit: 200 };
+            const queryParams = after ? { after, limit: 200 } : { limit: 200 };
             const guilds = await rest.get(Routes.userGuilds(), { query: queryParams });
 
             if (guilds.length === 0) break;
@@ -88,7 +88,7 @@ api.get("/guilds", async (req, res) => {
 
             if (guilds.length < 200) break;
 
-            before = guilds[guilds.length - 1].id;
+            after = guilds[guilds.length - 1].id;
         }
 
         return res.status(200).json({
