@@ -36,11 +36,11 @@ const rest = new REST({
 }).setToken(process.env.TOKEN);
 
 api.get("/invite", async (req, res) => {
-    return res.redirect(`https://discord.com/oauth2/authorize?client_id=${process.env.CLIENT_ID}`)
+    return res.redirect(`https://discord.com/oauth2/authorize?client_id=${process.env.CLIENT_ID}`);
 });
 
 api.get("/status", async (req, res) => {
-    const shards = manager.shards.map((shard) => { return { id: shard.id, online: shard.ready } });
+    const shards = manager.shards.map((shard) => { return { id: shard.id, online: shard.ready }; });
 
     const status = {
         version: package.version,
@@ -52,7 +52,7 @@ api.get("/status", async (req, res) => {
 });
 
 api.get("/status/all", async (req, res) => {
-    const shards = manager.shards.map((shard) => { return { id: shard.id, online: shard.ready } });
+    const shards = manager.shards.map((shard) => { return { id: shard.id, online: shard.ready }; });
 
     const guilds = await rest.get(Routes.userGuilds());
     const user = await rest.get(Routes.user());
