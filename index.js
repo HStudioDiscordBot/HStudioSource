@@ -1,8 +1,10 @@
 const { ShardingManager } = require("discord.js");
+const { REST } = require("@discordjs/rest");
+const { Routes } = require("discord-api-types/v10");
 const express = require("express");
 const cors = require("cors");
 
-const { version } = require("./package.json");
+const package = require("./package.json");
 
 require("dotenv").config();
 
@@ -20,13 +22,7 @@ manager.on("shardCreate", shard => {
     console.log(`Launched shard ${shard.id}`);
 });
 
-manager.spawn().then(shards => {
-    shards.forEach(shard => {
-        shard.on("message", message => {
-            console.log(`Shard[${shard.id}] : ${message._eval} : ${message._result}`);
-        });
-    });
-}).catch(console.error);
+manager.spawn();
 
 // API Manager
 const port = process.env.PORT || 8233;
@@ -35,22 +31,57 @@ const api = express();
 api.use(cors());
 api.use(express.json());
 
+const rest = new REST({
+    version: "10"
+}).setToken(process.env.TOKEN);
+
+api.get("/invite", async (req, res) => {
+    return res.redirect(`https://discord.com/oauth2/authorize?client_id=${process.env.CLIENT_ID}`)
+});
+
 api.get("/status", async (req, res) => {
+    const shards = manager.shards.map((shard) => { return { id: shard.id, online: shard.ready } });
+
     const status = {
-        version: version,
-        totalShards: manager.totalShards
+        version: package.version,
+        totalShards: manager.totalShards,
+        shards: shards
     };
 
-    status.shards = [];
+    return res.status(200).json(status);
+});
 
-    manager.shards.forEach(shard => {
-        status.shards.push({
-            id: shard.id,
-            online: shard.ready,
-        });
-    });
+api.get("/status/all", async (req, res) => {
+    const shards = manager.shards.map((shard) => { return { id: shard.id, online: shard.ready } });
+
+    const guilds = await rest.get(Routes.userGuilds());
+    const user = await rest.get(Routes.user());
+
+    const guildsList = guilds.map((val) => val.id);
+
+    const status = {
+        name: user.username,
+        version: package.version,
+        totalShards: manager.totalShards,
+        shards: shards,
+        guilds: {
+            total: guildsList.length,
+            list: guildsList
+        }
+    };
 
     return res.status(200).json(status);
+});
+
+api.get("/guilds", async (req, res) => {
+    const guilds = await rest.get(Routes.userGuilds());
+
+    const guildsList = guilds.map((val) => val.id);
+
+    return res.status(200).json({
+        total: guildsList.length,
+        list: guildsList
+    });
 });
 
 api.listen(port, () => {
