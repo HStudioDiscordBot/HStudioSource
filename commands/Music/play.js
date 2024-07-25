@@ -108,7 +108,6 @@ module.exports = {
                 ]
             });
         } else if (res.loadType === "playlist") {
-            console.log(res);
             trackEmbed.setTitle(`▶️ ${res.data.info.name}`)
                 .addFields(
                     { name: locale.getLocaleString("command.play.voiceChannel"), value: `<#${interaction.member.voice.channel.id}>`, inline: true },
