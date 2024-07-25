@@ -108,9 +108,9 @@ module.exports = {
                 ]
             });
         } else if (res.loadType === "playlist") {
-            trackEmbed.setTitle(`▶️ ${res.playlistInfo.name}`)
+            console.log(res);
+            trackEmbed.setTitle(`▶️ ${res.data.info.name}`)
                 .addFields(
-                    { name: locale.getLocaleString("command.play.duration"), value: `\`\`\`${convertToHHMMSS(msToSec(res.playlistInfo.duration))}\`\`\``, inline: true },
                     { name: locale.getLocaleString("command.play.voiceChannel"), value: `<#${interaction.member.voice.channel.id}>`, inline: true },
                     { name: locale.getLocaleString("command.play.owner"), value: `<@${interaction.user.id}>`, inline: true }
                 );
