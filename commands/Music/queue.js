@@ -116,9 +116,13 @@ module.exports = {
         });
 
         collector.on("end", () => {
-            message.edit({
-                components: []
-            });
+            try {
+                message.edit({
+                    components: []
+                });
+            } catch (err) {
+                console.error(err);
+            }
         });
     }
 };
