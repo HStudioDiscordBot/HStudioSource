@@ -18,7 +18,7 @@ module.exports = {
 
         await interaction.deferReply();
 
-        let player = client.moon.players.create({
+        let player = client.moon.createPlayer({
             guildId: interaction.guild.id,
             voiceChannelId: interaction.member.voice.channel.id,
             textChannelId: interaction.channel.id,
@@ -46,7 +46,7 @@ module.exports = {
             ephemeral: true
         });
 
-        const queue = player.queue.getQueue();
+        const queue = player.queue.tracks;
 
         if (queue.length == 0) return await interaction.editReply({
             embeds: [

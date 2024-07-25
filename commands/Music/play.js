@@ -32,7 +32,7 @@ module.exports = {
 
         let query = interaction.options.getString("query");
 
-        let player = client.moon.players.create({
+        let player = client.moon.createPlayer({
             guildId: interaction.guild.id,
             voiceChannelId: interaction.member.voice.channel.id,
             textChannelId: interaction.channel.id,
