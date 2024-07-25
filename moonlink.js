@@ -1,5 +1,6 @@
 const { EmbedBuilder, Colors } = require("discord.js");
 const { Manager } = require("moonlink.js");
+const { version } = require("./package.json");
 const Locale = require("./class/Locale");
 const LocaleSchema = require("./schemas/Locale");
 
@@ -35,7 +36,8 @@ function initializationMoonlink(client) {
         nodes: JSON.parse(process.env.NODES),
         options: {
             defaultPlatformSearch: "spsearch",
-            sortTypeNode: "cpuSystem"
+            sortTypeNode: "playingPlayers",
+            clientName: `HStudio/${version}`
         },
         sendPayload: (guildId, payload) => {
             const guild = client.guilds.cache.get(guildId);
@@ -68,7 +70,7 @@ function initializationMoonlink(client) {
     moon.on("trackStart", async (player, track) => {
         let sourceIcon = ":arrow_forward:";
 
-        const locale = await getLocale(track.requester);
+        const locale = await getLocale(track.requestedBy);
 
         try {
             if (track.sourceName == "spotify") {
