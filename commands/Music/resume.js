@@ -18,9 +18,10 @@ module.exports = {
 
         let player = client.moon.players.create({
             guildId: interaction.guild.id,
-            voiceChannel: interaction.member.voice.channel.id,
-            textChannel: interaction.channel.id,
-            autoLeave: true
+            voiceChannelId: interaction.member.voice.channel.id,
+            textChannelId: interaction.channel.id,
+            autoLeave: true,
+            autoPlay: true
         });
 
         if (!player.connected) {
