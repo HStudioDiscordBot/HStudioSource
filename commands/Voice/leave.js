@@ -17,15 +17,15 @@ module.exports = {
     async execute(interaction, client, locale) {
         if (!interaction.member.voice.channel) return await interaction.reply({ embeds: [new EmbedBuilder().setColor(Colors.Yellow).setTitle(locale.getLocaleString("command.join.userNotInVoiceChannel"))] });
 
-        let player = client.moon.players.create({
+        let player = client.moon.createPlayer({
             guildId: interaction.guild.id,
-            voiceChannel: interaction.member.voice.channel.id,
-            textChannel: interaction.channel.id,
-            autoLeave: true
+            voiceChannelId: interaction.member.voice.channel.id,
+            textChannelId: interaction.channel.id,
+            autoLeave: true,
+            autoPlay: true
         });
 
         if (!player.connected) {
-            player.destroy();
             return interaction.reply({
                 embeds: [
                     new EmbedBuilder()

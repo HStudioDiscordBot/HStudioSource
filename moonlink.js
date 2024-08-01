@@ -1,5 +1,6 @@
 const { EmbedBuilder, Colors } = require("discord.js");
-const { MoonlinkManager } = require("moonlink.js");
+const { Manager } = require("moonlink.js");
+const { version } = require("./package.json");
 const Locale = require("./class/Locale");
 const LocaleSchema = require("./schemas/Locale");
 
@@ -31,8 +32,17 @@ async function getLocale(userId) {
  * @param {import("discord.js").Client} client - The Discord client.
  */
 function initializationMoonlink(client) {
-    const moon = new MoonlinkManager(JSON.parse(process.env.NODES), {}, (guild, sPayload) => {
-        client.guilds.cache.get(guild).shard.send(JSON.parse(sPayload));
+    const moon = new Manager({
+        nodes: JSON.parse(process.env.NODES),
+        options: {
+            defaultPlatformSearch: "spsearch",
+            sortTypeNode: "playingPlayers",
+            clientName: `HStudio/${version}`
+        },
+        sendPayload: (guildId, payload) => {
+            const guild = client.guilds.cache.get(guildId);
+            if (guild) guild.shard.send(JSON.parse(payload));
+        }
     });
 
     moon.on("nodeCreate", (node) => {
@@ -60,14 +70,14 @@ function initializationMoonlink(client) {
     moon.on("trackStart", async (player, track) => {
         let sourceIcon = ":arrow_forward:";
 
-        const locale = await getLocale(track.requester);
+        const locale = await getLocale(track.requestedBy);
 
         try {
             if (track.sourceName == "spotify") {
                 sourceIcon = "<:spotify:1264178732739072020>";
 
                 client.channels.cache
-                    .get(player.textChannel)
+                    .get(player.textChannelId)
                     .send({
                         embeds: [
                             new EmbedBuilder()
@@ -77,7 +87,7 @@ function initializationMoonlink(client) {
                     });
             } else {
                 client.channels.cache
-                    .get(player.textChannel)
+                    .get(player.textChannelId)
                     .send({
                         embeds: [
                             new EmbedBuilder()

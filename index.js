@@ -89,7 +89,7 @@ api.get("/guilds", async (req, res) => {
             if (guilds.length < 200) break;
 
             after = guilds[guilds.length - 1].id;
-        }
+        };
 
         return res.status(200).json({
             total: guildsList.length,
@@ -97,7 +97,7 @@ api.get("/guilds", async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ error: 'An error occurred while fetching guilds' });
+        return res.status(500).json({ error: "An error occurred while fetching guilds" });
     }
 });
 
