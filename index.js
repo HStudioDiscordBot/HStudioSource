@@ -9,7 +9,7 @@ const package = require("./package.json");
 
 require("dotenv").config();
 
-// Init Bot Commands
+// Register Bot Commands
 handleCommands();
 
 // Sharding Manager
