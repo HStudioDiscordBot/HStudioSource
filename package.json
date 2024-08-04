@@ -4,9 +4,9 @@
   "description": "HStudio Discord Music Bot Source Code",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js",
     "bot": "node index.js",
-    "lint": "npx eslint ."
+    "dev": "nodemon index.js",
+    "lint": "npx eslint . --fix"
   },
   "repository": {
     "type": "git",
