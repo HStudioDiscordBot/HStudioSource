@@ -29,17 +29,13 @@ module.exports = (client) => {
 
         (async () => {
             try {
-                console.log(`[${client.shard.ids}] Started refreshing application (/) commands.`);
-
-                const data = await rest.put(
-                    Routes.applicationCommands(process.env.CLIENT_ID), {
-                        body: client.commandArray
-                    },
-                );
+                const data = await rest.get(Routes.applicationCommands(process.env.CLIENT_ID), {
+                    query: new URLSearchParams({
+                        with_localizations: true
+                    })
+                });
 
                 client.commandsData = data;
-
-                console.log(`[${client.shard.ids}] Successfully reloaded ${data.length} application (/) commands.`);
             } catch (error) {
                 console.error(error);
             }

@@ -3,10 +3,14 @@ const { REST } = require("@discordjs/rest");
 const { Routes } = require("discord-api-types/v10");
 const express = require("express");
 const cors = require("cors");
+const handleCommands = require("./utils/commands");
 
 const package = require("./package.json");
 
 require("dotenv").config();
+
+// Init Bot Commands
+handleCommands();
 
 // Sharding Manager
 const manager = new ShardingManager("bot.js", {
