@@ -42,4 +42,4 @@ module.exports = async function () {
             console.error(error);
         }
     })();
-}
+};
