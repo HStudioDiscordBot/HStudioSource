@@ -102,7 +102,7 @@ function initializationMoonlink(client) {
     });
 
     moon.on("queueEnd", async (player, track) => {
-        const locale = track ? await getLocale(track.requester) : new Locale("en-US");
+        const locale = track ? await getLocale(track.requestedBy) : new Locale("en-US");
 
         try {
             client.channels.cache
