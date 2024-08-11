@@ -12,11 +12,25 @@ module.exports = {
     * @param {import("discord.js").Client} client - The Discord client.
     */
     async execute(client) {
+        let currentStatus = 0;
+
         function setActivity() {
+            const status = [
+                `🌟 /help | V${version}`,
+                `🎷 Playing in ${client.moon.players.cache.size} Servers`,
+                "🎵 /play to play song",
+            ];
+            
             client.user.setActivity({
-                name: `/help | V${version}`,
+                name: status[currentStatus],
                 type: ActivityType.Custom
             });
+
+            if (currentStatus >= status.length - 1) {
+                currentStatus = 0;
+            } else {
+                currentStatus++;
+            }
         }
 
         setActivity();
@@ -24,7 +38,7 @@ module.exports = {
         console.log(`[${client.shard.ids}] Ready! Logged in as ${client.user.tag}`);
         console.log(`[${client.shard.ids}] Server Count: ${client.guilds.cache.size.toLocaleString()}`);
 
-        setInterval(setActivity, 60 * 1000);
+        setInterval(setActivity, 5 * 1000);
 
         if (mongoDBUrl) {
             await mongoose.connect(mongoDBUrl);
