@@ -114,5 +114,7 @@
     "command.ads.list": "Ads list",
     "moonlink.trackStart.withUrl": "{0} Start playing **[{1}]({2})**",
     "moonlink.trackStart.withoutUrl": "{0} Start playing **{1}**",
-    "moonlink.trackEnd": "There are no more tracks"
+    "moonlink.trackEnd": "There are no more tracks",
+    "command.clear.success": "🗑️ Clear Queue Success",
+    "command.clear.fail": "❌ Can't clear queue"
 }
