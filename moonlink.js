@@ -3,6 +3,7 @@ const { Manager } = require("moonlink.js");
 const { version } = require("./package.json");
 const Locale = require("./class/Locale");
 const LocaleSchema = require("./schemas/Locale");
+const PlayingHistorySchema = require("./schemas/PlayingHistory");
 
 /**
  * 
@@ -95,6 +96,22 @@ function initializationMoonlink(client) {
                                 .setDescription(locale.replacePlaceholders(locale.getLocaleString("moonlink.trackStart.withoutUrl"), [sourceIcon, track.title]))
                         ]
                     });
+            }
+
+            try {
+                if (track.requestedBy && track.sourceName && track.title && track.url && client.user.id && player.guildId && player.voiceChannelId) {
+                    await PlayingHistorySchema.create({
+                        userId: track.requestedBy,
+                        source: track.sourceName,
+                        title: track.title,
+                        url: track.url,
+                        bot: client.user.id,
+                        guildId: player.guildId,
+                        channelId: player.voiceChannelId
+                    });
+                }
+            } catch (err) {
+                console.error(err);
             }
         } catch (err) {
             console.error(err);
