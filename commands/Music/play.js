@@ -3,6 +3,9 @@ const { convertToHHMMSS, msToSec } = require("../../utils/time");
 const { isYouTubeUrl, isHStudioPlayUrl } = require("../../utils/youtube");
 const AdsSchema = require("../../schemas/Ad");
 const YoutubeDirectSchema = require("../../schemas/YoutubeDirect");
+const DefaultSourceSchema = require("../../schemas/DefaultSource");
+
+const sources = require("../../configs/sources.json");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -31,6 +34,10 @@ module.exports = {
         if (!interaction.member.voice.channel) return await interaction.editReply({ embeds: [new EmbedBuilder().setColor(Colors.Yellow).setTitle(locale.getLocaleString("command.play.userNotInVoiceChannel"))] });
 
         let query = interaction.options.getString("query");
+
+        const user_source = await DefaultSourceSchema.findOne({
+            userId: interaction.user.id
+        });
 
         let player = client.moon.createPlayer({
             guildId: interaction.guild.id,
@@ -68,7 +75,7 @@ module.exports = {
 
         let res = await client.moon.search({
             query,
-            source: "spsearch",
+            source: user_source ? sources[user_source.source] : "spsearch",
             requester: interaction.user.id
         });
 

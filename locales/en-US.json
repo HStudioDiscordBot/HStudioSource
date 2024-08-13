@@ -116,5 +116,7 @@
     "moonlink.trackStart.withoutUrl": "{0} Start playing **{1}**",
     "moonlink.trackEnd": "There are no more tracks",
     "command.clear.success": "🗑️ Clear Queue Success",
-    "command.clear.fail": "❌ Can't clear queue"
+    "command.clear.fail": "❌ Can't clear queue",
+    "command.setting.search.saved": "💾 Saved default source with `{0}`",
+    "command.setting.search.save.fail": "❌ Fail to save default source with `{0}`"
 }
