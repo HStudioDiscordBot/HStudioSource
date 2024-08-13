@@ -60,7 +60,6 @@ module.exports = {
                 if (track.sourceName == "spotify") {
                     return locale.replacePlaceholders(locale.getLocaleString("command.queue.spotify.raw"), [trackIndex, track.title, track.url, track.author]);
                 } else {
-                    console.log(track);
                     return locale.replacePlaceholders(locale.getLocaleString("command.queue.raw"), [trackIndex, track.title, track.author]);
                 }
             }).join("\n");
@@ -82,7 +81,7 @@ module.exports = {
                         .setDisabled(page === 0),
                     new ButtonBuilder()
                         .setCustomId("totalPages")
-                        .setLabel(`${currentPage}/${totalPages}`)
+                        .setLabel(`${currentPage + 1}/${totalPages}`)
                         .setStyle(ButtonStyle.Secondary)
                         .setDisabled(true),
                     new ButtonBuilder()
