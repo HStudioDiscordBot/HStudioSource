@@ -13,16 +13,17 @@ const PlayingHistorySchema = require("./schemas/PlayingHistory");
 async function getLocale(userId) {
     let userLocale = "en-US";
 
-    try {
-        if (userId) {
+    if (typeof userId == "string") {
+        try {
             const data = await LocaleSchema.findOne({
                 owner: userId
             });
 
             if (data && data.locale) userLocale = data.locale;
+
+        } catch (err) {
+            console.error(err);
         }
-    } catch (err) {
-        console.error(err);
     }
 
     return new Locale(userLocale);
@@ -97,9 +98,8 @@ function initializationMoonlink(client) {
                         ]
                     });
             }
-
-            try {
-                if (track.requestedBy && track.sourceName && track.title && track.url && client.user.id && player.guildId && player.voiceChannelId) {
+            if (typeof track.requestedBy == "string" && track.sourceName && track.title && track.url && client.user.id && player.guildId && player.voiceChannelId) {
+                try {
                     await PlayingHistorySchema.create({
                         userId: track.requestedBy,
                         source: track.sourceName,
@@ -109,9 +109,9 @@ function initializationMoonlink(client) {
                         guildId: player.guildId,
                         channelId: player.voiceChannelId
                     });
+                } catch (err) {
+                    console.error(err);
                 }
-            } catch (err) {
-                console.error(err);
             }
         } catch (err) {
             console.error(err);
