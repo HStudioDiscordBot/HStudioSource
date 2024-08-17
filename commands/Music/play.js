@@ -47,7 +47,7 @@ module.exports = {
             autoPlay: true
         });
 
-        if (isYouTubeUrl(query)) {
+        if (isYouTubeUrl(query) || sources[user_source.source].require.includes("YOUTUBE_DIRECT")) {
             const canDirect = await YoutubeDirectSchema.findOne({
                 userId: interaction.user.id
             });
@@ -75,7 +75,7 @@ module.exports = {
 
         let res = await client.moon.search({
             query,
-            source: user_source ? sources[user_source.source] : "spsearch",
+            source: user_source ? sources[user_source.source].source : "spsearch",
             requester: interaction.user.id
         });
 
