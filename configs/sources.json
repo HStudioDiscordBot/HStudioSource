@@ -1,5 +1,18 @@
 {
-    "spotify": "spsearch",
-    "youtube": "ytsearch",
-    "youtube_music": "ytmsearch"
+    "spotify": {
+        "source": "spsearch",
+        "require": []
+    },
+    "youtube": {
+        "source": "ytsearch",
+        "require": [
+            "YOUTUBE_DIRECT"
+        ]
+    },
+    "youtube_music": {
+        "source": "ytmsearch",
+        "require": [
+            "YOUTUBE_DIRECT"
+        ]
+    }
 }
