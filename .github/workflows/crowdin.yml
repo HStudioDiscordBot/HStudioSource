@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions: 
       contents: write
-      pull-requests: write
 
     steps:
       - name: Checkout
@@ -24,16 +23,33 @@ jobs:
           upload_translations: false
           download_translations: true
           localization_branch_name: crowdin_translations
-          create_pull_request: true
-          pull_request_title: "New Crowdin Translations"
-          pull_request_body: "New Crowdin translations by [Crowdin GH Action](https://github.com/crowdin/github-action)"
-          pull_request_base_branch_name: "main"
           skip_untranslated_strings: true
           export_only_approved: true
           config: crowdin.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
           CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
-
           CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+
+      - name: Check for new commits
+        id: check_commits
+        run: |
+          git fetch origin crowdin_translations
+          if [ "$(git rev-parse origin/crowdin_translations)" != "$(git rev-parse origin/main)" ]; then
+            echo "New commits detected."
+            echo "create_pull_request=true" >> $GITHUB_ENV
+          else
+            echo "No new commits."
+            echo "create_pull_request=false" >> $GITHUB_ENV
+          fi
+
+      - name: Create Pull request
+        if: env.create_pull_request == 'true'
+        run: |
+          curl -L \
+          -X POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ secrets.GITHUB_CROWDIN_TOKEN }}" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          https://api.github.com/repos/HStudioDiscordBot/HStudioSource/pulls \
+          -d '{"title":"New Crowdin Translations","body":"New Crowdin translations by [Crowdin GH Action](https://github.com/crowdin/github-action)","head":"HStudioDiscordBot:crowdin_translations","base":"main"}'
