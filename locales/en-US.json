@@ -118,5 +118,6 @@
     "command.clear.success": "🗑️ Clear Queue Success",
     "command.clear.fail": "❌ Can't clear queue",
     "command.setting.search.saved": "💾 Saved default source with `{0}`",
-    "command.setting.search.save.fail": "❌ Fail to save default source with `{0}`"
+    "command.setting.search.save.fail": "❌ Fail to save default source with `{0}`",
+    "crowdin.test.translate": "Testing translate"
 }
