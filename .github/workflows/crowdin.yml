@@ -23,6 +23,7 @@ jobs:
           upload_translations: false
           download_translations: true
           localization_branch_name: crowdin_translations
+          create_pull_request: false
           skip_untranslated_strings: true
           export_only_approved: true
           config: crowdin.yml
