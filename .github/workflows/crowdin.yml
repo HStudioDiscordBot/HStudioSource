@@ -31,17 +31,21 @@ jobs:
           CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
           CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
 
-      - name: Check for new commits
-        id: check_commits
+      - name: Check if branch exists and fetch commits
+        id: check_branch
         run: |
-          git fetch origin crowdin_translations
-          if [ "$(git rev-parse origin/crowdin_translations)" != "$(git rev-parse origin/main)" ]; then
-            echo "New commits detected."
-            echo "create_pull_request=true" >> $GITHUB_ENV
+          if git ls-remote --exit-code --heads origin crowdin_translations; then
+            git fetch origin crowdin_translations
+            if [ "$(git rev-parse origin/crowdin_translations)" != "$(git rev-parse origin/main)" ]; then
+              echo "New commits detected."
+              echo "create_pull_request=true" >> $GITHUB_ENV
+            else
+              echo "No new commits."
+              echo "create_pull_request=false" >> $GITHUB_ENV
+            fi
           else
-            echo "No new commits."
+            echo "Branch crowdin_translations does not exist."
             echo "create_pull_request=false" >> $GITHUB_ENV
-          fi
 
       - name: Create Pull request
         if: env.create_pull_request == 'true'
