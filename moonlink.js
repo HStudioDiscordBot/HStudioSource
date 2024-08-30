@@ -98,20 +98,30 @@ function initializationMoonlink(client) {
                         ]
                     });
             }
-            if (typeof track.requestedBy == "string" && track.sourceName && track.title && track.url && client.user.id && player.guildId && player.voiceChannelId) {
-                try {
-                    await PlayingHistorySchema.create({
-                        userId: track.requestedBy,
-                        source: track.sourceName,
-                        title: track.title,
-                        url: track.url,
-                        bot: client.user.id,
-                        guildId: player.guildId,
-                        channelId: player.voiceChannelId
+            try {
+                if (player.voiceChannelId) {
+                    const channel = await client.channels.fetch(player.voiceChannelId);
+
+                    channel.members.forEach(async (member) => {
+                        if (member.id && track.sourceName && track.title && track.url && client.user.id && player.guildId && player.voiceChannelId) {
+                            try {
+                                await PlayingHistorySchema.create({
+                                    userId: member.id,
+                                    source: track.sourceName,
+                                    title: track.title,
+                                    url: track.url,
+                                    bot: client.user.id,
+                                    guildId: player.guildId,
+                                    channelId: player.voiceChannelId
+                                });
+                            } catch (err) {
+                                console.error(err);
+                            }
+                        }
                     });
-                } catch (err) {
-                    console.error(err);
                 }
+            } catch (err) {
+                console.error(err);
             }
         } catch (err) {
             console.error(err);
