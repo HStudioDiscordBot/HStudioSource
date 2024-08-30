@@ -103,7 +103,7 @@ function initializationMoonlink(client) {
                     const channel = await client.channels.fetch(player.voiceChannelId);
 
                     channel.members.forEach(async (member) => {
-                        if (member.id && track.sourceName && track.title && track.url && client.user.id && player.guildId && player.voiceChannelId) {
+                        if (member.user && !member.user.bot && member.id && track.sourceName && track.title && track.url && client.user.id && player.guildId && player.voiceChannelId) {
                             try {
                                 await PlayingHistorySchema.create({
                                     userId: member.id,
