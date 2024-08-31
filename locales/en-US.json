@@ -119,5 +119,6 @@
     "command.clear.fail": "❌ Can't clear queue",
     "command.setting.search.saved": "💾 Saved default source with `{0}`",
     "command.setting.search.save.fail": "❌ Fail to save default source with `{0}`",
-    "crowdin.test.translate": "Testing translate"
+    "youtube.direct.disable.text": "# Want to listen to music directly from YouTube?\nYou can easily order through the HStudio website\n\n**[Support Discord](https://discord.gg/GzTbuZHTEx)**",
+    "youtube.direct.disable.button.text": "Buy now"
 }

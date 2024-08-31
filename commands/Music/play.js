@@ -47,7 +47,7 @@ module.exports = {
             autoPlay: true
         });
 
-        if (isYouTubeUrl(query) || user_source ? sources[user_source.source].require.includes("YOUTUBE_DIRECT") : false) {
+        if (isYouTubeUrl(query)) {
             const canDirect = await YoutubeDirectSchema.findOne({
                 userId: interaction.user.id
             });
@@ -58,6 +58,32 @@ module.exports = {
                         .setColor(Colors.Red)
                         .setTitle(locale.getLocaleString("command.play.youtube.disabled"))
                         .setDescription(locale.getLocaleString("command.play.youtube.disabled.description"))
+                ]
+            });
+        }
+
+        if (user_source ? sources[user_source.source].require.includes("YOUTUBE_DIRECT") : false) {
+            const canDirect = await YoutubeDirectSchema.findOne({
+                userId: interaction.user.id
+            });
+
+            const adsButton = new ButtonBuilder()
+                .setURL("https://hstudio.hewkawar.xyz/store")
+                .setLabel(locale.getLocaleString("youtube.direct.disable.button.text"))
+                .setStyle(ButtonStyle.Link);
+
+            const adsActionRow = new ActionRowBuilder()
+                .addComponents(adsButton);
+
+            if (!(canDirect && canDirect.userId && canDirect.userId == interaction.user.id)) return interaction.editReply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(Colors.Red)
+                        .setDescription(locale.getLocaleString("youtube.direct.disable.text"))
+                        .setImage("https://cdn.jsdelivr.net/gh/HStudioDiscordBot/Storage@main/ads/HStudio.ads.youtube_direct_user.png")
+                ],
+                components: [
+                    adsActionRow
                 ]
             });
         }
