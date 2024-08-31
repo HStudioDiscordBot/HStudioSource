@@ -47,7 +47,7 @@ module.exports = {
             autoPlay: true
         });
 
-        if (isYouTubeUrl(query) || sources[user_source.source].require.includes("YOUTUBE_DIRECT")) {
+        if (isYouTubeUrl(query) || user_source ? sources[user_source.source].require.includes("YOUTUBE_DIRECT") : false) {
             const canDirect = await YoutubeDirectSchema.findOne({
                 userId: interaction.user.id
             });
