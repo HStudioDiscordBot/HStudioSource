@@ -2,9 +2,6 @@ const { Events, Colors, EmbedBuilder } = require("discord.js");
 const Locale = require("../class/Locale");
 const donateModal = require("../modals/donate");
 const createAdsModal = require("../modals/create_ads");
-const buttonCreateAds = require("../buttons/buttonCreateAds");
-const buttonAdsConfirm = require("../buttons/adsConfirm");
-const buttonAdsDeny = require("../buttons/adsDeny");
 const LocaleSchema = require("../schemas/Locale");
 
 /**
@@ -82,15 +79,6 @@ async function handleInteraction(interaction, client, locale) {
         };
 
         const action = modals[interaction.customId];
-        if (action) await action(interaction, client, locale);
-    } else if (interaction.isButton()) {
-        const buttons = {
-            "buttonCreateAds": buttonCreateAds.execute,
-            "adsConfirm": buttonAdsConfirm.execute,
-            "adsDeny": buttonAdsDeny.execute
-        };
-
-        const action = buttons[interaction.customId];
         if (action) await action(interaction, client, locale);
     }
 }
