@@ -93,6 +93,17 @@ module.exports = {
     async execute(interaction, client) {
         const locale = new Locale(interaction.locale);
 
+        if (client.status != "online") {
+            return await interaction.reply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(Colors.Red)
+                        .setTitle(locale.getLocaleString("interaction.client.notOnline"))
+                ],
+                ephemeral: true
+            });
+        }
+
         await handleInteraction(interaction, client, locale);
 
         try {

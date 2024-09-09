@@ -3,6 +3,7 @@ const { REST } = require("@discordjs/rest");
 const { Routes } = require("discord-api-types/v10");
 const express = require("express");
 const cors = require("cors");
+const readline = require("readline");
 const handleCommands = require("./utils/commands");
 
 const package = require("./package.json");
@@ -116,4 +117,46 @@ require("dotenv").config();
     api.listen(port, () => {
         console.log(`\n\n🚀 Status page server is running at http://localhost:${port}/status\n\n`);
     });
+
+    // Handle Console Input
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
+
+    rl.on("line", async (input) => {
+        const cmdCommand = input.trim().toLowerCase();
+
+        switch (cmdCommand) {
+            case 'offline': {
+                console.log("🛑 Soft Offline all shards...");
+                await manager.broadcast({ operation: "offline", value: true });
+                console.log("✅ All shards soft offline successfully.");
+                break;
+            }
+            case 'online': {
+                console.log("🟢 Online all shards...");
+                await manager.broadcast({ operation: "online", value: true });
+                console.log("✅ All shards online successfully.");
+                break;
+            }
+            case 'restart': {
+                console.log("🔄 Restarting all shards...")
+                try {
+                    // Restart all shards
+                    await manager.respawnAll();
+                    console.log("✅ All shards restarted successfully.");
+                } catch (error) {
+                    console.error("❌ Error while restarting shards:", error);
+                }
+                break;
+            }
+            default: {
+                console.log(`Unknown command: ${input}`);
+                break;
+            }
+        }
+    });
+
+
 })();
