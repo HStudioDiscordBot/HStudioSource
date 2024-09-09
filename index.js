@@ -16,7 +16,14 @@ require("dotenv").config();
     console.log("🤖 Bot is starting...");
     console.log(`📦 HStudioSource@${package.version}`);
     console.log(`🤖 Bot is running on version ${package.version}`);
+    console.log(`🚀 Node.js version: ${process.version}`)
+    console.log(`🔧 Environment: ${process.env.NODE_ENV || "development"}`)
+    console.log(`🔑 Token: ${process.env.TOKEN}`);
+    console.log(`🦴 Shards: ${process.env.SHARDS || "auto"}`);
     console.log("\n");
+    console.log("🎁 Versions");
+    console.log(`📦 Discord.js: ${package.dependencies["discord.js"]}`);
+    console.log(`📦 Discord.js: ${package.dependencies["moonlink.js"]}`);
 
     // Register Bot Commands
     await handleCommands();
