@@ -13,6 +13,17 @@ const client = new Client({
 initializationMoonlink(client);
 
 client.commands = new Collection();
+client.status = "online";
+
+process.on("message", (message) => {
+    if (message && message.operation) {
+        if (message.operation == "offline") {
+            client.status = "dnd";
+        } else if (message.operation == "online") {
+            client.status = "online";
+        }
+    }
+});
 
 const functions = fs.readdirSync("./functions").filter(file => file.endsWith(".js"));
 const eventFiles = fs.readdirSync("./events").filter(file => file.endsWith(".js"));
