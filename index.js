@@ -128,20 +128,20 @@ require("dotenv").config();
         const cmdCommand = input.trim().toLowerCase();
 
         switch (cmdCommand) {
-            case 'offline': {
+            case "offline": {
                 console.log("🛑 Soft Offline all shards...");
                 await manager.broadcast({ operation: "offline", value: true });
                 console.log("✅ All shards soft offline successfully.");
                 break;
             }
-            case 'online': {
+            case "online": {
                 console.log("🟢 Online all shards...");
                 await manager.broadcast({ operation: "online", value: true });
                 console.log("✅ All shards online successfully.");
                 break;
             }
-            case 'restart': {
-                console.log("🔄 Restarting all shards...")
+            case "restart": {
+                console.log("🔄 Restarting all shards...");
                 try {
                     // Restart all shards
                     await manager.respawnAll();
