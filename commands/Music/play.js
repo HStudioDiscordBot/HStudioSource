@@ -47,23 +47,8 @@ module.exports = {
             autoPlay: true
         });
 
-        if (isYouTubeUrl(query)) {
-            const canDirect = await YoutubeDirectSchema.findOne({
-                userId: interaction.user.id
-            });
-
-            if (!(canDirect && canDirect.userId && canDirect.userId == interaction.user.id)) return interaction.editReply({
-                embeds: [
-                    new EmbedBuilder()
-                        .setColor(Colors.Red)
-                        .setTitle(locale.getLocaleString("command.play.youtube.disabled"))
-                        .setDescription(locale.getLocaleString("command.play.youtube.disabled.description"))
-                ]
-            });
-        }
-
-        if (user_source ? sources[user_source.source].require.includes("YOUTUBE_DIRECT") : false) {
-            const canDirect = await YoutubeDirectSchema.findOne({
+        async function checkYoutubeDirect() {
+            const ytDirect = await YoutubeDirectSchema.findOne({
                 userId: interaction.user.id
             });
 
@@ -75,17 +60,46 @@ module.exports = {
             const adsActionRow = new ActionRowBuilder()
                 .addComponents(adsButton);
 
-            if (!(canDirect && canDirect.userId && canDirect.userId == interaction.user.id)) return interaction.editReply({
-                embeds: [
-                    new EmbedBuilder()
-                        .setColor(Colors.Red)
-                        .setDescription(locale.getLocaleString("youtube.direct.disable.text"))
-                        .setImage("https://cdn.jsdelivr.net/gh/HStudioDiscordBot/Storage@main/ads/HStudio.ads.youtube_direct_user.png")
-                ],
-                components: [
-                    adsActionRow
-                ]
-            });
+            if (!ytDirect) {
+                await interaction.editReply({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setColor(Colors.Red)
+                            .setDescription(locale.getLocaleString("youtube.direct.disable.text"))
+                            .setImage("https://cdn.jsdelivr.net/gh/HStudioDiscordBot/Storage@main/ads/HStudio.ads.youtube_direct_user.png")
+                    ],
+                    components: [
+                        adsActionRow
+                    ]
+                });
+                return false;
+            } else if ((ytDirect.expireAt ? ytDirect.expireAt.getTime() < Date.now() : false) && !ytDirect.infinity) {
+                await interaction.editReply({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setColor(Colors.Red)
+                            .setDescription(locale.getLocaleString("youtube.direct.disable.expired"))
+                    ],
+                    components: [
+                        adsActionRow
+                    ]
+                });
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        if (isYouTubeUrl(query)) {
+            if (!(await checkYoutubeDirect())) {
+                return;
+            }
+        }
+
+        if (user_source ? sources[user_source.source].require.includes("YOUTUBE_DIRECT") : false) {
+            if (!(await checkYoutubeDirect())) {
+                return;
+            }
         }
 
         if (isHStudioPlayUrl(query)) {
