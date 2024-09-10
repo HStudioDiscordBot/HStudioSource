@@ -1,8 +1,11 @@
 name: Build and Push to Docker Hub
 
 on:
-  release: 
+  release:
     types: [published]
+  push:
+    branches:
+      - main
 
 jobs:
   build:
