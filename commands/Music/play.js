@@ -73,7 +73,7 @@ module.exports = {
                     ]
                 });
                 return false;
-            } else if (ytDirect.expireAt ? ytDirect.expireAt.getTime() < Date.now() : false && !ytDirect.infinity) {
+            } else if ((ytDirect.expireAt ? ytDirect.expireAt.getTime() < Date.now() : false) && !ytDirect.infinity) {
                 await interaction.editReply({
                     embeds: [
                         new EmbedBuilder()
