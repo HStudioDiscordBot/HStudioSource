@@ -21,9 +21,14 @@ module.exports = {
                 "🎵 /play to play song",
             ];
             
-            client.user.setActivity({
-                name: status[currentStatus],
-                type: ActivityType.Custom
+            client.user.setPresence({
+                status: client.status,
+                activities: [
+                    {
+                        name: status[currentStatus],
+                        type: ActivityType.Custom
+                    }
+                ]
             });
 
             if (currentStatus >= status.length - 1) {
@@ -37,7 +42,7 @@ module.exports = {
 
         console.log(`[${client.shard.ids}] Ready! Logged in as ${client.user.tag}`);
         console.log(`[${client.shard.ids}] Server Count: ${client.guilds.cache.size.toLocaleString()}`);
-
+        console.log(`[${client.shard.ids}] Member Count: ${client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0).toLocaleString()}`);
         setInterval(setActivity, 5 * 1000);
 
         if (mongoDBUrl) {

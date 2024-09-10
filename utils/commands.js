@@ -28,16 +28,24 @@ module.exports = async function () {
         version: "10"
     }).setToken(process.env.TOKEN);
 
-    (async () => {
+    await (async () => {
         try {
-            console.log("Started refreshing application (/) commands.");
 
+            console.log("📃 Commands Process");
+            console.log("🔒 Started refreshing application (/) commands.");
+            
             const data = await rest.put(
                 Routes.applicationCommands(process.env.CLIENT_ID), {
                 body: commandArray
             });
 
-            console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+            console.log(`🔓 Successfully reloaded ${data.length} application (/) commands.`);
+
+            console.log("\n");
+
+            const commands = data.map(command => `🟢 /${command.name} Operational`);
+
+            console.log(commands.join("\n"));
         } catch (error) {
             console.error(error);
         }
