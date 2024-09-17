@@ -65,7 +65,7 @@ Configure your Lavalink nodes. More information [here](https://lavalink.dev/):
 
 ```dotenv
 # Nodes configuration
-NODES='[{"host":"0.0.0.0","port":2333,"password":"your_lavalink_password","secure":false}]'
+NODES='[{"identifier":"Local", "regions": ["My Home"], "host":"0.0.0.0","port":2333,"password":"your_lavalike_password","secure":false}]'
 ```
 
 **Log**
