@@ -113,7 +113,7 @@ docker run -d --restart always \
     -e CLIENT_ID=your_client_id_here \
     -e TRUEMONEY_PHONE_NUMBER=your_truemoney_phone_number_here \
     -e DONATE_WEBHOOK_URL=your_donate_webhook_url_here \
-    -e NODES='[{"host":"0.0.0.0","port":2333,"password":"your_lavalink_password","secure":false}]' \
+    -e NODES='[{"identifier":"Local", "regions": ["My Home"], "host":"0.0.0.0","port":2333,"password":"your_lavalike_password","secure":false}]' \
     -e ANALYTIC_CHANNEL_ID=your_analytic_channel_id_here \
     -e MONGODB_URL=your_mongodb_url_here \
     -e GUILD_LOG=your_log_channel_id_here \
