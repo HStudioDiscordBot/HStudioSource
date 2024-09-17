@@ -121,7 +121,7 @@
     "command.setting.search.save.fail": "❌ Fail to save default source with `{0}`",
     "youtube.direct.disable.text": "# Want to listen to music directly from YouTube?\nYou can easily order through the HStudio website\n\n**[Support Discord](https://discord.gg/GzTbuZHTEx)**",
     "youtube.direct.disable.button.text": "Buy now",
-    "youtube.direct.disable.expired": "# Youtube Directly is expired\nYou can't use this feature anymore\nYou can order through the Studio website",
+    "youtube.direct.disable.expired": "# Youtube Directly is expired\nYou can't use this feature anymore\nYou can order through the HStudio website",
     "interaction.client.notOnline": "❌ The bot is not online",
     "command.nodes.title": "Nodes",
     "command.nodes.field": "Region: {0}\nPlayers: {1}\nActive Players: {2}\nMemory: {3}\nCPU: {4} %\nUptime: {5}",
