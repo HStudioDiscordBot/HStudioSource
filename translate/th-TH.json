@@ -121,5 +121,14 @@
     "command.setting.search.save.fail": "❌ ไม่สามารถบันทึกด้วย `{0}` ได้",
     "youtube.direct.disable.text": "# อยากฟังเพลงจาก Youtube โดยตรงงั้นหรอ?\nคุณสามารถสั่งซื้อได้ง่ายๆผ่านเว็ปไซต์ HStudio\n\n**[Support Discord](https://discord.gg/GzTbuZHTEx)**",
     "youtube.direct.disable.button.text": "ซื้อตอนนี้",
-    "interaction.client.notOnline": "❌ปิดใช้งานบอทชั่วคราว"
+    "interaction.client.notOnline": "❌ปิดใช้งานบอทชั่วคราว",
+    "command.nodes.title": "เครื่องเล่น",
+    "utils.time.second": "วินาที",
+    "utils.time.minute": "นาที",
+    "utils.time.hour": "ชั่วโมง",
+    "utils.time.day": "วัน",
+    "utils.time.seconds": "วินาที",
+    "utils.time.minutes": "นาที",
+    "utils.time.hours": "ชั่วโมง",
+    "utils.time.days": "วัน"
 }
