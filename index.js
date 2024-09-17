@@ -23,9 +23,10 @@ require("dotenv").config();
     console.log("\n");
     console.log("🎁 Versions");
     console.log(`📦 Discord.js: ${package.dependencies["discord.js"]}`);
-    console.log(`📦 Discord.js: ${package.dependencies["moonlink.js"]}`);
+    console.log(`📦 Moonlink.js: ${package.dependencies["moonlink.js"]}`);
 
     // Register Bot Commands
+    console.log("\n");
     await handleCommands();
 
     // Sharding Manager
