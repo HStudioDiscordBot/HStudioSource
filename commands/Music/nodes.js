@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ApplicationIntegrationType, EmbedBuilder, Colors } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, Colors } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -19,13 +19,13 @@ module.exports = {
         let online = [];
 
         function formatBytes(bytes) {
-            if (bytes === 0) return '0 Bytes';
+            if (bytes === 0) return "0 Bytes";
 
             const k = 1024;
             const sizes = [locale.getLocaleString("utils.size.bytes"), locale.getLocaleString("utils.size.kb"), locale.getLocaleString("utils.size.mb"), locale.getLocaleString("utils.size.gb"), locale.getLocaleString("utils.size.tb"), locale.getLocaleString("utils.size.pb"), locale.getLocaleString("utils.size.eb"), locale.getLocaleString("utils.size.zb"), locale.getLocaleString("utils.size.yb")];
             const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
         }
 
         function convertUptime(milliseconds) {
@@ -38,12 +38,12 @@ module.exports = {
             minutes = minutes % 60;
             hours = hours % 24;
 
-            let result = '';
+            let result = "";
             if (days > 0) result += `${days} ${days > 1 ? locale.getLocaleString("utils.time.days") : locale.getLocaleString("utils.time.day")}, `;
             if (hours > 0) result += `${hours} ${hours > 1 ? locale.getDefaultString("utils.time.hours") : locale.getLocaleString("utils.time.hour")}, `;
             if (minutes > 0) result += `${minutes} ${minutes > 1 ? locale.getLocaleString("utils.time.minutes") : locale.getLocaleString("utils.time.minute")}`;
 
-            return result.trim().replace(/,$/, '');
+            return result.trim().replace(/,$/, "");
         }
 
         nodes.forEach((node) => {
@@ -70,4 +70,4 @@ module.exports = {
             ]
         });
     }
-}
+};
