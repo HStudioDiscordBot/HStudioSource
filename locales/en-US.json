@@ -141,5 +141,14 @@
     "utils.time.seconds": "Seconds",
     "utils.time.minutes": "Minutes",
     "utils.time.hours": "Hours",
-    "utils.time.days": "Days"
+    "utils.time.days": "Days",
+    "command.profile.finding": "🔎 Finding profile information...",
+    "command.profile.ytDirect.false": "Youtube Direct ❌",
+    "command.profile.ytDirect.true": "Youtube Direct ✅",
+    "command.profile.ytDirect.notHave": "```Don't have Youtube Direct```",
+    "command.profile.ytDirect.expired.value": "```Youtube Direct expired```",
+    "command.profile.ytDirect.have.value": "Expires at: {0}",
+    "command.profile.ytDirect.infinity": "Nerver",
+    "command.profile.title": "Profile Information",
+    "command.profile.description": "```Username: {0}\nDisplay Name: {1}\nID: {2}```"
 }
