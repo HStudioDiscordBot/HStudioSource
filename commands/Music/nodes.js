@@ -40,7 +40,7 @@ module.exports = {
 
             let result = "";
             if (days > 0) result += `${days} ${days > 1 ? locale.getLocaleString("utils.time.days") : locale.getLocaleString("utils.time.day")}, `;
-            if (hours > 0) result += `${hours} ${hours > 1 ? locale.getDefaultString("utils.time.hours") : locale.getLocaleString("utils.time.hour")}, `;
+            if (hours > 0) result += `${hours} ${hours > 1 ? locale.getLocaleString("utils.time.hours") : locale.getLocaleString("utils.time.hour")}, `;
             if (minutes > 0) result += `${minutes} ${minutes > 1 ? locale.getLocaleString("utils.time.minutes") : locale.getLocaleString("utils.time.minute")}`;
 
             return result.trim().replace(/,$/, "");
